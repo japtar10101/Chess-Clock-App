@@ -44,6 +44,8 @@ public class TimerOption {
 	private int mDelayTimeMinutes;
 	/** The delay time (seconds) */
 	private int mDelayTimeSeconds;
+	/** The saved state */
+	private Bundle mSavedState;
 
 	/* ===========================================================
 	 * Constructors
@@ -58,20 +60,6 @@ public class TimerOption {
 		this.setDelayTimeSeconds(DEFAULT_DELAY_TIME_SECONDS);
 	}
 	
-	/**
-	 * Constructor for saved state.  Recalls the options for this application.
-	 * @param savedState this application's saved state
-	 */
-	public TimerOption(final Bundle savedState) {
-		// Set the values to default parameters
-		this();
-		
-		// Try to recall any saved options
-		if(savedState != null) {
-			this.loadOptions(savedState);
-		}
-	}
-
 	/* ===========================================================
 	 * Public Methods
 	 * =========================================================== */
@@ -80,45 +68,17 @@ public class TimerOption {
 	 * @param savedState the bundle to save this app's options
 	 * @throws InvalidParameterException if <b>savedState</b> is null
 	 */
-	public void saveOptions(final Bundle savedState) {
-		// Make sure the parameter is correct
-		if(savedState == null) {
-			throw new InvalidParameterException("Saved State cannot be null");
+	public void saveOptions() {
+		// Make sure the bundle isn't null
+		if(mSavedState != null) {
+			// Save the attributes to the bundle
+			mSavedState.putInt(KEY_TIME_LIMIT_MINUTES, mTimeLimitMinutes);
+			mSavedState.putInt(KEY_TIME_LIMIT_SECONDS, mTimeLimitSeconds);
+			mSavedState.putInt(KEY_DELAY_TIME_MINUTES, mDelayTimeMinutes);
+			mSavedState.putInt(KEY_DELAY_TIME_SECONDS, mDelayTimeSeconds);
 		}
-		
-		// Save the attributes to the bundle
-		savedState.putInt(KEY_TIME_LIMIT_MINUTES, mTimeLimitMinutes);
-		savedState.putInt(KEY_TIME_LIMIT_SECONDS, mTimeLimitSeconds);
-		savedState.putInt(KEY_DELAY_TIME_MINUTES, mDelayTimeMinutes);
-		savedState.putInt(KEY_DELAY_TIME_SECONDS, mDelayTimeSeconds);
 	}
 	
-	/**
-	 * Loads the bundle's state to options
-	 * @param savedState the bundle to load this app's options
-	 * @throws InvalidParameterException if <b>savedState</b> is null
-	 */
-	public void loadOptions(final Bundle savedState) {
-		// Make sure the parameter is correct
-		if(savedState == null) {
-			throw new InvalidParameterException("Saved State cannot be null");
-		}
-		
-		// Save the attributes to the bundle
-		this.setTimeLimitMinutes(savedState.getInt(
-				KEY_TIME_LIMIT_MINUTES,
-				DEFAULT_TIME_LIMIT_MINUTES));
-		this.setTimeLimitSeconds(savedState.getInt(
-				KEY_TIME_LIMIT_SECONDS,
-				DEFAULT_TIME_LIMIT_SECONDS));
-		this.setDelayTimeMinutes(savedState.getInt(
-				KEY_DELAY_TIME_MINUTES,
-				DEFAULT_DELAY_TIME_MINUTES));
-		this.setDelayTimeSeconds(savedState.getInt(
-				KEY_DELAY_TIME_MINUTES,
-				DEFAULT_DELAY_TIME_SECONDS));
-	}
-
 	/* ===========================================================
 	 * Getters
 	 * =========================================================== */
@@ -148,6 +108,13 @@ public class TimerOption {
 	 */
 	public int getDelayTimeSeconds() {
 		return mDelayTimeSeconds;
+	}
+	
+	/**
+	 * @return {@link mSavedState}
+	 */
+	public Bundle getmSavedState() {
+		return mSavedState;
 	}
 	
 	/* ===========================================================
@@ -201,6 +168,31 @@ public class TimerOption {
 		
 		// Set the variable
 		this.mDelayTimeSeconds = delayTimeSeconds;	
+	}
+	
+	/**
+	 * @param savedState sets {@link mSavedState}
+	 */
+	public void setSavedState(final Bundle savedState) {
+		// Set mSavedState
+		mSavedState = savedState;
+		
+		// Make sure the parameter is correct
+		if(mSavedState == null) {
+			// Save the attributes to the bundle
+			this.setTimeLimitMinutes(mSavedState.getInt(
+					KEY_TIME_LIMIT_MINUTES,
+					DEFAULT_TIME_LIMIT_MINUTES));
+			this.setTimeLimitSeconds(mSavedState.getInt(
+					KEY_TIME_LIMIT_SECONDS,
+					DEFAULT_TIME_LIMIT_SECONDS));
+			this.setDelayTimeMinutes(mSavedState.getInt(
+					KEY_DELAY_TIME_MINUTES,
+					DEFAULT_DELAY_TIME_MINUTES));
+			this.setDelayTimeSeconds(mSavedState.getInt(
+					KEY_DELAY_TIME_MINUTES,
+					DEFAULT_DELAY_TIME_SECONDS));
+		}
 	}
 	
 	/* ===========================================================

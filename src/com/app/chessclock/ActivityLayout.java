@@ -3,16 +3,34 @@
  */
 package com.app.chessclock;
 
-import android.app.Activity;
-
 /**
  * TODO: add a description
  * @author japtar10101
  */
-public interface ActivityLayout {
+public abstract class ActivityLayout {
+	/* ===========================================================
+	 * Members
+	 * =========================================================== */
+	/** The main activities class */
+	protected MainActivity mParentActivity;
+
+	/* ===========================================================
+	 * Constructor
+	 * =========================================================== */
+	/**
+	 * @param parent sets {@link mParentActivity}
+	 */
+	public ActivityLayout(final MainActivity parent) {
+		mParentActivity = parent;
+	}
 	/**
 	 * Sets up the activity to match with this layout's GUI
 	 * @param main
 	 */
-	public void setupLayout(final Activity main);
+	public abstract void setupLayout();
+	/**
+	 * TODO: add a description
+	 * @param main
+	 */
+	public abstract void exitLayout();
 }
