@@ -15,9 +15,9 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         
         // Update the Display Manager
-        getWindowManager().getDefaultDisplay().getMetrics(DISPLAY);
+        this.getWindowManager().getDefaultDisplay().getMetrics(DISPLAY);
         
         // Set the default layout to main
-        setContentView(R.layout.main);
+        this.setContentView(R.layout.main);
     }
 } 
