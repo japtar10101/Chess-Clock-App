@@ -1,13 +1,15 @@
 /**
  * 
  */
-package com.app.chessclock;
+package com.app.chessclock.menus;
+
+import com.app.chessclock.MainActivity;
 
 /**
  * TODO: add a description
  * @author japtar10101
  */
-public abstract class ActivityLayout {
+public abstract class ActivityMenu {
 	/* ===========================================================
 	 * Members
 	 * =========================================================== */
@@ -20,7 +22,7 @@ public abstract class ActivityLayout {
 	/**
 	 * @param parent sets {@link mParentActivity}
 	 */
-	public ActivityLayout(final MainActivity parent) {
+	public ActivityMenu(final MainActivity parent) {
 		mParentActivity = parent;
 	}
 	/**

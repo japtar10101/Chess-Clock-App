@@ -1,17 +1,17 @@
 /**
  * 
  */
-package com.app.chessclock.options;
+package com.app.chessclock.models;
 
 import java.security.InvalidParameterException;
 
 import android.os.Bundle;
 
 /**
- * TODO: add a description
+ * Options shared between each layout
  * @author japtar10101
  */
-public class TimerOption {
+public class Options {
 	/* ===========================================================
 	 * Constants
 	 * =========================================================== */
@@ -37,29 +37,20 @@ public class TimerOption {
 	 * Members
 	 * =========================================================== */
 	/** The time limit (minutes) */
-	private int mTimeLimitMinutes;
+	private int mTimeLimitMinutes = DEFAULT_TIME_LIMIT_MINUTES;
 	/** The time limit (seconds) */
-	private int mTimeLimitSeconds;
+	private int mTimeLimitSeconds = DEFAULT_TIME_LIMIT_SECONDS;
 	/** The delay time (minutes) */
-	private int mDelayTimeMinutes;
+	private int mDelayTimeMinutes = DEFAULT_DELAY_TIME_MINUTES;
 	/** The delay time (seconds) */
-	private int mDelayTimeSeconds;
+	private int mDelayTimeSeconds = DEFAULT_DELAY_TIME_SECONDS;
 	/** The saved state */
-	private Bundle mSavedState;
-
-	/* ===========================================================
-	 * Constructors
-	 * =========================================================== */
-	/**
-	 * Default constructor.  Sets the time to default parameters.
-	 */
-	public TimerOption() {
-		this.setTimeLimitMinutes(DEFAULT_TIME_LIMIT_MINUTES);
-		this.setTimeLimitSeconds(DEFAULT_TIME_LIMIT_SECONDS);
-		this.setDelayTimeMinutes(DEFAULT_DELAY_TIME_MINUTES);
-		this.setDelayTimeSeconds(DEFAULT_DELAY_TIME_SECONDS);
-	}
+	private Bundle mSavedState = null;
 	
+	/** Variable used between layouts.
+	 * Determines whether the Timer is paused or not */
+	public boolean isPaused = false;
+
 	/* ===========================================================
 	 * Public Methods
 	 * =========================================================== */

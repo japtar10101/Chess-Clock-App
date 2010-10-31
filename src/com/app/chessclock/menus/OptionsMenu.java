@@ -1,9 +1,8 @@
 /**
  * 
  */
-package com.app.chessclock.options;
+package com.app.chessclock.menus;
 
-import com.app.chessclock.ActivityLayout;
 import com.app.chessclock.MainActivity;
 import com.app.chessclock.R;
 
@@ -11,7 +10,7 @@ import com.app.chessclock.R;
  * TODO: add a description
  * @author japtar10101
  */
-public class OptionsMenu extends ActivityLayout {
+public class OptionsMenu extends ActivityMenu {
 	/* ===========================================================
 	 * Constants
 	 * =========================================================== */
@@ -24,10 +23,12 @@ public class OptionsMenu extends ActivityLayout {
 	 * Constructors
 	 * =========================================================== */
 	/**
-	 * @see ActivityLayout#ActivityLayout(MainActivity)
+	 * @see ActivityMenu#ActivityLayout(MainActivity)
 	 */
 	public OptionsMenu(final MainActivity parent) {
 		super(parent);
+		
+		// TODO: grab the labels and button attributes
 	}
 
 	/* ===========================================================
@@ -35,7 +36,7 @@ public class OptionsMenu extends ActivityLayout {
 	 * =========================================================== */
 	/**
 	 * TODO: add a description
-	 * @see com.app.chessclock.ActivityLayout#setupLayout(android.app.Activity)
+	 * @see com.app.chessclock.menus.ActivityMenu#setupLayout(android.app.Activity)
 	 */
 	@Override
 	public void setupLayout() {
@@ -48,7 +49,7 @@ public class OptionsMenu extends ActivityLayout {
 
 	/**
 	 * TODO: add a description
-	 * @see com.app.chessclock.ActivityLayout#exitLayout(android.app.Activity)
+	 * @see com.app.chessclock.menus.ActivityMenu#exitLayout(android.app.Activity)
 	 */
 	@Override
 	public void exitLayout() {

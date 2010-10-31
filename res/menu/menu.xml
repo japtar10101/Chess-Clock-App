@@ -4,6 +4,4 @@
           android:title="Reset" />
     <item android:id="@+id/menuOptions"
           android:title="Options..." />
-    <item android:id="@+id/menuQuit"
-          android:title="Quit" />
 </menu>

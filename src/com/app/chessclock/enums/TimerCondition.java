@@ -1,13 +1,15 @@
 /**
  * 
  */
-package com.app.chessclock.timer;
+package com.app.chessclock.enums;
 
 /**
  * TODO: add a description
  * @author japtar10101
  */
 public enum TimerCondition {
+	/** Indicates the timer just started */
+	STARTING,
 	/** Indicates the timer is running */
 	RUNNING,
 	/** Indicates the timer is paused, due to opening the menu */
