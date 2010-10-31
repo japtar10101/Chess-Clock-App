@@ -1,12 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/hello"
-    />
-</LinearLayout>
+
+<RelativeLayout android:id="@+id/widget39"
+android:layout_width="fill_parent" android:layout_height="fill_parent"
+xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<LinearLayout android:id="@+id/widget47"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:layout_alignParentTop="true" android:layout_alignParentLeft="true">
+	
+		<Button android:id="@+id/buttonLeftTime"
+		android:layout_width="wrap_content" android:layout_height="fill_parent"
+		android:text="Time" android:layout_weight="1"
+		android:typeface="monospace" android:textStyle="bold">
+		</Button>
+		<Button android:id="@+id/buttonRightTime"
+		android:layout_width="wrap_content" android:layout_height="fill_parent"
+		android:text="Time" android:layout_weight="1"
+		android:typeface="monospace" android:textStyle="bold">
+	   </Button>
+	
+	</LinearLayout>
+	
+	<TextView android:id="@+id/delayLabel"
+	android:layout_width="wrap_content" android:layout_height="wrap_content"
+	android:text="Delay: " android:background="#ff333333"
+	android:layout_alignParentBottom="true" android:layout_centerHorizontal="true">
+	</TextView>
+	
+</RelativeLayout>
