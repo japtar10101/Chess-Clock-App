@@ -2,22 +2,24 @@ package com.app.chessclock;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 
 public class MainActivity extends Activity {
-	public static final DisplayMetrics DISPLAY = new DisplayMetrics();
-	
+	/* ===========================================================
+	 * Overrides
+	 * =========================================================== */
     /** Called when the activity is first created. */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-    	
+    public void onCreate(final Bundle savedInstanceState) {
     	// Do whatever is in the super class first
         super.onCreate(savedInstanceState);
         
-        // Update the Display Manager
-        this.getWindowManager().getDefaultDisplay().getMetrics(DISPLAY);
+        // Update all constant variables
+        this.getWindowManager().getDefaultDisplay().getMetrics(Global.DISPLAY);
+        Global.SAVED_STATE.putAll(savedInstanceState);
+        Global.OPTIONS.loadOptions(savedInstanceState);
         
         // Set the default layout to main
+        Global.TIMER_MENU.setupLayout(this);
         this.setContentView(R.layout.main);
     }
 } 

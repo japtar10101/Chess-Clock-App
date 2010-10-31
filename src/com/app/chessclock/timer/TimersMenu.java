@@ -6,22 +6,13 @@ package com.app.chessclock.timer;
 import android.app.Activity;
 
 import com.app.chessclock.ActivityLayout;
+import com.app.chessclock.R;
 
 /**
  * TODO: add a description
  * @author japtar10101
  */
-public class ChessClock implements ActivityLayout {
-
-	/**
-	 * TODO: add a description
-	 * @see com.app.chessclock.ActivityLayout#setupLayout(android.app.Activity)
-	 */
-	@Override
-	public void setupLayout(Activity main) {
-		// TODO Auto-generated method stub
-
-	}
+public class TimersMenu implements ActivityLayout {
 	/* ===========================================================
 	 * Constants
 	 * =========================================================== */
@@ -37,6 +28,17 @@ public class ChessClock implements ActivityLayout {
 	/* ===========================================================
 	 * Overrides
 	 * =========================================================== */
+	/**
+	 * TODO: add a description
+	 * @see com.app.chessclock.ActivityLayout#setupLayout(android.app.Activity)
+	 */
+	@Override
+	public void setupLayout(final Activity main) {
+		// First, setup the UI
+		main.setContentView(R.layout.main);
+		
+		// TODO: grab the labels and button attributes
+	}
 
 	/* ===========================================================
 	 * Public Methods
