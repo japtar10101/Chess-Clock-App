@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menuReset"
+          android:title="Reset" />
+    <item android:id="@+id/menuOptions"
+          android:title="Options..." />
+    <item android:id="@+id/menuQuit"
+          android:title="Quit" />
+</menu>

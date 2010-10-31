@@ -20,6 +20,5 @@ public class MainActivity extends Activity {
         
         // Set the default layout to main
         Global.TIMER_MENU.setupLayout(this);
-        this.setContentView(R.layout.main);
     }
 } 

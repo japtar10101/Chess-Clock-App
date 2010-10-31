@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout android:id="@+id/widget39"
+<RelativeLayout android:id="@+id/layoutMain"
 android:layout_width="fill_parent" android:layout_height="fill_parent"
 xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<LinearLayout android:id="@+id/widget47"
+	<LinearLayout android:id="@+id/layoutMainButtons"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
 	android:layout_alignParentTop="true" android:layout_alignParentLeft="true">
 	
