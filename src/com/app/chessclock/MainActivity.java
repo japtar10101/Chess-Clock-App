@@ -42,9 +42,32 @@ public class MainActivity extends Activity {
         // Create all the layouts
         mAllMenus.put(MenuId.TIMER, new TimersMenu(this));
         mAllMenus.put(MenuId.OPTIONS, new OptionsMenu(this));
+    }
+    
+    /**
+     * Called when the activity starts.
+     * @see android.app.Activity#onStart()
+     */
+    @Override
+    public void onStart() {
+    	// Do whatever is in the super class first
+        super.onStart();
         
         // Set the default layout to main
         this.setCurrentMenuId(MenuId.TIMER);
+    }
+    
+    /**
+     * Called when the activity pauses.
+     * @see android.app.Activity#onPause()
+     */
+    @Override
+    public void onPause() {
+        // Exit the current layout
+        this.getCurrentMenu().exitLayout();
+        
+    	// Do whatever is in the super class last
+        super.onPause();
     }
     
     /**
@@ -154,14 +177,12 @@ public class MainActivity extends Activity {
 		}
 		
 		// Exit the current layout
-		ActivityMenu tempLayout = this.getCurrentMenu();
-		tempLayout.exitLayout();
+		this.getCurrentMenu().exitLayout();
 		
 		// Update the layout ID
 		mCurrentMenuId = menuId;
 		
 		// Setup the new layout
-		tempLayout = this.getCurrentMenu();
-		tempLayout.setupLayout();
+		this.getCurrentMenu().setupLayout();
 	}
 }

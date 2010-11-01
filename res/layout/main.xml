@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout android:id="@+id/layoutMain"
+<RelativeLayout android:id="@+id/layoutMain" android:keepScreenOn="true"
 android:layout_width="fill_parent" android:layout_height="fill_parent"
 xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -31,13 +31,5 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:typeface="monospace" android:textStyle="bold" android:textSize="18px"
 	android:visibility="invisible">
 	</TextView>
-	
-	<TextView android:id="@+id/labelPause"
-    android:layout_width="fill_parent" android:layout_height="fill_parent"
-    android:text="Pause" android:background="#b0000000"
-    android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
-    android:gravity="center" android:textStyle="bold" android:textSize="30px"
-    android:visibility="invisible">
-    </TextView>
 	
 </RelativeLayout>

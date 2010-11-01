@@ -3,6 +3,10 @@
  */
 package com.app.chessclock.menus;
 
+import java.util.Timer;
+
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -10,31 +14,46 @@ import com.app.chessclock.Global;
 import com.app.chessclock.MainActivity;
 import com.app.chessclock.R;
 import com.app.chessclock.enums.TimerCondition;
+import com.app.chessclock.models.Time;
 
 /**
  * TODO: add a description
  * @author japtar10101
  */
-public class TimersMenu extends ActivityMenu {
+public class TimersMenu extends ActivityMenu implements OnClickListener {
 	/* ===========================================================
 	 * Members
 	 * =========================================================== */
+	// == Timer ==
+	private final Timer mTimeTracker = new Timer();
+	
 	// == Conditionals ==
 	/** The current timer's condition */
 	private TimerCondition mCondition = TimerCondition.STARTING;
+	/** Flag indicating whose turn it is */
+	private boolean mLeftPlayersTurn = false;
+	
+	// == Times ==
+	/** Left player's time */
+	private final Time mLeftPlayersTime = new Time();
+	/** Right player's time */
+	private final Time mRightPlayersTime = new Time();
+	/** Time of delay */
+	private final Time mDelayTime = new Time();
 	
 	// == Buttons ==
 	/** Left player's button */
-	private Button mLeftbutton;
+	private final Button mLeftButton;
 	/** Right player's button */
-	private Button mRightbutton;
+	private final Button mRightButton;
 	
 	// == Labels ==
 	/** Label indicating delay */
-	private TextView mDelayLabel;
+	private final TextView mDelayLabel;
+	// FIXME: add a label indicating to click anywhere
 	
-	// == Layouts ==
-	// FIXME: create a pause menu layout
+	// == Dialog ==
+	// FIXME: create a pause dialog
 	
 	/* ===========================================================
 	 * Constructors
@@ -42,17 +61,22 @@ public class TimersMenu extends ActivityMenu {
 	/**
 	 * @see ActivityMenu#ActivityLayout(MainActivity)
 	 */
-	public TimersMenu(MainActivity parent) {
+	public TimersMenu(final MainActivity parent) {
 		super(parent);
 		
-		// TODO: grab the labels and button attributes
+		// Grab the buttons
+		mLeftButton = (Button)mParentActivity.findViewById(R.id.buttonLeftTime);
+		mRightButton = (Button)mParentActivity.findViewById(R.id.buttonRightTime);
+		
+		// Grab the labels
+		mDelayLabel = (TextView)mParentActivity.findViewById(R.id.labelDelay);
 	}
 
 	/* ===========================================================
 	 * Overrides
 	 * =========================================================== */
 	/**
-	 * TODO: add a description
+	 * Resumes the timer if paused, or starts it over.
 	 * @see com.app.chessclock.menus.ActivityMenu#setupLayout(android.app.Activity)
 	 */
 	@Override
@@ -64,12 +88,12 @@ public class TimersMenu extends ActivityMenu {
 		if(Global.OPTIONS.isPaused) {
 			mCondition = TimerCondition.PAUSE_WITHOUT_MENU;
 		} else {
-			mCondition = TimerCondition.STARTING;
+			this.reset();
 		}
 	}
 
 	/**
-	 * TODO: add a description
+	 * Pauses the timer, unless the time is up.
 	 * @see com.app.chessclock.menus.ActivityMenu#exitLayout(android.app.Activity)
 	 */
 	@Override
@@ -83,22 +107,58 @@ public class TimersMenu extends ActivityMenu {
 		}
 	}
 
-	/* ===========================================================
-	 * Public Methods
-	 * =========================================================== */
 
-	/* ===========================================================
-	 * Getters
-	 * =========================================================== */
-
-	/* ===========================================================
-	 * Setters
-	 * =========================================================== */
-
+	/**
+	 * TODO: add a description
+	 * @see android.view.View.OnClickListener#onClick(android.view.View)
+	 */
+	@Override
+	public void onClick(final View v) {
+		// Check to make sure which button this view belongs to
+		if(v.equals(mLeftButton)) {
+			// Disable the left button, enable the right button
+			mLeftButton.setEnabled(false);
+			mRightButton.setEnabled(true);
+			
+			// TODO: Switch the player role
+			
+			// TODO: restart the timer
+		} else {
+			// Disable the right button, enable the left button
+			mLeftButton.setEnabled(true);
+			mRightButton.setEnabled(false);
+			
+			// TODO: Switch the player role
+			
+			// TODO: restart the timer
+		}
+	}
 	/* ===========================================================
 	 * Private/Protected Methods
 	 * =========================================================== */
-	private void startup() {
-		// FIXME: update the buttons, and hide all the text
+	/**
+	 * Resets this menu.
+	 */
+	private void reset() {
+		// Set the condition to starting
+		mCondition = TimerCondition.STARTING;
+		
+		// Reset the time
+		mLeftPlayersTime.setTime(Global.OPTIONS.getTimeLimit());
+		mRightPlayersTime.setTime(Global.OPTIONS.getTimeLimit());
+		mDelayTime.setTime(Global.OPTIONS.getDelayTime());
+		
+		// Enable both buttons
+		mLeftButton.setEnabled(true);
+		mRightButton.setEnabled(true);
+		
+		// Update their text
+		mLeftButton.setText(mLeftPlayersTime.toString());
+		mRightButton.setText(mRightPlayersTime.toString());
+		
+		// Hide the delay label
+		mDelayLabel.setVisibility(View.INVISIBLE);
+		
+		// TODO: show the delay dialog, indicating to push either button
 	}
 }
