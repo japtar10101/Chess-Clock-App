@@ -3,6 +3,8 @@
  */
 package com.app.chessclock.models;
 
+import java.security.InvalidParameterException;
+
 import android.os.Bundle;
 
 /**
@@ -95,7 +97,7 @@ public class Options {
 	/**
 	 * @param savedState sets {@link mSavedState}
 	 */
-	public void setSavedState(final Bundle savedState) {
+	public void setSavedState(final Bundle savedState) throws InvalidParameterException {
 		// Set mSavedState
 		mSavedState = savedState;
 		

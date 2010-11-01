@@ -43,7 +43,17 @@ public class Time {
 	 */
 	@Override
 	public String toString() {
-		return mMinutes.toString() + ":" + mSeconds.toString();
+		// Generate a string, starting with the minutes
+		String toReturn = mMinutes.toString() + ':';
+		
+		// Append the seconds
+		if(mSeconds < 10) {
+			// If seconds is less than 10, append a 0
+			toReturn += '0';
+		}
+		toReturn += mSeconds.toString();
+		
+		return toReturn;
 	}
 	
 	/* ===========================================================
@@ -86,14 +96,14 @@ public class Time {
 	
 	/**
 	 * Decreases the time by a seconds
-	 * @return
+	 * @return False if both minutes and seconds are 0
+	 * @see #isTimeZero()
 	 */
 	public boolean decrementASecond() {
-		// Check if we're already at 0
-		if(isTimeZero()) {
-			// return true immediately
-			return true;
-		} else {
+		boolean toReturn = !isTimeZero();
+		
+		// Check if we're not at 0
+		if(toReturn) {
 			// check if the seconds is already at 0
 			if(mSeconds <= 0) {
 				// If so, decrement the minutes
@@ -105,8 +115,9 @@ public class Time {
 				// If not, decrement the seconds 
 				--mSeconds;
 			}
-			return false;
 		}
+		
+		return toReturn;
 	}
 
 	/* ===========================================================
@@ -132,7 +143,7 @@ public class Time {
 	 * @param minutes sets {@link mMinutes}
 	 * @throws InvalidParameterException if <b>minutes</b> is negative
 	 */
-	public void setMinutes(final int minutes) {
+	public void setMinutes(final int minutes) throws InvalidParameterException {
 		if(minutes < 0) {
 			// negative valuemLeftButton
 			throw new InvalidParameterException("Minutes must be positive");
@@ -146,7 +157,7 @@ public class Time {
 	 * @throws InvalidParameterException if <b>seconds</b> is negative,
 	 * or greater than 59
 	 */
-	public void setSeconds(final int seconds) {
+	public void setSeconds(final int seconds) throws InvalidParameterException {
 		if(seconds < 0) {
 			// negative value
 			throw new InvalidParameterException("Seconds must be positive");

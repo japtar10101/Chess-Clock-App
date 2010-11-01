@@ -15,8 +15,6 @@ public interface Global {
 	/* ===========================================================
 	 * Constants
 	 * =========================================================== */
-	
-	// Device-related attributes
 	/** The screen's dimensions */
 	public static final DisplayMetrics DISPLAY = new DisplayMetrics();
 	/** The screen's dimensions */

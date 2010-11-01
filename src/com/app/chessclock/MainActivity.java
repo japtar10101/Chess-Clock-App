@@ -19,7 +19,7 @@ public class MainActivity extends Activity {
 	 * Member Variables
 	 * =========================================================== */
 	/** The current layout */
-	private MenuId mCurrentMenuId = null;
+	private MenuId mCurrentMenuId = MenuId.TIMER;
 	private final HashMap<MenuId, ActivityMenu> mAllMenus =
 		new HashMap<MenuId, ActivityMenu>();
 	
@@ -90,14 +90,7 @@ public class MainActivity extends Activity {
      */
     @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
-    	boolean toReturn = false;
-    	
-    	// Check if the layout is currently set to Timer
-    	if(mCurrentMenuId == MenuId.TIMER) {
-    		toReturn = true;
-    	}
-    	
-    	return toReturn;
+    	return this.getCurrentMenu().enableMenuButton();
     }
 
 	/**
@@ -170,7 +163,7 @@ public class MainActivity extends Activity {
 	 * @param menuId sets {@link mCurrentMenuId}
 	 * @throws InvalidParameterException if <b>currentLayoutId</b> is null
 	 */
-	public void setCurrentMenuId(final MenuId menuId) {
+	public void setCurrentMenuId(final MenuId menuId) throws InvalidParameterException {
 		// Check parameter if it's null
 		if(menuId == null) {
 			throw new InvalidParameterException("Menu ID cannot be null");

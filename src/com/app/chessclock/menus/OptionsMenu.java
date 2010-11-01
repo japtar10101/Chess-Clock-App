@@ -27,8 +27,6 @@ public class OptionsMenu extends ActivityMenu {
 	 */
 	public OptionsMenu(final MainActivity parent) {
 		super(parent);
-		
-		// TODO: grab the labels and button attributes
 	}
 
 	/* ===========================================================
@@ -55,6 +53,15 @@ public class OptionsMenu extends ActivityMenu {
 	public void exitLayout() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	/**
+	 * @return false, always
+	 * @see com.app.chessclock.menus.ActivityMenu#enableMenuButton()
+	 */
+	@Override
+	public boolean enableMenuButton() {
+		return false;
 	}
 
 	/* ===========================================================

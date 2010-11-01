@@ -25,14 +25,22 @@ public abstract class ActivityMenu {
 	public ActivityMenu(final MainActivity parent) {
 		mParentActivity = parent;
 	}
+	
+	/* ===========================================================
+	 * Abstract Methods
+	 * =========================================================== */
 	/**
-	 * Sets up the activity to match with this layout's GUI
-	 * @param main
+	 * Sets up this menu
 	 */
 	public abstract void setupLayout();
+	
 	/**
-	 * TODO: add a description
-	 * @param main
+	 * Cleans up this menu
 	 */
 	public abstract void exitLayout();
+	
+	/**
+	 * @return true if the menu button should be enabled
+	 */
+	public abstract boolean enableMenuButton();
 }

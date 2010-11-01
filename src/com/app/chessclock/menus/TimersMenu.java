@@ -3,8 +3,8 @@
  */
 package com.app.chessclock.menus;
 
-import java.util.Timer;
-
+import android.os.Handler;
+import android.os.SystemClock;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -25,7 +25,8 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 	 * Members
 	 * =========================================================== */
 	// == Timer ==
-	private final Timer mTimeTracker = new Timer();
+	private final Handler mTimer = new Handler();
+	private final ChessTask mTask = new ChessTask();
 	
 	// == Conditionals ==
 	/** The current timer's condition */
@@ -43,17 +44,19 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 	
 	// == Buttons ==
 	/** Left player's button */
-	private final Button mLeftButton;
+	private Button mLeftButton = null;
 	/** Right player's button */
-	private final Button mRightButton;
+	private Button mRightButton = null;
 	
 	// == Labels ==
 	/** Label indicating delay */
-	private final TextView mDelayLabel;
-	// FIXME: add a label indicating to click anywhere
+	private TextView mDelayLabel = null;
 	
 	// == Dialog ==
-	// FIXME: create a pause dialog
+	// FIXME: create a start dialog, which disappears automatically
+	// FIXME: create a generic pause dialog
+	// FIXME: create a menu-button pause dialog
+	// FIXME: create a times-up dialog
 	
 	/* ===========================================================
 	 * Constructors
@@ -63,13 +66,6 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 	 */
 	public TimersMenu(final MainActivity parent) {
 		super(parent);
-		
-		// Grab the buttons
-		mLeftButton = (Button)mParentActivity.findViewById(R.id.buttonLeftTime);
-		mRightButton = (Button)mParentActivity.findViewById(R.id.buttonRightTime);
-		
-		// Grab the labels
-		mDelayLabel = (TextView)mParentActivity.findViewById(R.id.labelDelay);
 	}
 
 	/* ===========================================================
@@ -99,40 +95,53 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 	@Override
 	public void exitLayout() {
 		// Set the option's state
-		if(mCondition == TimerCondition.TIMES_UP) {
-			Global.OPTIONS.isPaused = false;
-		} else {
-			Global.OPTIONS.isPaused = true;
-			mCondition = TimerCondition.PAUSE_WITHOUT_MENU;
+		switch(mCondition) {
+			case TIMES_UP:
+			case STARTING:
+				Global.OPTIONS.isPaused = false;
+				break;
+			default:
+				Global.OPTIONS.isPaused = true;
+				mCondition = TimerCondition.PAUSE_WITHOUT_MENU;
 		}
 	}
 
 
 	/**
-	 * TODO: add a description
+	 * Updates the player's turns, based on the button clicked
 	 * @see android.view.View.OnClickListener#onClick(android.view.View)
 	 */
 	@Override
 	public void onClick(final View v) {
-		// Check to make sure which button this view belongs to
-		if(v.equals(mLeftButton)) {
-			// Disable the left button, enable the right button
-			mLeftButton.setEnabled(false);
-			mRightButton.setEnabled(true);
-			
-			// TODO: Switch the player role
-			
-			// TODO: restart the timer
+		// Stop the timer
+		mTimer.removeCallbacks(mTask);
+
+		// Update the condition and current player
+		mCondition = TimerCondition.RUNNING;
+		mLeftPlayersTurn = v.equals(mRightButton);
+		
+		// Enable only one button
+		mLeftButton.setEnabled(mLeftPlayersTurn);
+		mRightButton.setEnabled(!mLeftPlayersTurn);
+		
+		// Restart the timer
+		mTask.reset();
+		mTimer.postDelayed(mTask, 1000);
+	}
+	
+	/**
+	 * @return true unless time's up
+	 * @see com.app.chessclock.menus.ActivityMenu#enableMenuButton()
+	 */
+	@Override
+	public boolean enableMenuButton() {
+		if(mCondition == TimerCondition.TIMES_UP) {
+			return false;
 		} else {
-			// Disable the right button, enable the left button
-			mLeftButton.setEnabled(true);
-			mRightButton.setEnabled(false);
-			
-			// TODO: Switch the player role
-			
-			// TODO: restart the timer
+			return true;
 		}
 	}
+	
 	/* ===========================================================
 	 * Private/Protected Methods
 	 * =========================================================== */
@@ -143,6 +152,17 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 		// Set the condition to starting
 		mCondition = TimerCondition.STARTING;
 		
+		// Grab the buttons
+		mLeftButton = (Button)mParentActivity.findViewById(R.id.buttonLeftTime);
+		mRightButton = (Button)mParentActivity.findViewById(R.id.buttonRightTime);
+		
+		// Set the buttons click behavior to this class
+		mLeftButton.setOnClickListener(this);
+		mRightButton.setOnClickListener(this);
+		
+		// Grab the labels
+		mDelayLabel = (TextView)mParentActivity.findViewById(R.id.labelDelay);
+
 		// Reset the time
 		mLeftPlayersTime.setTime(Global.OPTIONS.getTimeLimit());
 		mRightPlayersTime.setTime(Global.OPTIONS.getTimeLimit());
@@ -159,6 +179,118 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 		// Hide the delay label
 		mDelayLabel.setVisibility(View.INVISIBLE);
 		
-		// TODO: show the delay dialog, indicating to push either button
+		// FIXME: show the delay dialog, indicating to push either button
+	}
+	
+	/**
+	 * Indicate the time is up
+	 */
+	private void timesUp() {
+		// Set the condition to time up
+		mCondition = TimerCondition.TIMES_UP;
+		
+		// Disable both buttons
+		mLeftButton.setEnabled(false);
+		mRightButton.setEnabled(false);
+		
+		// Hide the delay label
+		mDelayLabel.setVisibility(View.INVISIBLE);
+		
+		// TODO: show the delay dialog, indicating to start over,
+		// or go to options
+	}
+	
+	/* ===========================================================
+	 * Private/Protected Class
+	 * =========================================================== */
+	private class ChessTask implements Runnable {
+		/* ===========================================================
+		 * Members
+		 * =========================================================== */
+		/** The time this task has begun */
+		private long mStartTime = 0L;
+		
+		/* ===========================================================
+		 * Overrides
+		 * =========================================================== */
+		/**
+		 * Decrement the player's time, and update the GUI
+		 * @see java.lang.Runnable#run()
+		 */
+		@Override
+		public void run() {
+			// Figure out the amount of time delayed since last called
+			final long timeSpanMilliseconds =
+				SystemClock.uptimeMillis() - mStartTime;
+			
+			// Update the start time immediately
+			mStartTime = SystemClock.uptimeMillis();
+			
+			// Figure out which time to decrement
+			Time updateTime = mRightPlayersTime;
+			if(mLeftPlayersTurn) {
+				updateTime = mLeftPlayersTime;
+			}
+			
+			// Decrement the time that many seconds
+			final int timeSpanSeconds = (int) (timeSpanMilliseconds / 1000);
+			for(int second = 0; second < timeSpanSeconds; ++second) {
+				// First attempt to decrement the delay time
+				if(!mDelayTime.decrementASecond()) {
+					// If failed, try decrementing the player's time
+					if(!updateTime.decrementASecond()) {
+						// If that failed, times up!
+						timesUp();
+					}
+				}
+			}
+			
+			// Update the button's text
+			updateLabels();
+			
+			// Call this task again, if condition is still running
+			if(mCondition == TimerCondition.RUNNING) {
+				mTimer.postDelayed(this, 1000);
+			}
+		}
+		
+		/* ===========================================================
+		 * Public Methods
+		 * =========================================================== */
+		/**
+		 * Updates {@link mStartTime} to the current time
+		 */
+		public void reset() {
+			mStartTime = SystemClock.uptimeMillis();
+			mDelayTime.setTime(Global.OPTIONS.getDelayTime());
+			updateLabels();
+		}
+		
+		/* ===========================================================
+		 * Private/Protected Methods
+		 * =========================================================== */
+		private void updateLabels() {
+			// Update the corresponding button
+			if(mLeftPlayersTurn) {
+				mLeftButton.setText(mLeftPlayersTime.toString());
+			} else {
+				mRightButton.setText(mRightPlayersTime.toString());
+			}
+			
+			// Update the delay time
+			if(mDelayTime.isTimeZero()) {
+				// Set the label invisible, if at 0
+				mDelayLabel.setVisibility(View.INVISIBLE);
+			} else {
+				// Generate the string to display
+				String labelText = mParentActivity.getString(
+						R.string.delayLabelText);
+				labelText += mDelayTime.toString();
+				
+				// Set the label visible, and update the text
+				mDelayLabel.setVisibility(View.VISIBLE);
+				mDelayLabel.setText(labelText);
+			}
+		}
 	}
 }
