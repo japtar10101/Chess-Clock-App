@@ -3,22 +3,43 @@
  */
 package com.app.chessclock.menus;
 
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TimePicker;
+
+import com.app.chessclock.Global;
 import com.app.chessclock.MainActivity;
 import com.app.chessclock.R;
+import com.app.chessclock.enums.MenuId;
+import com.app.chessclock.models.TimeModel;
 
 /**
  * TODO: add a description
  * @author japtar10101
  */
-public class OptionsMenu extends ActivityMenu {
-	/* ===========================================================
-	 * Constants
-	 * =========================================================== */
-
+public class OptionsMenu extends ActivityMenu implements OnClickListener {
 	/* ===========================================================
 	 * Members
 	 * =========================================================== */
-
+	// == Buttons ==
+	/** "Start Game" button */
+	private Button mStartGame = null;
+	/** "Cancel" button */
+	private Button mCancel = null;
+	
+	// == TimePicker ==
+	/** "Time Limit" picker */
+	private TimePicker mTimeLimit = null;
+	/** "Delay Time" picker */
+	private TimePicker mDelayTime = null;
+	
+	// == Selection box button ==
+	// FIXME: add sound-related GUI
+	
+	// == Selection dialog ==
+	// FIXME: add sound-related GUI
+	
 	/* ===========================================================
 	 * Constructors
 	 * =========================================================== */
@@ -33,27 +54,46 @@ public class OptionsMenu extends ActivityMenu {
 	 * Overrides
 	 * =========================================================== */
 	/**
-	 * TODO: add a description
+	 * Sets up the Menu
 	 * @see com.app.chessclock.menus.ActivityMenu#setupLayout(android.app.Activity)
 	 */
 	@Override
-	public void setupLayout() {
+	public void setupMenu() {
 		// First, setup the UI
 		mParentActivity.setContentView(R.layout.options);
 		
-		// TODO: grab the timer-related stuff, and set it to the same thing
-		// as in options
+		// Grab the buttons
+		mStartGame = (Button)mParentActivity.findViewById(R.id.buttonOk);
+		mCancel = (Button)mParentActivity.findViewById(R.id.buttonCancel);
+		
+		// Set the buttons click behavior to this class
+		mStartGame.setOnClickListener(this);
+		mCancel.setOnClickListener(this);
+		
+		// Grab the TimePickers
+		mTimeLimit = (TimePicker)mParentActivity.findViewById(R.id.timeTimeLimit);
+		mDelayTime = (TimePicker)mParentActivity.findViewById(R.id.timeDelayTime);
+		
+		// Hack: remove the AM/PM options
+		mTimeLimit.setIs24HourView(true);
+		mDelayTime.setIs24HourView(true);
+		
+		// Update the TimePickers to current settings
+		TimeModel updateTime = Global.OPTIONS.savedTimeLimit;
+		mTimeLimit.setCurrentHour(updateTime.getMinutes());
+		mTimeLimit.setCurrentMinute(updateTime.getSeconds());
+		
+		updateTime = Global.OPTIONS.savedDelayTime;
+		mDelayTime.setCurrentHour(updateTime.getMinutes());
+		mDelayTime.setCurrentMinute(updateTime.getSeconds());
 	}
 
 	/**
-	 * TODO: add a description
+	 * Does nothing
 	 * @see com.app.chessclock.menus.ActivityMenu#exitLayout(android.app.Activity)
 	 */
 	@Override
-	public void exitLayout() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void exitMenu() { }
 
 	/**
 	 * @return false, always
@@ -64,17 +104,36 @@ public class OptionsMenu extends ActivityMenu {
 		return false;
 	}
 
-	/* ===========================================================
-	 * Public Methods
-	 * =========================================================== */
-
-	/* ===========================================================
-	 * Getters
-	 * =========================================================== */
-
-	/* ===========================================================
-	 * Setters
-	 * =========================================================== */
+	/**
+	 * TODO: add a description
+	 * @see android.view.View.OnClickListener#onClick(android.view.View)
+	 */
+	@Override
+	public void onClick(final View view) {
+		
+		// Check if the Start Game button was selected
+		if(view == mStartGame) {
+			
+			// If so, update the time limit settings
+			TimeModel updateTime = Global.OPTIONS.savedTimeLimit;
+			updateTime.setMinutes(mTimeLimit.getCurrentHour());
+			updateTime.setSeconds(mTimeLimit.getCurrentMinute());
+			
+			// update the delay time settings
+			updateTime = Global.OPTIONS.savedDelayTime;
+			updateTime.setMinutes(mDelayTime.getCurrentHour());
+			updateTime.setSeconds(mDelayTime.getCurrentMinute());
+			
+			// FIXME: update the sound settings
+			
+			// Save the settings, and restart the game
+			Global.OPTIONS.saveSettings();
+			Global.OPTIONS.isPaused = false;
+		}
+		
+		// Switch the layout to TimersMenu
+		mParentActivity.setCurrentMenuId(MenuId.TIMER);
+	}
 
 	/* ===========================================================
 	 * Private/Protected Methods

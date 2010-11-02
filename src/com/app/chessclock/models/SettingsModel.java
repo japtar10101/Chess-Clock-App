@@ -11,7 +11,7 @@ import android.os.Bundle;
  * Options shared between each layout
  * @author japtar10101
  */
-public class Options {
+public class SettingsModel {
 	/* ===========================================================
 	 * Constants
 	 * =========================================================== */
@@ -36,18 +36,35 @@ public class Options {
 	/* ===========================================================
 	 * Members
 	 * =========================================================== */
+	// == Settings saved ==
 	/** The time limit */
-	private final Time mTimeLimit =
-		new Time(DEFAULT_TIME_LIMIT_MINUTES, DEFAULT_TIME_LIMIT_SECONDS);
+	public final TimeModel savedTimeLimit =
+		new TimeModel(DEFAULT_TIME_LIMIT_MINUTES, DEFAULT_TIME_LIMIT_SECONDS);
 	/** The delay time */
-	private final Time mDelayTime =
-		new Time(DEFAULT_DELAY_TIME_MINUTES, DEFAULT_DELAY_TIME_SECONDS);
+	public final TimeModel savedDelayTime =
+		new TimeModel(DEFAULT_DELAY_TIME_MINUTES, DEFAULT_DELAY_TIME_SECONDS);
 	/** The saved state */
 	private Bundle mSavedState = null;
 	
+	// == Settings held temporarily ==
+	// TODO: move this to a different model.  Not really needed here.
 	/** Variable used between layouts.
 	 * Determines whether the Timer is paused or not */
 	public boolean isPaused = false;
+	/** Variable stored between layouts.
+	 * Determines who's playing */
+	public boolean leftPlayersTurn = false;
+	/** Variable stored between layouts.
+	 * Retains the current delay time */
+	public final TimeModel currentDelayTime = new TimeModel();
+	/** Variable stored between layouts.
+	 * Retains left player's time */
+	public final TimeModel leftPlayersTime = new TimeModel();
+	/** Variable stored between layouts.
+	 * Determines who's playing */
+	public final TimeModel rightPlayersTime = new TimeModel();
+	
+	// FIXME: add a sound
 
 	/* ===========================================================
 	 * Public Methods
@@ -56,34 +73,22 @@ public class Options {
 	 * Saves the current options state to a bundle
 	 * @param savedState the bundle to save this app's options
 	 */
-	public void saveOptions() {
+	public void saveSettings() {
 		// Make sure the bundle isn't null
 		if(mSavedState != null) {
 			// Save the attributes to the bundle
-			mSavedState.putInt(KEY_TIME_LIMIT_MINUTES, mTimeLimit.getMinutes());
-			mSavedState.putInt(KEY_TIME_LIMIT_SECONDS, mTimeLimit.getSeconds());
-			mSavedState.putInt(KEY_DELAY_TIME_MINUTES, mDelayTime.getMinutes());
-			mSavedState.putInt(KEY_DELAY_TIME_SECONDS, mDelayTime.getSeconds());
+			mSavedState.putInt(KEY_TIME_LIMIT_MINUTES, savedTimeLimit.getMinutes());
+			mSavedState.putInt(KEY_TIME_LIMIT_SECONDS, savedTimeLimit.getSeconds());
+			mSavedState.putInt(KEY_DELAY_TIME_MINUTES, savedDelayTime.getMinutes());
+			mSavedState.putInt(KEY_DELAY_TIME_SECONDS, savedDelayTime.getSeconds());
+			
+			// FIXME: save this bundle to some personal SQL database
 		}
 	}
 	
 	/* ===========================================================
 	 * Getters
 	 * =========================================================== */
-	/**
-	 * @return {@link mTimeLimit}
-	 */
-	public Time getTimeLimit() {
-		return mTimeLimit;
-	}
-
-	/**
-	 * @return {@link mDelayTime}
-	 */
-	public Time getDelayTime() {
-		return mDelayTime;
-	}
-	
 	/**
 	 * @return {@link mSavedState}
 	 */
@@ -104,16 +109,16 @@ public class Options {
 		// Make sure the parameter is correct
 		if(mSavedState != null) {
 			// Save the attributes to the bundle
-			mTimeLimit.setMinutes(mSavedState.getInt(
+			savedTimeLimit.setMinutes(mSavedState.getInt(
 					KEY_TIME_LIMIT_MINUTES,
 					DEFAULT_TIME_LIMIT_MINUTES));
-			mTimeLimit.setSeconds(mSavedState.getInt(
+			savedTimeLimit.setSeconds(mSavedState.getInt(
 					KEY_TIME_LIMIT_SECONDS,
 					DEFAULT_TIME_LIMIT_SECONDS));
-			mDelayTime.setMinutes(mSavedState.getInt(
+			savedDelayTime.setMinutes(mSavedState.getInt(
 					KEY_DELAY_TIME_MINUTES,
 					DEFAULT_DELAY_TIME_MINUTES));
-			mDelayTime.setSeconds(mSavedState.getInt(
+			savedDelayTime.setSeconds(mSavedState.getInt(
 					KEY_DELAY_TIME_MINUTES,
 					DEFAULT_DELAY_TIME_SECONDS));
 		}

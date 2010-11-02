@@ -32,12 +32,12 @@ public abstract class ActivityMenu {
 	/**
 	 * Sets up this menu
 	 */
-	public abstract void setupLayout();
+	public abstract void setupMenu();
 	
 	/**
 	 * Cleans up this menu
 	 */
-	public abstract void exitLayout();
+	public abstract void exitMenu();
 	
 	/**
 	 * @return true if the menu button should be enabled

@@ -9,7 +9,7 @@ import java.security.InvalidParameterException;
  * Helper class representing time.
  * @author japtar10101
  */
-public class Time {
+public class TimeModel {
 	/* ===========================================================
 	 * Members
 	 * =========================================================== */
@@ -24,14 +24,14 @@ public class Time {
 	/**
 	 * @see #setTime(int, int)
 	 */
-	public Time(final int minutes, final int seconds) {
+	public TimeModel(final int minutes, final int seconds) {
 		this.setTime(minutes, seconds);
 	}
 	
 	/**
 	 * Default constructor.  Sets the time to 0.
 	 */
-	public Time() {
+	public TimeModel() {
 		this(0, 0);
 	}
 
@@ -78,7 +78,7 @@ public class Time {
 	 * Sets the time.
 	 * @param time time to match
 	 */
-	public void setTime(final Time time) {
+	public void setTime(final TimeModel time) {
 		if(time != null) {
 			this.setMinutes(time.getMinutes());
 			this.setSeconds(time.getSeconds());
@@ -141,12 +141,17 @@ public class Time {
 	 * =========================================================== */
 	/**
 	 * @param minutes sets {@link mMinutes}
-	 * @throws InvalidParameterException if <b>minutes</b> is negative
+	 * @throws InvalidParameterException if <b>minutes</b> is negative,
+	 * or greater than 23 (as arbitrary as it sounds, due to current
+	 * GUI limitations, it's set to the hours limitations on a TimePicker).
 	 */
 	public void setMinutes(final int minutes) throws InvalidParameterException {
 		if(minutes < 0) {
 			// negative valuemLeftButton
 			throw new InvalidParameterException("Minutes must be positive");
+		} else if(minutes >= 24) {
+			// greater than 59
+			throw new InvalidParameterException("Minutes must be less than 24");
 		} else {
 			// update the minutes
 			this.mMinutes = minutes;

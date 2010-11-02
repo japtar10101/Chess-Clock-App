@@ -64,7 +64,7 @@ public class MainActivity extends Activity {
     @Override
     public void onPause() {
         // Exit the current layout
-        this.getCurrentMenu().exitLayout();
+        this.getCurrentMenu().exitMenu();
         
     	// Do whatever is in the super class last
         super.onPause();
@@ -170,12 +170,12 @@ public class MainActivity extends Activity {
 		}
 		
 		// Exit the current layout
-		this.getCurrentMenu().exitLayout();
+		this.getCurrentMenu().exitMenu();
 		
 		// Update the layout ID
 		mCurrentMenuId = menuId;
 		
 		// Setup the new layout
-		this.getCurrentMenu().setupLayout();
+		this.getCurrentMenu().setupMenu();
 	}
 }
