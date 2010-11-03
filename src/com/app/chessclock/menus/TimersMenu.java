@@ -8,6 +8,7 @@ import android.os.SystemClock;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.app.chessclock.Global;
@@ -45,16 +46,21 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 	private Button mLeftButton = null;
 	/** Right player's button */
 	private Button mRightButton = null;
+	/** Resume-after-pause button */
+	private Button mResumeButton = null;
+	/** New game button */
+	private Button mNewGameButton = null;
 	
 	// == Labels ==
 	/** Label indicating delay */
 	private TextView mDelayLabel = null;
 	
 	// == Dialog ==
+	/** A pause screen, generally left invisible */
+	private RelativeLayout mPauseLayout = null;
+	/** A "Times Up!" screen, generally left invisible */
+	private RelativeLayout mTimesUpLayout = null;
 	// FIXME: create a start dialog, which disappears automatically
-	// FIXME: create a generic pause dialog
-	// FIXME: create a menu-button pause dialog
-	// FIXME: create a times-up dialog
 	
 	// == Sound ==
 	// FIXME: add a sound

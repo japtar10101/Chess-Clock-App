@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+
     <string name="app_name">Chess Clock App</string>
-    <string name="delayLabelText">Delay: </string>
+    <string name="delayLabelText">Delay </string>
+	<string name="pauseLabelText">Paused</string>
+	<string name="resumeButtonText">Resume</string>
+    <string name="timesUpLabelText">Times Up!</string>
+    <string name="newGameButtonText">New Game</string>
 
 </resources>
