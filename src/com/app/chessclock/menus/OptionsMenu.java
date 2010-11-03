@@ -12,6 +12,7 @@ import com.app.chessclock.Global;
 import com.app.chessclock.MainActivity;
 import com.app.chessclock.R;
 import com.app.chessclock.enums.MenuId;
+import com.app.chessclock.enums.TimerCondition;
 import com.app.chessclock.models.TimeModel;
 
 /**
@@ -128,7 +129,7 @@ public class OptionsMenu extends ActivityMenu implements OnClickListener {
 			
 			// Save the settings, and restart the game
 			Global.OPTIONS.saveSettings();
-			Global.OPTIONS.isPaused = false;
+			Global.OPTIONS.timerCondition = TimerCondition.STARTING;
 		}
 		
 		// Switch the layout to TimersMenu

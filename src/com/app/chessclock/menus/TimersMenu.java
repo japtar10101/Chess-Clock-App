@@ -24,23 +24,21 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 	/* ===========================================================
 	 * Members
 	 * =========================================================== */
-	// == Timer ==
-	private final Handler mTimer = new Handler();
-	private final ChessTask mTask = new ChessTask();
-	
 	// == Conditionals ==
-	/** The current timer's condition */
-	private TimerCondition mCondition = TimerCondition.STARTING;
 	/** Flag indicating whose turn it is */
-	private boolean mLeftPlayersTurn = false;
+	private static boolean msLeftPlayersTurn = false;
 	
 	// == Times ==
 	/** Left player's time */
-	private final TimeModel mLeftPlayersTime = new TimeModel();
+	private static final TimeModel msLeftPlayersTime = new TimeModel();
 	/** Right player's time */
-	private final TimeModel mRightPlayersTime = new TimeModel();
+	private static final TimeModel msRightPlayersTime = new TimeModel();
 	/** Time of delay */
-	private final TimeModel mDelayTime = new TimeModel();
+	private static final TimeModel msDelayTime = new TimeModel();
+	
+	// == Timer ==
+	private final Handler mTimer = new Handler();
+	private final ChessTask mTask = new ChessTask();
 	
 	// == Buttons ==
 	/** Left player's button */
@@ -97,14 +95,14 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 		// Determine the condition to begin this game at
 		// FIXME: we need a new model retaining the game's current conditions,
 		// and save that in options
-		mCondition = TimerCondition.PAUSE_WITHOUT_MENU;
-		if(!Global.OPTIONS.isPaused) {
-			mCondition = TimerCondition.STARTING;
+		Global.OPTIONS.timerCondition = TimerCondition.PAUSE_WITHOUT_MENU;
+		if(Global.OPTIONS.timerCondition != TimerCondition.PAUSE_WITHOUT_MENU) {
+			Global.OPTIONS.timerCondition = TimerCondition.STARTING;
 			
 			// Reset the time
-			mLeftPlayersTime.setTime(Global.OPTIONS.savedTimeLimit);
-			mRightPlayersTime.setTime(Global.OPTIONS.savedTimeLimit);
-			mDelayTime.setTime(Global.OPTIONS.savedDelayTime);
+			msLeftPlayersTime.setTime(Global.OPTIONS.savedTimeLimit);
+			msRightPlayersTime.setTime(Global.OPTIONS.savedTimeLimit);
+			msDelayTime.setTime(Global.OPTIONS.savedDelayTime);
 			
 			// Enable both buttons
 			mLeftButton.setEnabled(true);
@@ -112,8 +110,8 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 		}
 		
 		// Update their text
-		mLeftButton.setText(mLeftPlayersTime.toString());
-		mRightButton.setText(mRightPlayersTime.toString());
+		mLeftButton.setText(msLeftPlayersTime.toString());
+		mRightButton.setText(msRightPlayersTime.toString());
 		
 		// Hide the delay label
 		mDelayLabel.setVisibility(View.INVISIBLE);
@@ -128,14 +126,13 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 	@Override
 	public void exitMenu() {
 		// Set the option's state
-		switch(mCondition) {
+		switch(Global.OPTIONS.timerCondition) {
 			case TIMES_UP:
 			case STARTING:
-				Global.OPTIONS.isPaused = false;
+				Global.OPTIONS.timerCondition = TimerCondition.STARTING;
 				break;
 			default:
-				Global.OPTIONS.isPaused = true;
-				mCondition = TimerCondition.PAUSE_WITHOUT_MENU;
+				Global.OPTIONS.timerCondition = TimerCondition.PAUSE_WITHOUT_MENU;
 		}
 	}
 
@@ -150,12 +147,12 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 		mTimer.removeCallbacks(mTask);
 
 		// Update the condition and current player
-		mCondition = TimerCondition.RUNNING;
-		mLeftPlayersTurn = v.equals(mRightButton);
+		Global.OPTIONS.timerCondition = TimerCondition.RUNNING;
+		msLeftPlayersTurn = v.equals(mRightButton);
 		
 		// Enable only one button
-		mLeftButton.setEnabled(mLeftPlayersTurn);
-		mRightButton.setEnabled(!mLeftPlayersTurn);
+		mLeftButton.setEnabled(msLeftPlayersTurn);
+		mRightButton.setEnabled(!msLeftPlayersTurn);
 		
 		// Restart the timer
 		mTask.reset();
@@ -186,7 +183,7 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 	 */
 	private void timesUp() {
 		// Set the condition to time up
-		mCondition = TimerCondition.TIMES_UP;
+		Global.OPTIONS.timerCondition = TimerCondition.TIMES_UP;
 		
 		// Disable both buttons
 		mLeftButton.setEnabled(false);
@@ -226,16 +223,16 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 			mStartTime = SystemClock.uptimeMillis();
 			
 			// Figure out which time to decrement
-			TimeModel updateTime = mRightPlayersTime;
-			if(mLeftPlayersTurn) {
-				updateTime = mLeftPlayersTime;
+			TimeModel updateTime = msRightPlayersTime;
+			if(msLeftPlayersTurn) {
+				updateTime = msLeftPlayersTime;
 			}
 			
 			// Decrement the time that many seconds
 			final int timeSpanSeconds = (int) (timeSpanMilliseconds / 1000);
 			for(int second = 0; second < timeSpanSeconds; ++second) {
 				// First attempt to decrement the delay time
-				if(!mDelayTime.decrementASecond()) {
+				if(!msDelayTime.decrementASecond()) {
 					// If failed, try decrementing the player's time
 					if(!updateTime.decrementASecond()) {
 						// If that failed, times up!
@@ -248,7 +245,7 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 			updateLabels();
 			
 			// Call this task again, if condition is still running
-			if(mCondition == TimerCondition.RUNNING) {
+			if(Global.OPTIONS.timerCondition == TimerCondition.RUNNING) {
 				mTimer.postDelayed(this, 1000);
 			}
 		}
@@ -261,7 +258,7 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 		 */
 		public void reset() {
 			mStartTime = SystemClock.uptimeMillis();
-			mDelayTime.setTime(Global.OPTIONS.savedDelayTime);
+			msDelayTime.setTime(Global.OPTIONS.savedDelayTime);
 			updateLabels();
 		}
 		
@@ -270,21 +267,21 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 		 * =========================================================== */
 		private void updateLabels() {
 			// Update the corresponding button
-			if(mLeftPlayersTurn) {
-				mLeftButton.setText(mLeftPlayersTime.toString());
+			if(msLeftPlayersTurn) {
+				mLeftButton.setText(msLeftPlayersTime.toString());
 			} else {
-				mRightButton.setText(mRightPlayersTime.toString());
+				mRightButton.setText(msRightPlayersTime.toString());
 			}
 			
 			// Update the delay time
-			if(mDelayTime.isTimeZero()) {
+			if(msDelayTime.isTimeZero()) {
 				// Set the label invisible, if at 0
 				mDelayLabel.setVisibility(View.INVISIBLE);
 			} else {
 				// Generate the string to display
 				String labelText = mParentActivity.getString(
 						R.string.delayLabelText);
-				labelText += mDelayTime.toString();
+				labelText += msDelayTime.toString();
 				
 				// Set the label visible, and update the text
 				mDelayLabel.setVisibility(View.VISIBLE);

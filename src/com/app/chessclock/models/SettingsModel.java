@@ -5,6 +5,8 @@ package com.app.chessclock.models;
 
 import java.security.InvalidParameterException;
 
+import com.app.chessclock.enums.TimerCondition;
+
 import android.os.Bundle;
 
 /**
@@ -47,22 +49,8 @@ public class SettingsModel {
 	private Bundle mSavedState = null;
 	
 	// == Settings held temporarily ==
-	// TODO: move this to a different model.  Not really needed here.
-	/** Variable used between layouts.
-	 * Determines whether the Timer is paused or not */
-	public boolean isPaused = false;
-	/** Variable stored between layouts.
-	 * Determines who's playing */
-	public boolean leftPlayersTurn = false;
-	/** Variable stored between layouts.
-	 * Retains the current delay time */
-	public final TimeModel currentDelayTime = new TimeModel();
-	/** Variable stored between layouts.
-	 * Retains left player's time */
-	public final TimeModel leftPlayersTime = new TimeModel();
-	/** Variable stored between layouts.
-	 * Determines who's playing */
-	public final TimeModel rightPlayersTime = new TimeModel();
+	/** The current timer's condition */
+	public TimerCondition timerCondition = TimerCondition.STARTING;
 	
 	// FIXME: add a sound
 
