@@ -39,6 +39,8 @@ public class MainActivity extends Activity {
         this.getWindowManager().getDefaultDisplay().getMetrics(Global.DISPLAY);
         Global.OPTIONS.setSavedState(savedInstanceState);
         Global.GAME_STATE.setSavedState(savedInstanceState);
+        Global.GAME_STATE.setDelayPrependString(
+        		this.getString(R.string.delayLabelText));
         
         // Create all the layouts
         mAllMenus.put(MenuId.TIMER, new TimersMenu(this));
