@@ -1,11 +1,9 @@
 /**
- * 
+ * Helper classes
  */
 package com.app.chessclock.models;
 
 import java.security.InvalidParameterException;
-
-import com.app.chessclock.enums.TimerCondition;
 
 import android.os.Bundle;
 
@@ -21,6 +19,7 @@ public class SettingsModel {
 	public static final String KEY_TIME_LIMIT_MINUTES = "timeLimitMinutes";
 	/** The saved key value for time limit (seconds) */
 	public static final String KEY_TIME_LIMIT_SECONDS = "timeLimitSeconds";
+	
 	/** The saved key value for delay time (minutes) */
 	public static final String KEY_DELAY_TIME_MINUTES = "delayTimeMinutes";
 	/** The saved key value for delay time (seconds) */
@@ -30,6 +29,7 @@ public class SettingsModel {
 	public static final int DEFAULT_TIME_LIMIT_MINUTES = 5;
 	/** The default time limit (seconds) */
 	public static final int DEFAULT_TIME_LIMIT_SECONDS = 0;
+	
 	/** The default delay time (minutes) */
 	public static final int DEFAULT_DELAY_TIME_MINUTES = 0;
 	/** The default delay time (seconds) */
@@ -45,14 +45,9 @@ public class SettingsModel {
 	/** The delay time */
 	public final TimeModel savedDelayTime =
 		new TimeModel(DEFAULT_DELAY_TIME_MINUTES, DEFAULT_DELAY_TIME_SECONDS);
+	// FIXME: add a sound
 	/** The saved state */
 	private Bundle mSavedState = null;
-	
-	// == Settings held temporarily ==
-	/** The current timer's condition */
-	public TimerCondition timerCondition = TimerCondition.STARTING;
-	
-	// FIXME: add a sound
 
 	/* ===========================================================
 	 * Public Methods
@@ -67,6 +62,7 @@ public class SettingsModel {
 			// Save the attributes to the bundle
 			mSavedState.putInt(KEY_TIME_LIMIT_MINUTES, savedTimeLimit.getMinutes());
 			mSavedState.putInt(KEY_TIME_LIMIT_SECONDS, savedTimeLimit.getSeconds());
+			
 			mSavedState.putInt(KEY_DELAY_TIME_MINUTES, savedDelayTime.getMinutes());
 			mSavedState.putInt(KEY_DELAY_TIME_SECONDS, savedDelayTime.getSeconds());
 			
@@ -103,11 +99,12 @@ public class SettingsModel {
 			savedTimeLimit.setSeconds(mSavedState.getInt(
 					KEY_TIME_LIMIT_SECONDS,
 					DEFAULT_TIME_LIMIT_SECONDS));
+			
 			savedDelayTime.setMinutes(mSavedState.getInt(
 					KEY_DELAY_TIME_MINUTES,
 					DEFAULT_DELAY_TIME_MINUTES));
 			savedDelayTime.setSeconds(mSavedState.getInt(
-					KEY_DELAY_TIME_MINUTES,
+					KEY_DELAY_TIME_SECONDS,
 					DEFAULT_DELAY_TIME_SECONDS));
 		}
 	}

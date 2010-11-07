@@ -1,12 +1,12 @@
 /**
- * 
+ * Package of menus
  */
 package com.app.chessclock.menus;
 
 import com.app.chessclock.MainActivity;
 
 /**
- * TODO: add a description
+ * Base class for each menu
  * @author japtar10101
  */
 public abstract class ActivityMenu {

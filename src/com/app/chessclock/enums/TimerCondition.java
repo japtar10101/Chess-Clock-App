@@ -1,10 +1,10 @@
 /**
- * 
+ * Package of enumerators
  */
 package com.app.chessclock.enums;
 
 /**
- * TODO: add a description
+ * All the possible game state conditions
  * @author japtar10101
  */
 public enum TimerCondition {

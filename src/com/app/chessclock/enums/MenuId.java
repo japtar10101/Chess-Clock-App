@@ -1,10 +1,10 @@
 /**
- * 
+ * Package of enumerators
  */
 package com.app.chessclock.enums;
 
 /**
- * TODO: add a description
+ * ID on which menu you're on
  * @author japtar10101
  */
 public enum MenuId {

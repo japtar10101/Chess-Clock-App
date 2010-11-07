@@ -38,6 +38,7 @@ public class MainActivity extends Activity {
         // Update all constant variables
         this.getWindowManager().getDefaultDisplay().getMetrics(Global.DISPLAY);
         Global.OPTIONS.setSavedState(savedInstanceState);
+        Global.GAME_STATE.setSavedState(savedInstanceState);
         
         // Create all the layouts
         mAllMenus.put(MenuId.TIMER, new TimersMenu(this));
@@ -65,6 +66,10 @@ public class MainActivity extends Activity {
     public void onPause() {
         // Exit the current layout
         this.getCurrentMenu().exitMenu();
+        
+        // Save settings
+        Global.OPTIONS.saveSettings();
+        Global.GAME_STATE.saveSettings();
         
     	// Do whatever is in the super class last
         super.onPause();

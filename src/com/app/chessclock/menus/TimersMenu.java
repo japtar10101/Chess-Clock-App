@@ -1,5 +1,5 @@
 /**
- * 
+ * Package of menus
  */
 package com.app.chessclock.menus;
 
@@ -119,7 +119,7 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 		// Determine the condition to begin this game at
 		// FIXME: we need a new model retaining the game's current conditions,
 		// and save that in options
-		if(Global.OPTIONS.timerCondition != TimerCondition.PAUSE) {
+		if(Global.GAME_STATE.timerCondition != TimerCondition.PAUSE) {
 			
 			// If paused, set the pause layout visible
 			mPauseLayout.setVisibility(View.VISIBLE);
@@ -128,7 +128,7 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 			mLeftButton.setEnabled(true);
 			mRightButton.setEnabled(true);
 		} else {
-			Global.OPTIONS.timerCondition = TimerCondition.STARTING;
+			Global.GAME_STATE.timerCondition = TimerCondition.STARTING;
 			
 			// Reset the time
 			// FIXME: move this to the "pause-state model"
@@ -156,13 +156,13 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 	@Override
 	public void exitMenu() {
 		// Set the option's state
-		switch(Global.OPTIONS.timerCondition) {
+		switch(Global.GAME_STATE.timerCondition) {
 			case TIMES_UP:
 			case STARTING:
-				Global.OPTIONS.timerCondition = TimerCondition.STARTING;
+				Global.GAME_STATE.timerCondition = TimerCondition.STARTING;
 				break;
 			default:
-				Global.OPTIONS.timerCondition = TimerCondition.PAUSE;
+				Global.GAME_STATE.timerCondition = TimerCondition.PAUSE;
 		}
 	}
 
@@ -177,7 +177,7 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 		mTimer.removeCallbacks(mTask);
 
 		// Update the condition and current player
-		Global.OPTIONS.timerCondition = TimerCondition.RUNNING;
+		Global.GAME_STATE.timerCondition = TimerCondition.RUNNING;
 		msLeftPlayersTurn = v.equals(mRightButton);
 		
 		// Enable only one button
@@ -213,7 +213,7 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 	 */
 	private void timesUp() {
 		// Set the condition to time up
-		Global.OPTIONS.timerCondition = TimerCondition.TIMES_UP;
+		Global.GAME_STATE.timerCondition = TimerCondition.TIMES_UP;
 		
 		// Disable both buttons
 		mLeftButton.setEnabled(false);
@@ -275,7 +275,7 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 			updateLabels();
 			
 			// Call this task again, if condition is still running
-			if(Global.OPTIONS.timerCondition == TimerCondition.RUNNING) {
+			if(Global.GAME_STATE.timerCondition == TimerCondition.RUNNING) {
 				mTimer.postDelayed(this, 1000);
 			}
 		}

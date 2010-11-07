@@ -1,5 +1,5 @@
 /**
- * 
+ * Package of menus
  */
 package com.app.chessclock.menus;
 
@@ -129,7 +129,7 @@ public class OptionsMenu extends ActivityMenu implements OnClickListener {
 			
 			// Save the settings, and restart the game
 			Global.OPTIONS.saveSettings();
-			Global.OPTIONS.timerCondition = TimerCondition.STARTING;
+			Global.GAME_STATE.timerCondition = TimerCondition.STARTING;
 		}
 		
 		// Switch the layout to TimersMenu
