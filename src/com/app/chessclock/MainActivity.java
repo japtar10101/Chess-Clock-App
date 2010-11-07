@@ -4,6 +4,7 @@ import java.security.InvalidParameterException;
 import java.util.HashMap;
 
 import com.app.chessclock.enums.MenuId;
+import com.app.chessclock.enums.TimerCondition;
 import com.app.chessclock.menus.ActivityMenu;
 import com.app.chessclock.menus.OptionsMenu;
 import com.app.chessclock.menus.TimersMenu;
@@ -69,8 +70,7 @@ public class MainActivity extends Activity {
         // Exit the current layout
         this.getCurrentMenu().exitMenu();
         
-        // Save settings
-        Global.OPTIONS.saveSettings();
+        // Save pause state
         Global.GAME_STATE.saveSettings();
         
     	// Do whatever is in the super class last
@@ -117,16 +117,37 @@ public class MainActivity extends Activity {
 			    
 			// If reset is clicked, restart the timers menu
 			case R.id.menuReset:
+				Global.GAME_STATE.timerCondition = TimerCondition.STARTING;
 				this.setCurrentMenuId(MenuId.TIMER);
 				break;
 			
 			// Otherwise, let the super class figure it out
 			default:
 				toReturn = super.onOptionsItemSelected(item);
+				break;
 		}
 		return toReturn;
 	}
     
+	/**
+	 * If backing from the options menu, saves the options,
+	 * and go directly to the game menu.
+	 * @see android.app.Activity#onBackPressed()
+	 */
+	public void onBackPressed() {
+		// Check which menu we're on
+		if(mCurrentMenuId == MenuId.OPTIONS) {
+			// If we're on options, first save the game options
+			Global.OPTIONS.saveSettings();
+			
+			// Go right back to the timer menu
+			this.setCurrentMenuId(MenuId.TIMER);
+		} else {
+			// Otherwise, let the super class figure it out
+			super.onBackPressed();
+		}
+	}
+	
 	/* ===========================================================
 	 * Public Methods
 	 * =========================================================== */
@@ -138,7 +159,10 @@ public class MainActivity extends Activity {
 	public ActivityMenu getMenu(final MenuId menuId) {
 		ActivityMenu toReturn = null;
 		
+		// Make sure the ID is contained in the HashMap
 		if(mAllMenus.containsKey(menuId)) {
+			
+			// Return the corresponding menu
 			toReturn = mAllMenus.get(menuId);
 		}
 		

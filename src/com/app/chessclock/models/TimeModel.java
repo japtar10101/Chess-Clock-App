@@ -22,6 +22,7 @@ public class TimeModel {
 	 * Constructors
 	 * =========================================================== */
 	/**
+	 * Default constructor.  Sets the time to 0.
 	 * @see #setTime(int, int)
 	 */
 	public TimeModel(final int minutes, final int seconds) {
@@ -70,8 +71,8 @@ public class TimeModel {
 	 * @see #setSeconds(int)
 	 */
 	public void setTime(final int minutes, final int seconds) {
-		this.setMinutes(minutes);
 		this.setSeconds(seconds);
+		this.setMinutes(minutes);
 	}
 	
 	/**
@@ -80,8 +81,7 @@ public class TimeModel {
 	 */
 	public void setTime(final TimeModel time) {
 		if(time != null) {
-			this.setMinutes(time.getMinutes());
-			this.setSeconds(time.getSeconds());
+			this.setTime(time.getMinutes(), time.getSeconds());
 		}
 	}
 	

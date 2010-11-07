@@ -159,7 +159,7 @@ public class GameStateModel {
 		if(mDelayTime.isTimeZero()) {
 			return null;
 		} else if(mDelayPrependString != null) {
-			return mDelayPrependString + mDelayTime.toString();
+			return mDelayPrependString + ' ' + mDelayTime.toString();
 		} else {
 			return mDelayTime.toString();
 		}

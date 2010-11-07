@@ -9,6 +9,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.app.chessclock.Global;
 import com.app.chessclock.MainActivity;
@@ -102,7 +103,10 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 			case TIMES_UP:
 			case STARTING:
 				this.startup();
-				// FIXME: show a notification, indicating to push a button
+				Toast.makeText(mParentActivity,
+						"Click either button to start the timer.\n" +
+						"Press the menu button to pause.",
+						Toast.LENGTH_LONG).show();
 				break;
 			default:
 				this.paused();
@@ -143,7 +147,7 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 			return;
 		}
 		
-		// Stop the timerCondition, in case it's running
+		// Stop the handler
 		mTimer.removeCallbacks(mTask);
 		
 		// Set condition to running
@@ -177,11 +181,22 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 	}
 	
 	/**
+	 * Pauses the timer, while the menu is being opened.
 	 * @return true unless time's up
 	 * @see com.app.chessclock.menus.ActivityMenu#enableMenuButton()
 	 */
 	@Override
 	public boolean enableMenuButton() {
+		// Stop the handler
+		mTimer.removeCallbacks(mTask);
+		
+		// Set condition to pause
+		Global.GAME_STATE.timerCondition = TimerCondition.PAUSE;
+		
+		// Pause the timer
+		this.paused();
+		
+		// Show the menu (by returning true)
 		return true;
 	}
 	
