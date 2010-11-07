@@ -18,7 +18,7 @@ import com.app.chessclock.enums.TimerCondition;
 import com.app.chessclock.models.TimeModel;
 
 /**
- * TODO: add a description
+ * Menu for Timer
  * @author japtar10101
  */
 public class TimersMenu extends ActivityMenu implements OnClickListener {
@@ -87,33 +87,57 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 		// First, setup the UI
 		mParentActivity.setContentView(R.layout.main);
 
+		// Grab the label
+		mDelayLabel = (TextView)mParentActivity.findViewById(R.id.labelDelay);
+		
+		// Grab layouts
+		mPauseLayout = (RelativeLayout)
+			mParentActivity.findViewById(R.id.layoutPause);
+		mTimesUpLayout = (RelativeLayout)
+			mParentActivity.findViewById(R.id.layoutTimesUp);
+		
 		// Grab the buttons
 		mLeftButton = (Button)mParentActivity.findViewById(R.id.buttonLeftTime);
 		mRightButton = (Button)mParentActivity.findViewById(R.id.buttonRightTime);
+		mResumeButton = (Button)mParentActivity.findViewById(R.id.buttonResume);
+		mNewGameButton = (Button)mParentActivity.findViewById(R.id.buttonNewGame);
 		
 		// Set the buttons click behavior to this class
 		mLeftButton.setOnClickListener(this);
 		mRightButton.setOnClickListener(this);
+		mResumeButton.setOnClickListener(this);
+		mNewGameButton.setOnClickListener(this);
 		
-		// Grab the labels
-		mDelayLabel = (TextView)mParentActivity.findViewById(R.id.labelDelay);
+		// Default both layouts to be invisible
+		mPauseLayout.setVisibility(View.INVISIBLE);
+		mTimesUpLayout.setVisibility(View.INVISIBLE);
+		
+		// Default player buttons to be enabled
+		mLeftButton.setEnabled(true);
+		mRightButton.setEnabled(true);
 		
 		// Determine the condition to begin this game at
 		// FIXME: we need a new model retaining the game's current conditions,
 		// and save that in options
-		Global.OPTIONS.timerCondition = TimerCondition.PAUSE_WITHOUT_MENU;
-		if(Global.OPTIONS.timerCondition != TimerCondition.PAUSE_WITHOUT_MENU) {
+		if(Global.OPTIONS.timerCondition != TimerCondition.PAUSE) {
+			
+			// If paused, set the pause layout visible
+			mPauseLayout.setVisibility(View.VISIBLE);
+			
+			// Disable player buttons
+			mLeftButton.setEnabled(true);
+			mRightButton.setEnabled(true);
+		} else {
 			Global.OPTIONS.timerCondition = TimerCondition.STARTING;
 			
 			// Reset the time
+			// FIXME: move this to the "pause-state model"
 			msLeftPlayersTime.setTime(Global.OPTIONS.savedTimeLimit);
 			msRightPlayersTime.setTime(Global.OPTIONS.savedTimeLimit);
 			msDelayTime.setTime(Global.OPTIONS.savedDelayTime);
-			
-			// Enable both buttons
-			mLeftButton.setEnabled(true);
-			mRightButton.setEnabled(true);
 		}
+		
+		// FIXME: update the button and delay labels
 		
 		// Update their text
 		mLeftButton.setText(msLeftPlayersTime.toString());
@@ -138,7 +162,7 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 				Global.OPTIONS.timerCondition = TimerCondition.STARTING;
 				break;
 			default:
-				Global.OPTIONS.timerCondition = TimerCondition.PAUSE_WITHOUT_MENU;
+				Global.OPTIONS.timerCondition = TimerCondition.PAUSE;
 		}
 	}
 

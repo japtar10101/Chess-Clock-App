@@ -12,10 +12,8 @@ public enum TimerCondition {
 	STARTING,
 	/** Indicates the timer is running */
 	RUNNING,
-	/** Indicates the timer is paused, due to opening the menu */
-	PAUSE_WITH_MENU,
-	/** Indicates the timer is paused, without the menu */
-	PAUSE_WITHOUT_MENU,
+	/** Indicates the timer is paused */
+	PAUSE,
 	/** Indicates when the time is up */
 	TIMES_UP
 }
