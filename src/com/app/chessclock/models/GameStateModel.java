@@ -5,6 +5,7 @@ package com.app.chessclock.models;
 
 import java.security.InvalidParameterException;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.app.chessclock.Global;
@@ -18,6 +19,9 @@ public class GameStateModel {
 	/* ===========================================================
 	 * Constants
 	 * =========================================================== */
+	/** Shared preference name to recall/save */
+	public static final String PREFERENCE_FILE_NAME = "ChessClockAppPauseState";
+	
 	/** The saved key value for who's turn it is */
 	public static final String KEY_LEFT_PLAYERS_TURN = "leftPlayersTurn";
 	/** The saved key value for the timer condition */
@@ -41,8 +45,6 @@ public class GameStateModel {
 	/* ===========================================================
 	 * Members
 	 * =========================================================== */
-	/** The saved state */
-	private Bundle mSavedState = null;
 	/** prepend string for delay time */
 	private String mDelayPrependString = null;
 	
@@ -64,27 +66,92 @@ public class GameStateModel {
 	 * Public Methods
 	 * =========================================================== */
 	/**
-	 * Saves the current omDelayPrependStringptions state to a bundle
-	 * @param savedState the bundle to save this app's options
+	 * Saves the current settings to a SharedPreferences
+	 * @param saveState the SharedPreferences to save this app's options
+	 * @see SharedPreferences
 	 */
-	public void saveSettings() {
-		// Make sure the bundle isn't null
-		if(mSavedState != null) {
-			// Save the attributes to the bundle
-			mSavedState.putInt(KEY_LEFT_PLAYERS_MINUTES, mLeftPlayersTime.getMinutes());
-			mSavedState.putInt(KEY_LEFT_PLAYERS_SECONDS, mLeftPlayersTime.getSeconds());
-			
-			mSavedState.putInt(KEY_RIGHT_PLAYERS_MINUTES, mRightPlayersTime.getMinutes());
-			mSavedState.putInt(KEY_RIGHT_PLAYERS_SECONDS, mRightPlayersTime.getSeconds());
-			
-			mSavedState.putInt(KEY_DELAY_TIME_MINUTES, mDelayTime.getMinutes());
-			mSavedState.putInt(KEY_DELAY_TIME_SECONDS, mDelayTime.getSeconds());
-			
-			mSavedState.putBoolean(KEY_LEFT_PLAYERS_TURN, leftPlayersTurn);
-			
-			mSavedState.putInt(KEY_TIMER_CONDITION, timerCondition.ordinal());
-			
-			// FIXME: save this bundle to some personal SQL database
+	public void saveSettings(final SharedPreferences saveState) throws
+			IllegalArgumentException {
+		// Make sure the parameter isn't null
+		if(saveState == null) {
+			// If so, complain
+			throw new IllegalArgumentException("saveState cannot be null");
+		}
+		
+		// Grab the editor, and start saving
+		final SharedPreferences.Editor saveEditor = saveState.edit();
+		
+		// First, the left player time
+		saveEditor.putInt(KEY_LEFT_PLAYERS_MINUTES, mLeftPlayersTime.getMinutes());
+		saveEditor.putInt(KEY_LEFT_PLAYERS_SECONDS, mLeftPlayersTime.getSeconds());
+		
+		// Then, the right player time
+		saveEditor.putInt(KEY_RIGHT_PLAYERS_MINUTES, mRightPlayersTime.getMinutes());
+		saveEditor.putInt(KEY_RIGHT_PLAYERS_SECONDS, mRightPlayersTime.getSeconds());
+		
+		// The delay time
+		saveEditor.putInt(KEY_DELAY_TIME_MINUTES, mDelayTime.getMinutes());
+		saveEditor.putInt(KEY_DELAY_TIME_SECONDS, mDelayTime.getSeconds());
+		
+		// Who's turn it is
+		saveEditor.putBoolean(KEY_LEFT_PLAYERS_TURN, leftPlayersTurn);
+		
+		// The ordinal value of timerCondition
+		saveEditor.putInt(KEY_TIMER_CONDITION, timerCondition.ordinal());
+		
+		// Write it in!
+		saveEditor.commit();
+	}
+	
+	/**
+	 * Saves the current settings to a SharedPreferences
+	 * @param savedState the SharedPreferences to save this app's options
+	 * @see SharedPreferences
+	 * @param savedState shared Preference to save to
+	 */
+	public void recallSettings(final SharedPreferences savedState) throws
+			InvalidParameterException, IllegalArgumentException {
+		
+		// Make sure the parameter isn't null
+		if(savedState == null) {
+			// If so, complain
+			throw new IllegalArgumentException("savedState cannot be null");
+		}
+		
+		// Recall the attributes from the preference
+		// First, the left player's time
+		mLeftPlayersTime.setMinutes(savedState.getInt(
+				KEY_LEFT_PLAYERS_MINUTES,
+				SettingsModel.DEFAULT_TIME_LIMIT_MINUTES));
+		mLeftPlayersTime.setSeconds(savedState.getInt(
+				KEY_LEFT_PLAYERS_SECONDS,
+				SettingsModel.DEFAULT_TIME_LIMIT_SECONDS));
+
+		// Then, the right player's time
+		mRightPlayersTime.setMinutes(savedState.getInt(
+				KEY_RIGHT_PLAYERS_MINUTES,
+				SettingsModel.DEFAULT_TIME_LIMIT_MINUTES));
+		mRightPlayersTime.setSeconds(savedState.getInt(
+				KEY_RIGHT_PLAYERS_SECONDS,
+				SettingsModel.DEFAULT_TIME_LIMIT_SECONDS));
+
+		// The delay time...
+		mDelayTime.setMinutes(savedState.getInt(KEY_DELAY_TIME_MINUTES,
+				SettingsModel.DEFAULT_DELAY_TIME_MINUTES));
+		mDelayTime.setSeconds(savedState.getInt(KEY_DELAY_TIME_SECONDS,
+				SettingsModel.DEFAULT_DELAY_TIME_SECONDS));
+		
+		// Who's turn it is...
+		leftPlayersTurn = savedState.getBoolean(KEY_LEFT_PLAYERS_TURN, true);
+		
+		// Lastly, the game's state
+		// We store the timer condition as an ordinal, so recall as such
+		final int ordinal = savedState.getInt(KEY_TIMER_CONDITION, 0);
+		final TimerCondition[] conditions = TimerCondition.values();
+		if(ordinal >= conditions.length) {
+			timerCondition = TimerCondition.STARTING;
+		} else {
+			timerCondition = conditions[ordinal];
 		}
 	}
 	
@@ -174,16 +241,6 @@ public class GameStateModel {
 			return seconds.toString();
 		}
 	}
-		
-	/* ===========================================================
-	 * Getters
-	 * =========================================================== */
-	/**
-	 * @return {@link mSavedState}
-	 */
-	public Bundle getSavedState() {
-		return mSavedState;
-	}
 	
 	/* ===========================================================
 	 * Setters
@@ -193,40 +250,5 @@ public class GameStateModel {
 	 */
 	public void setDelayPrependString(final String prepend) {
 		mDelayPrependString = prepend;
-	}
-	
-	/**
-	 * @param savedState sets {@link mSavedState}
-	 */
-	public void setSavedState(final Bundle savedState) throws InvalidParameterException {
-		// Set mSavedState
-		mSavedState = savedState;
-		
-		// Make sure the parameter is correct
-		if(mSavedState != null) {
-			// Save the attributes to the bundle
-			mLeftPlayersTime.setMinutes(mSavedState.getInt(
-					KEY_LEFT_PLAYERS_MINUTES));
-			mLeftPlayersTime.setSeconds(mSavedState.getInt(
-					KEY_LEFT_PLAYERS_SECONDS));
-
-			mRightPlayersTime.setMinutes(mSavedState.getInt(
-					KEY_RIGHT_PLAYERS_MINUTES));
-			mRightPlayersTime.setSeconds(mSavedState.getInt(
-					KEY_RIGHT_PLAYERS_SECONDS));
-
-			mDelayTime.setMinutes(mSavedState.getInt(KEY_DELAY_TIME_MINUTES));
-			mDelayTime.setSeconds(mSavedState.getInt(KEY_DELAY_TIME_SECONDS));
-			
-			leftPlayersTurn = mSavedState.getBoolean(KEY_LEFT_PLAYERS_TURN);
-			
-			final int ordinal = mSavedState.getInt(KEY_TIMER_CONDITION);
-			final TimerCondition[] conditions = TimerCondition.values();
-			if(ordinal >= conditions.length) {
-				timerCondition = TimerCondition.STARTING;
-			} else {
-				timerCondition = conditions[ordinal];
-			}
-		}
 	}
 }

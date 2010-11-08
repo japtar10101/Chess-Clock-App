@@ -4,6 +4,7 @@ import java.security.InvalidParameterException;
 import java.util.HashMap;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,8 +13,8 @@ import android.view.MenuItem;
 import com.app.chessclock.enums.MenuId;
 import com.app.chessclock.enums.TimerCondition;
 import com.app.chessclock.menus.ActivityMenu;
-import com.app.chessclock.menus.OptionsMenu;
 import com.app.chessclock.menus.TimersMenu;
+import com.app.chessclock.models.GameStateModel;
 
 public class MainActivity extends Activity {
 	/* ===========================================================
@@ -33,15 +34,26 @@ public class MainActivity extends Activity {
      */
     @Override
     public void onCreate(final Bundle savedInstanceState) {
+    	
     	// Do whatever is in the super class first
         super.onCreate(savedInstanceState);
 
-        // Update all constant variables
+        // Grab the Display metrics
         this.getWindowManager().getDefaultDisplay().getMetrics(Global.DISPLAY);
-        Global.OPTIONS.setSavedState(savedInstanceState);
-        Global.GAME_STATE.setSavedState(savedInstanceState);
+        
+        // Recall and update the last game state.
+        SharedPreferences settings = this.getSharedPreferences(
+        		GameStateModel.PREFERENCE_FILE_NAME, 0);
+        Global.GAME_STATE.recallSettings(settings);
+        
+        // Also update the delay label
         Global.GAME_STATE.setDelayPrependString(
         		this.getString(R.string.delayLabelText));
+        
+        // TODO: once the options menu is done, recall the preferences from there
+//        SharedPreferences settings = this.getSharedPreferences(
+//        		GameStateModel.PREFERENCE_FILE_NAME, 0);
+//        Global.OPTIONS.setSavedState(savedInstanceState);
         
         // Create all the layouts
         mAllMenus.put(MenuId.TIMER, new TimersMenu(this));
@@ -50,21 +62,34 @@ public class MainActivity extends Activity {
         // Set the default layout to main
         this.setCurrentMenuId(MenuId.TIMER);
     }
-    
+        
     /**
      * Called when the activity pauses.
      * @see android.app.Activity#onPause()
      */
     @Override
     public void onPause() {
+    	
+    	// Do whatever is in the super class first
+        super.onPause();
+        
         // Exit the current layout
         this.getCurrentMenu().exitMenu();
-        
+    }
+    
+    /**
+     * Called when the activity pauses.
+     * @see android.app.Activity#onPause()
+     */
+    @Override
+    public void onStop() {
+    	// Do whatever is in the super class first
+        super.onStop();
+
         // Save pause state
-        Global.GAME_STATE.saveSettings();
-        
-    	// Do whatever is in the super class last
-        super.onPause();
+        final SharedPreferences settings = this.getSharedPreferences(
+        		GameStateModel.PREFERENCE_FILE_NAME, 0);
+        Global.GAME_STATE.saveSettings(settings);
     }
     
     /**
@@ -124,10 +149,12 @@ public class MainActivity extends Activity {
 	}
     
 	/**
+	 * TODO: once the options menu is finished, delete this.
 	 * If backing from the options menu, saves the options,
 	 * and go directly to the game menu.
 	 * @see android.app.Activity#onBackPressed()
 	 */
+	@Override
 	public void onBackPressed() {
 		// Check which menu we're on
 		if(mCurrentMenuId == MenuId.OPTIONS) {
