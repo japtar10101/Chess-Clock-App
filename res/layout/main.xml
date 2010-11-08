@@ -35,16 +35,14 @@ xmlns:android="http://schemas.android.com/apk/res/android">
     android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
     android:visibility="invisible" android:background="#d0000000">
     
-	    <TextView android:text="@string/pauseLabelText"
+	    <TextView android:id="@+id/labelPause" android:text="@string/pauseLabelText"
 	    android:layout_width="wrap_content" android:layout_height="wrap_content"
 	    android:layout_centerVertical="true" android:layout_centerHorizontal="true"
-	    android:typeface="monospace" android:textStyle="bold"
-	    android:textSize="30px" />
+	    android:typeface="monospace" android:textStyle="bold" android:textSize="30px" />
 	    
 	    <Button android:id="@+id/buttonResume" android:text="@string/resumeButtonText"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:typeface="monospace" android:textStyle="bold"
-        android:textSize="16px"
+        android:typeface="monospace" android:textStyle="bold" android:textSize="16px"
         android:layout_centerHorizontal="true" android:layout_below="@+id/labelPause" />
         
     </RelativeLayout>
@@ -54,7 +52,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
     android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
     android:visibility="invisible" android:background="#d0000000">
     
-        <TextView android:text="@string/timesUpLabelText"
+        <TextView android:id="@+id/labelTimesUp" android:text="@string/timesUpLabelText"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:layout_centerVertical="true" android:layout_centerHorizontal="true"
         android:typeface="monospace" android:textStyle="bold"
@@ -62,8 +60,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
         
         <Button android:id="@+id/buttonNewGame" android:text="@string/newGameButtonText"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:typeface="monospace" android:textStyle="bold"
-        android:textSize="16px"
+        android:typeface="monospace" android:textStyle="bold" android:textSize="16px"
         android:layout_centerHorizontal="true" android:layout_below="@+id/labelTimesUp" />
         
     </RelativeLayout>

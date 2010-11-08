@@ -5,75 +5,21 @@
 	
 		<Preference android:title="Time Limit"
 		android:summary="The starting time for each player"
-		android:key="prefTimeLimit">
-			
-			<!-- Timer Widget here -->
-			<TimePicker android:id="@+id/timeTimeLimit"
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent" />
-	            
-	        <!-- OK/Cancel button here -->
-            <LinearLayout android:layout_height="wrap_content"
-		    android:layout_width="fill_parent">
-		    
-		        <Button android:id="@+id/buttonLimitOk"
-		        android:layout_weight="1"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:text="@string/OkButton">
-		        </Button>
-		        
-				<Button android:id="@+id/buttonLimitCancel"
-				android:layout_weight="1"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="@string/CancelButton">
-				</Button>
-		       
-            </LinearLayout>
-            
-		</Preference>
+		android:key="prefTimeLimit" />
 		
 		<Preference android:title="Delay Time"
 		android:summary="The amount of time delayed after pressing a button"
-		android:key="prefDelayTime">
-		
-            <!-- Timer Widget here -->
-            <TimePicker android:id="@+id/timeDelayTime"
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent" />
-                
-            <!-- OK/Cancel button here -->
-            <LinearLayout android:layout_height="wrap_content"
-            android:layout_width="fill_parent">
-            
-                <Button android:id="@+id/buttonDelayOk"
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/OkButton">
-                </Button>
-                
-                <Button android:id="@+id/buttonDelayCancel"
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/CancelButton">
-                </Button>
-               
-            </LinearLayout>
-            
-		</Preference>
+		android:key="prefDelayTime" />
         
 	</PreferenceCategory>
 	
 	<PreferenceCategory android:title="Alarm">
 	
 		<RingtonePreference
-		android:name="Ringtone Preference"
-		android:summary="Select a ringtone"
-		android:title="Ringtones"
-		android:key="ringtonePref" />
+		android:name="Sound"
+		android:summary="Select a sound"
+		android:title="Sounds"
+		android:key="prefSound" />
 			
 	</PreferenceCategory>
 	

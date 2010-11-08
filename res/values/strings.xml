@@ -3,7 +3,7 @@
 
     <string name="app_name">Chess Clock App</string>
     <string name="playerButtonText">Time</string>
-    <string name="delayLabelText">Delay: </string>
+    <string name="delayLabelText">Delay - </string>
 	<string name="pauseLabelText">Paused</string>
 	<string name="resumeButtonText">Resume</string>
     <string name="timesUpLabelText">Times Up!</string>

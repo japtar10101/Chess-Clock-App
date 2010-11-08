@@ -3,17 +3,17 @@ package com.app.chessclock;
 import java.security.InvalidParameterException;
 import java.util.HashMap;
 
-import com.app.chessclock.enums.MenuId;
-import com.app.chessclock.enums.TimerCondition;
-import com.app.chessclock.menus.ActivityMenu;
-import com.app.chessclock.menus.OptionsMenu;
-import com.app.chessclock.menus.TimersMenu;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import com.app.chessclock.enums.MenuId;
+import com.app.chessclock.enums.TimerCondition;
+import com.app.chessclock.menus.ActivityMenu;
+import com.app.chessclock.menus.OptionsMenu;
+import com.app.chessclock.menus.TimersMenu;
 
 public class MainActivity extends Activity {
 	/* ===========================================================
@@ -35,7 +35,7 @@ public class MainActivity extends Activity {
     public void onCreate(final Bundle savedInstanceState) {
     	// Do whatever is in the super class first
         super.onCreate(savedInstanceState);
-        
+
         // Update all constant variables
         this.getWindowManager().getDefaultDisplay().getMetrics(Global.DISPLAY);
         Global.OPTIONS.setSavedState(savedInstanceState);
@@ -45,17 +45,7 @@ public class MainActivity extends Activity {
         
         // Create all the layouts
         mAllMenus.put(MenuId.TIMER, new TimersMenu(this));
-        mAllMenus.put(MenuId.OPTIONS, new OptionsMenu(this));
-    }
-    
-    /**
-     * Called when the activity starts.
-     * @see android.app.Activity#onStart()
-     */
-    @Override
-    public void onStart() {
-    	// Do whatever is in the super class first
-        super.onStart();
+        //mAllMenus.put(MenuId.OPTIONS, new OptionsMenu(this));
         
         // Set the default layout to main
         this.setCurrentMenuId(MenuId.TIMER);
@@ -86,6 +76,10 @@ public class MainActivity extends Activity {
     	// Generate the menu
         final MenuInflater inflater = this.getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
+        
+        // TODO: When the options menu is fixed, take this out
+        final MenuItem settings = (MenuItem) menu.getItem(1);
+        settings.setEnabled(false);
         
         // Return true
         return true;
@@ -137,9 +131,6 @@ public class MainActivity extends Activity {
 	public void onBackPressed() {
 		// Check which menu we're on
 		if(mCurrentMenuId == MenuId.OPTIONS) {
-			// If we're on options, first save the game options
-			Global.OPTIONS.saveSettings();
-			
 			// Go right back to the timer menu
 			this.setCurrentMenuId(MenuId.TIMER);
 		} else {

@@ -20,8 +20,7 @@ import com.app.chessclock.models.TimeModel;
  * TODO: add a description
  * @author japtar10101
  */
-public class OptionsMenu extends PreferenceActivity implements
-		ActivityMenu, OnClickListener {
+public class OptionsMenu extends PreferenceActivity implements ActivityMenu, OnClickListener {
 	/* ===========================================================
 	 * Members
 	 * =========================================================== */
@@ -55,6 +54,9 @@ public class OptionsMenu extends PreferenceActivity implements
 	public OptionsMenu(final MainActivity parent) {
 		// Setup activity
 		mParentActivity = parent;
+		
+		// Setup the settings
+		this.addPreferencesFromResource(R.layout.settings);
 	}
 
 	/* ===========================================================
@@ -66,6 +68,7 @@ public class OptionsMenu extends PreferenceActivity implements
 	 */
 	@Override
 	public void setupMenu() {
+		// FIXME: launch an intent here.
 		// First, setup the UI
 		mParentActivity.setContentView(R.layout.options);
 		
@@ -96,11 +99,14 @@ public class OptionsMenu extends PreferenceActivity implements
 	}
 
 	/**
-	 * Does nothing
+	 * Saves the settings
 	 * @see com.app.chessclock.menus.ActivityMenu#exitLayout(android.app.Activity)
 	 */
 	@Override
-	public void exitMenu() { }
+	public void exitMenu() {
+		// If we're on options, first save the game options
+		Global.OPTIONS.saveSettings();
+	}
 
 	/**
 	 * @return false, always
