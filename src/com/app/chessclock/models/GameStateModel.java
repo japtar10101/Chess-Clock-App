@@ -169,7 +169,7 @@ public class GameStateModel {
 		
 		// Prepend the string, if available
 		if(mDelayPrependString != null) {
-			return mDelayPrependString + seconds.toString();
+			return mDelayPrependString + ' ' + seconds.toString();
 		} else {
 			return seconds.toString();
 		}

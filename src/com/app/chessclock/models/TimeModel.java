@@ -104,17 +104,20 @@ public class TimeModel {
 		
 		// Check if we're not at 0
 		if(toReturn) {
-			// check if the seconds is already at 0
-			if(mSeconds <= 0) {
+			// check if the seconds is 0 or not
+			if(mSeconds > 0) {
+				// If not, decrement the seconds 
+				--mSeconds;
+			} else {
 				// If so, decrement the minutes
 				--mMinutes;
 				
 				// reset seconds to 59
 				mSeconds = 59;
-			} else {
-				// If not, decrement the seconds 
-				--mSeconds;
 			}
+			
+			// Re-check if after decrementing, it hasn't zeroed yet
+			toReturn = !isTimeZero();
 		}
 		
 		return toReturn;
