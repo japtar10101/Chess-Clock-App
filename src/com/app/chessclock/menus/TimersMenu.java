@@ -20,12 +20,17 @@ import com.app.chessclock.enums.TimerCondition;
  * Menu for Timer
  * @author japtar10101
  */
-public class TimersMenu extends ActivityMenu implements OnClickListener {
+public class TimersMenu  implements OnClickListener, ActivityMenu {
 	/* ===========================================================
 	 * Members
 	 * =========================================================== */
+	/** The main activities class */
+	protected MainActivity mParentActivity;
+	
 	// == Timer ==
+	/** The handler running {@link mTask} */
 	private final Handler mTimer;
+	/** Task that decrements the timer */
 	private final DecrementTimerTask mTask;
 	
 	// == Buttons ==
@@ -55,10 +60,11 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 	 * Constructors
 	 * =========================================================== */
 	/**
-	 * @see ActivityMenu#ActivityLayout(MainActivity)
+	 * @param parent the menu's parent activity
 	 */
 	public TimersMenu(final MainActivity parent) {
-		super(parent);
+		// Setup activity
+		mParentActivity = parent;
 		
 		// Setup the timer-related stuff
 		mTimer = new Handler();
@@ -187,14 +193,18 @@ public class TimersMenu extends ActivityMenu implements OnClickListener {
 	 */
 	@Override
 	public boolean enableMenuButton() {
-		// Stop the handler
-		mTimer.removeCallbacks(mTask);
-		
-		// Set condition to pause
-		Global.GAME_STATE.timerCondition = TimerCondition.PAUSE;
-		
-		// Pause the timer
-		this.paused();
+		// Check if the timer is running
+		if(Global.GAME_STATE.timerCondition == TimerCondition.RUNNING) {
+			
+			// Stop the handler
+			mTimer.removeCallbacks(mTask);
+			
+			// Set condition to pause
+			Global.GAME_STATE.timerCondition = TimerCondition.PAUSE;
+			
+			// Pause the timer
+			this.paused();
+		}
 		
 		// Show the menu (by returning true)
 		return true;

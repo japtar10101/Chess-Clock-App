@@ -126,13 +126,13 @@ public class TimeModel {
 	/**
 	 * @return {@link mMinutes}
 	 */
-	public int getMinutes() {
+	public Integer getMinutes() {
 		return mMinutes;
 	}
 	/**
 	 * @return {@link mSeconds}
 	 */
-	public int getSeconds() {
+	public Integer getSeconds() {
 		return mSeconds;
 	}
 

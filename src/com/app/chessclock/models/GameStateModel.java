@@ -156,12 +156,22 @@ public class GameStateModel {
 	 * Otherwise, returns the current delay time, in text.
 	 */
 	public String delayTime() {
+		// Check if the delay time is zero
 		if(mDelayTime.isTimeZero()) {
+			
+			// If so, return null
 			return null;
-		} else if(mDelayPrependString != null) {
-			return mDelayPrependString + ' ' + mDelayTime.toString();
+		}
+		
+		// Calculate the total seconds to delay
+		final Integer seconds = mDelayTime.getMinutes() * 60 +
+			mDelayTime.getSeconds();
+		
+		// Prepend the string, if available
+		if(mDelayPrependString != null) {
+			return mDelayPrependString + seconds.toString();
 		} else {
-			return mDelayTime.toString();
+			return seconds.toString();
 		}
 	}
 		

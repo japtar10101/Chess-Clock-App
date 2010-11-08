@@ -3,6 +3,7 @@
  */
 package com.app.chessclock.menus;
 
+import android.preference.PreferenceActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -19,10 +20,14 @@ import com.app.chessclock.models.TimeModel;
  * TODO: add a description
  * @author japtar10101
  */
-public class OptionsMenu extends ActivityMenu implements OnClickListener {
+public class OptionsMenu extends PreferenceActivity implements
+		ActivityMenu, OnClickListener {
 	/* ===========================================================
 	 * Members
 	 * =========================================================== */
+	/** The main activities class */
+	protected MainActivity mParentActivity;
+
 	// == Buttons ==
 	/** "Start Game" button */
 	private Button mStartGame = null;
@@ -45,10 +50,11 @@ public class OptionsMenu extends ActivityMenu implements OnClickListener {
 	 * Constructors
 	 * =========================================================== */
 	/**
-	 * @see ActivityMenu#ActivityLayout(MainActivity)
+	 * @param parent the menu's parent activity
 	 */
 	public OptionsMenu(final MainActivity parent) {
-		super(parent);
+		// Setup activity
+		mParentActivity = parent;
 	}
 
 	/* ===========================================================

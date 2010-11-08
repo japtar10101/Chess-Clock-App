@@ -3,29 +3,11 @@
  */
 package com.app.chessclock.menus;
 
-import com.app.chessclock.MainActivity;
-
 /**
- * Base class for each menu
+ * Interface for each menu
  * @author japtar10101
  */
-public abstract class ActivityMenu {
-	/* ===========================================================
-	 * Members
-	 * =========================================================== */
-	/** The main activities class */
-	protected MainActivity mParentActivity;
-
-	/* ===========================================================
-	 * Constructor
-	 * =========================================================== */
-	/**
-	 * @param parent sets {@link mParentActivity}
-	 */
-	public ActivityMenu(final MainActivity parent) {
-		mParentActivity = parent;
-	}
-	
+public interface ActivityMenu {
 	/* ===========================================================
 	 * Abstract Methods
 	 * =========================================================== */
