@@ -12,13 +12,13 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:layout_width="wrap_content" android:layout_height="fill_parent"
 		android:text="@string/playerButtonText" android:layout_weight="1"
 		android:typeface="monospace" android:textStyle="bold"
-		android:textSize="30px" />
+		android:textSize="60px" />
 		
 		<Button android:id="@+id/buttonRightTime"
 		android:layout_width="wrap_content" android:layout_height="fill_parent"
 		android:text="@string/playerButtonText" android:layout_weight="1"
 		android:typeface="monospace" android:textStyle="bold"
-		android:textSize="30px" />
+		android:textSize="60px" />
 	
 	</LinearLayout>
 	
@@ -27,7 +27,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:padding="5px"
 	android:text="@string/delayLabelText" android:background="#b0000000"
 	android:layout_alignParentBottom="true" android:layout_centerHorizontal="true"
-	android:typeface="monospace" android:textStyle="bold" android:textSize="18px"
+	android:typeface="monospace" android:textStyle="bold" android:textSize="30px"
 	android:visibility="invisible" />
 	
 	<RelativeLayout android:id="@+id/layoutPause"
@@ -38,11 +38,11 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	    <TextView android:id="@+id/labelPause" android:text="@string/pauseLabelText"
 	    android:layout_width="wrap_content" android:layout_height="wrap_content"
 	    android:layout_centerVertical="true" android:layout_centerHorizontal="true"
-	    android:typeface="monospace" android:textStyle="bold" android:textSize="30px" />
+	    android:typeface="monospace" android:textStyle="bold" android:textSize="60px" />
 	    
 	    <Button android:id="@+id/buttonResume" android:text="@string/resumeButtonText"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:typeface="monospace" android:textStyle="bold" android:textSize="16px"
+        android:typeface="monospace" android:textStyle="bold" android:textSize="30px"
         android:layout_centerHorizontal="true" android:layout_below="@+id/labelPause" />
         
     </RelativeLayout>
@@ -56,11 +56,11 @@ xmlns:android="http://schemas.android.com/apk/res/android">
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:layout_centerVertical="true" android:layout_centerHorizontal="true"
         android:typeface="monospace" android:textStyle="bold"
-        android:textSize="30px" />
+        android:textSize="60px" />
         
         <Button android:id="@+id/buttonNewGame" android:text="@string/newGameButtonText"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:typeface="monospace" android:textStyle="bold" android:textSize="16px"
+        android:typeface="monospace" android:textStyle="bold" android:textSize="30px"
         android:layout_centerHorizontal="true" android:layout_below="@+id/labelTimesUp" />
         
     </RelativeLayout>
