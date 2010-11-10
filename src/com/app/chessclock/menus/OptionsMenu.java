@@ -90,12 +90,12 @@ public class OptionsMenu extends PreferenceActivity implements ActivityMenu, OnC
 		
 		// Update the TimePickers to current settings
 		TimeModel updateTime = Global.OPTIONS.savedTimeLimit;
-		mTimeLimit.setCurrentHour(updateTime.getMinutes());
-		mTimeLimit.setCurrentMinute(updateTime.getSeconds());
+		mTimeLimit.setCurrentHour(Integer.valueOf(updateTime.getMinutes()));
+		mTimeLimit.setCurrentMinute(Integer.valueOf(updateTime.getSeconds()));
 		
 		updateTime = Global.OPTIONS.savedDelayTime;
-		mDelayTime.setCurrentHour(updateTime.getMinutes());
-		mDelayTime.setCurrentMinute(updateTime.getSeconds());
+		mDelayTime.setCurrentHour(Integer.valueOf(updateTime.getMinutes()));
+		mDelayTime.setCurrentMinute(Integer.valueOf(updateTime.getSeconds()));
 	}
 
 	/**
@@ -126,16 +126,19 @@ public class OptionsMenu extends PreferenceActivity implements ActivityMenu, OnC
 		
 		// Check if the Start Game button was selected
 		if(view == mStartGame) {
-			
 			// If so, update the time limit settings
 			TimeModel updateTime = Global.OPTIONS.savedTimeLimit;
-			updateTime.setMinutes(mTimeLimit.getCurrentHour());
-			updateTime.setSeconds(mTimeLimit.getCurrentMinute());
+			updateTime.setMinutes(TimeModel.intToByte(
+					mTimeLimit.getCurrentHour()));
+			updateTime.setSeconds(TimeModel.intToByte(
+					mTimeLimit.getCurrentMinute()));
 			
 			// update the delay time settings
 			updateTime = Global.OPTIONS.savedDelayTime;
-			updateTime.setMinutes(mDelayTime.getCurrentHour());
-			updateTime.setSeconds(mDelayTime.getCurrentMinute());
+			updateTime.setMinutes(TimeModel.intToByte(
+					mDelayTime.getCurrentHour()));
+			updateTime.setSeconds(TimeModel.intToByte(
+					mDelayTime.getCurrentMinute()));
 			
 			// FIXME: update the sound settings
 			

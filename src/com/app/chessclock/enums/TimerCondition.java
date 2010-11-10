@@ -7,13 +7,15 @@ package com.app.chessclock.enums;
  * All the possible game state conditions
  * @author japtar10101
  */
-public enum TimerCondition {
+public interface TimerCondition {
 	/** Indicates the timer just started */
-	STARTING,
+	public static final byte STARTING = 0;
 	/** Indicates the timer is running */
-	RUNNING,
+	public static final byte RUNNING = 1;
 	/** Indicates the timer is paused */
-	PAUSE,
+	public static final byte PAUSE = 2;
 	/** Indicates when the time is up */
-	TIMES_UP
+	public static final byte TIMES_UP = 3;
+	/** Number of TimerConditions */
+	public static final byte NUM_CONDITIONS = 4;
 }

@@ -106,8 +106,8 @@ public class TimersMenu  implements OnClickListener, ActivityMenu {
 		
 		// Determine the condition to begin this game at
 		switch(Global.GAME_STATE.timerCondition) {
-			case TIMES_UP:
-			case STARTING:
+			case TimerCondition.TIMES_UP:
+			case TimerCondition.STARTING:
 				this.startup();
 				Toast.makeText(mParentActivity,
 						"Click either button to start the timer.\n" +
@@ -128,8 +128,8 @@ public class TimersMenu  implements OnClickListener, ActivityMenu {
 	public void exitMenu() {
 		// Set the option's state
 		switch(Global.GAME_STATE.timerCondition) {
-			case TIMES_UP:
-			case STARTING:
+			case TimerCondition.TIMES_UP:
+			case TimerCondition.STARTING:
 				Global.GAME_STATE.timerCondition = TimerCondition.STARTING;
 				break;
 			default:

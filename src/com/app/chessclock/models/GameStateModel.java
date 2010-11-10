@@ -6,7 +6,6 @@ package com.app.chessclock.models;
 import java.security.InvalidParameterException;
 
 import android.content.SharedPreferences;
-import android.os.Bundle;
 
 import com.app.chessclock.Global;
 import com.app.chessclock.enums.TimerCondition;
@@ -52,7 +51,7 @@ public class GameStateModel {
 	/** Flag indicating whose turn it is */
 	public boolean leftPlayersTurn = false;
 	/** The current timer's condition */
-	public TimerCondition timerCondition = TimerCondition.STARTING;
+	public byte timerCondition = TimerCondition.STARTING;
 	
 	// == Times ==
 	/** Left player's time */
@@ -97,7 +96,7 @@ public class GameStateModel {
 		saveEditor.putBoolean(KEY_LEFT_PLAYERS_TURN, leftPlayersTurn);
 		
 		// The ordinal value of timerCondition
-		saveEditor.putInt(KEY_TIMER_CONDITION, timerCondition.ordinal());
+		saveEditor.putInt(KEY_TIMER_CONDITION, timerCondition);
 		
 		// Write it in!
 		saveEditor.commit();
@@ -120,38 +119,40 @@ public class GameStateModel {
 		
 		// Recall the attributes from the preference
 		// First, the left player's time
-		mLeftPlayersTime.setMinutes(savedState.getInt(
-				KEY_LEFT_PLAYERS_MINUTES,
-				SettingsModel.DEFAULT_TIME_LIMIT_MINUTES));
-		mLeftPlayersTime.setSeconds(savedState.getInt(
-				KEY_LEFT_PLAYERS_SECONDS,
-				SettingsModel.DEFAULT_TIME_LIMIT_SECONDS));
+		mLeftPlayersTime.setMinutes(TimeModel.intToByte(
+				savedState.getInt(KEY_LEFT_PLAYERS_MINUTES,
+				SettingsModel.DEFAULT_TIME_LIMIT_MINUTES)));
+		mLeftPlayersTime.setSeconds(TimeModel.intToByte(
+				savedState.getInt(KEY_LEFT_PLAYERS_SECONDS,
+				SettingsModel.DEFAULT_TIME_LIMIT_SECONDS)));
 
 		// Then, the right player's time
-		mRightPlayersTime.setMinutes(savedState.getInt(
-				KEY_RIGHT_PLAYERS_MINUTES,
-				SettingsModel.DEFAULT_TIME_LIMIT_MINUTES));
-		mRightPlayersTime.setSeconds(savedState.getInt(
-				KEY_RIGHT_PLAYERS_SECONDS,
-				SettingsModel.DEFAULT_TIME_LIMIT_SECONDS));
+		mRightPlayersTime.setMinutes(TimeModel.intToByte(
+				savedState.getInt(KEY_RIGHT_PLAYERS_MINUTES,
+				SettingsModel.DEFAULT_TIME_LIMIT_MINUTES)));
+		mRightPlayersTime.setSeconds(TimeModel.intToByte(
+				savedState.getInt(KEY_RIGHT_PLAYERS_SECONDS,
+				SettingsModel.DEFAULT_TIME_LIMIT_SECONDS)));
 
 		// The delay time...
-		mDelayTime.setMinutes(savedState.getInt(KEY_DELAY_TIME_MINUTES,
-				SettingsModel.DEFAULT_DELAY_TIME_MINUTES));
-		mDelayTime.setSeconds(savedState.getInt(KEY_DELAY_TIME_SECONDS,
-				SettingsModel.DEFAULT_DELAY_TIME_SECONDS));
+		mDelayTime.setMinutes(TimeModel.intToByte(
+				savedState.getInt(KEY_DELAY_TIME_MINUTES,
+				SettingsModel.DEFAULT_DELAY_TIME_MINUTES)));
+		mDelayTime.setSeconds(TimeModel.intToByte(
+				savedState.getInt(KEY_DELAY_TIME_SECONDS,
+				SettingsModel.DEFAULT_DELAY_TIME_SECONDS)));
 		
 		// Who's turn it is...
 		leftPlayersTurn = savedState.getBoolean(KEY_LEFT_PLAYERS_TURN, true);
 		
 		// Lastly, the game's state
 		// We store the timer condition as an ordinal, so recall as such
-		final int ordinal = savedState.getInt(KEY_TIMER_CONDITION, 0);
-		final TimerCondition[] conditions = TimerCondition.values();
-		if(ordinal >= conditions.length) {
+		final byte ordinal = TimeModel.intToByte(
+				savedState.getInt(KEY_TIMER_CONDITION, 0));
+		if(ordinal >= TimerCondition.NUM_CONDITIONS) {
 			timerCondition = TimerCondition.STARTING;
 		} else {
-			timerCondition = conditions[ordinal];
+			timerCondition = ordinal;
 		}
 	}
 	

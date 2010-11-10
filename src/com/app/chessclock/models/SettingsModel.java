@@ -26,14 +26,14 @@ public class SettingsModel {
 	public static final String KEY_DELAY_TIME_SECONDS = "delayTimeSeconds";
 
 	/** The default time limit (minutes) */
-	public static final int DEFAULT_TIME_LIMIT_MINUTES = 5;
+	public static final byte DEFAULT_TIME_LIMIT_MINUTES = 5;
 	/** The default time limit (seconds) */
-	public static final int DEFAULT_TIME_LIMIT_SECONDS = 0;
+	public static final byte DEFAULT_TIME_LIMIT_SECONDS = 0;
 	
 	/** The default delay time (minutes) */
-	public static final int DEFAULT_DELAY_TIME_MINUTES = 0;
+	public static final byte DEFAULT_DELAY_TIME_MINUTES = 0;
 	/** The default delay time (seconds) */
-	public static final int DEFAULT_DELAY_TIME_SECONDS = 2;
+	public static final byte DEFAULT_DELAY_TIME_SECONDS = 2;
 
 	/* ===========================================================
 	 * Members
@@ -93,19 +93,29 @@ public class SettingsModel {
 		// Make sure the parameter is correct
 		if(mSavedState != null) {
 			// Save the attributes to the bundle
-			savedTimeLimit.setMinutes(mSavedState.getInt(
-					KEY_TIME_LIMIT_MINUTES,
-					DEFAULT_TIME_LIMIT_MINUTES));
-			savedTimeLimit.setSeconds(mSavedState.getInt(
-					KEY_TIME_LIMIT_SECONDS,
-					DEFAULT_TIME_LIMIT_SECONDS));
+			int savedValue = savedState.getInt(
+					KEY_TIME_LIMIT_MINUTES, DEFAULT_TIME_LIMIT_MINUTES);
+			byte valueToSet = (savedValue <= Byte.MAX_VALUE ?
+					(byte) savedValue : Byte.MAX_VALUE);
+			savedTimeLimit.setMinutes(valueToSet);
 			
-			savedDelayTime.setMinutes(mSavedState.getInt(
-					KEY_DELAY_TIME_MINUTES,
-					DEFAULT_DELAY_TIME_MINUTES));
-			savedDelayTime.setSeconds(mSavedState.getInt(
-					KEY_DELAY_TIME_SECONDS,
-					DEFAULT_DELAY_TIME_SECONDS));
+			savedValue = savedState.getInt(
+					KEY_TIME_LIMIT_SECONDS, DEFAULT_TIME_LIMIT_SECONDS);
+			valueToSet = (savedValue <= Byte.MAX_VALUE ?
+					(byte) savedValue : Byte.MAX_VALUE);
+			savedTimeLimit.setSeconds(valueToSet);
+			
+			savedValue = savedState.getInt(
+					KEY_DELAY_TIME_MINUTES, DEFAULT_DELAY_TIME_MINUTES);
+			valueToSet = (savedValue <= Byte.MAX_VALUE ?
+					(byte) savedValue : Byte.MAX_VALUE);
+			savedDelayTime.setMinutes(valueToSet);
+			
+			savedValue = savedState.getInt(
+					KEY_DELAY_TIME_SECONDS, DEFAULT_DELAY_TIME_SECONDS);
+			valueToSet = (savedValue <= Byte.MAX_VALUE ?
+					(byte) savedValue : Byte.MAX_VALUE);
+			savedDelayTime.setSeconds(valueToSet);
 		}
 	}
 }

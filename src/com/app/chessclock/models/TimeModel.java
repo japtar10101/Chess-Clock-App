@@ -11,12 +11,22 @@ import java.security.InvalidParameterException;
  */
 public class TimeModel {
 	/* ===========================================================
+	 * Static functions
+	 * =========================================================== */
+	/**
+	 * @return Converts <b>integer</b> into a byte
+	 */
+	public final static byte intToByte(final int integer) {
+		return (integer <= Byte.MAX_VALUE ? (byte) integer : Byte.MAX_VALUE);
+	}
+	
+	/* ===========================================================
 	 * Members
 	 * =========================================================== */
 	/** Minutes */
-	private Integer mMinutes;
+	private byte mMinutes;
 	/** Seconds */
-	private Integer mSeconds;
+	private byte mSeconds;
 	
 	/* ===========================================================
 	 * Constructors
@@ -25,15 +35,17 @@ public class TimeModel {
 	 * Default constructor.  Sets the time to 0.
 	 * @see #setTime(int, int)
 	 */
-	public TimeModel(final int minutes, final int seconds) {
-		this.setTime(minutes, seconds);
+	public TimeModel(final byte minutes, final byte seconds) {
+		this.setSeconds(seconds);
+		mMinutes = minutes;
 	}
 	
 	/**
 	 * Default constructor.  Sets the time to 0.
 	 */
 	public TimeModel() {
-		this(0, 0);
+		mSeconds = 0;
+		mMinutes = 0;
 	}
 
 	/* ===========================================================
@@ -45,14 +57,14 @@ public class TimeModel {
 	@Override
 	public String toString() {
 		// Generate a string, starting with the minutes
-		String toReturn = mMinutes.toString() + ':';
+		String toReturn = Byte.toString(mMinutes) + ':';
 		
 		// Append the seconds
 		if(mSeconds < 10) {
 			// If seconds is less than 10, append a 0
 			toReturn += '0';
 		}
-		toReturn += mSeconds.toString();
+		toReturn += Byte.toString(mSeconds);
 		
 		return toReturn;
 	}
@@ -67,12 +79,13 @@ public class TimeModel {
 	 * @throws InvalidParameterException if <b>minutes</b> is negative
 	 * @throws InvalidParameterException if <b>seconds</b> is negative,
 	 * or greater than 59
-	 * @see #setMinutes(int)
-	 * @see #setSeconds(int)
+	 * @see #setMinutes(byte)
+	 * @see #setSeconds(byte)
 	 */
-	public void setTime(final int minutes, final int seconds) {
+	public void setTime(final byte minutes, final byte seconds) throws
+			InvalidParameterException {
 		this.setSeconds(seconds);
-		this.setMinutes(minutes);
+		mMinutes = minutes;
 	}
 	
 	/**
@@ -115,9 +128,6 @@ public class TimeModel {
 				// reset seconds to 59
 				mSeconds = 59;
 			}
-			
-			// Re-check if after decrementing, it hasn't zeroed yet
-			toReturn = !isTimeZero();
 		}
 		
 		return toReturn;
@@ -129,13 +139,13 @@ public class TimeModel {
 	/**
 	 * @return {@link mMinutes}
 	 */
-	public Integer getMinutes() {
+	public byte getMinutes() {
 		return mMinutes;
 	}
 	/**
 	 * @return {@link mSeconds}
 	 */
-	public Integer getSeconds() {
+	public byte getSeconds() {
 		return mSeconds;
 	}
 
@@ -148,28 +158,18 @@ public class TimeModel {
 	 * or greater than 23 (as arbitrary as it sounds, due to current
 	 * GUI limitations, it's set to the hours limitations on a TimePicker).
 	 */
-	public void setMinutes(final int minutes) throws InvalidParameterException {
-		if(minutes < 0) {
-			// negative valuemLeftButton
-			throw new InvalidParameterException("Minutes must be positive");
-		} else if(minutes >= 24) {
-			// greater than 59
-			throw new InvalidParameterException("Minutes must be less than 24");
-		} else {
-			// update the minutes
-			this.mMinutes = minutes;
-		}
+	public void setMinutes(final byte minutes) {
+		// update the minutes
+		this.mMinutes = minutes;
 	}
+	
 	/**
 	 * @param seconds sets {@link mSeconds}
 	 * @throws InvalidParameterException if <b>seconds</b> is negative,
 	 * or greater than 59
 	 */
-	public void setSeconds(final int seconds) throws InvalidParameterException {
-		if(seconds < 0) {
-			// negative value
-			throw new InvalidParameterException("Seconds must be positive");
-		} else if(seconds >= 60) {
+	public void setSeconds(final byte seconds) throws InvalidParameterException {
+		if(seconds >= 60) {
 			// greater than 59
 			throw new InvalidParameterException("Seconds must be less than 60");
 		} else {
