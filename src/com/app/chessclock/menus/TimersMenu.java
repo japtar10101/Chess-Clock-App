@@ -38,10 +38,8 @@ public class TimersMenu  implements OnClickListener, ActivityMenu {
 	private Button mLeftButton = null;
 	/** Right player's button */
 	private Button mRightButton = null;
-	/** Resume-after-pause button */
-	private Button mResumeButton = null;
-	/** New game button */
-	private Button mNewGameButton = null;
+	/** The All-purpose (mainly for pausing the game) button */
+	private Button mPauseButton = null;
 	
 	// == Labels ==
 	/** Label indicating delay */
@@ -95,14 +93,12 @@ public class TimersMenu  implements OnClickListener, ActivityMenu {
 		// Grab the buttons
 		mLeftButton = (Button)mParentActivity.findViewById(R.id.buttonLeftTime);
 		mRightButton = (Button)mParentActivity.findViewById(R.id.buttonRightTime);
-		mResumeButton = (Button)mParentActivity.findViewById(R.id.buttonResume);
-		mNewGameButton = (Button)mParentActivity.findViewById(R.id.buttonNewGame);
+		mPauseButton = (Button)mParentActivity.findViewById(R.id.buttonPause);
 		
 		// Set the buttons click behavior to this class
 		mLeftButton.setOnClickListener(this);
 		mRightButton.setOnClickListener(this);
-		mResumeButton.setOnClickListener(this);
-		mNewGameButton.setOnClickListener(this);
+		mPauseButton.setOnClickListener(this);
 		
 		// Determine the condition to begin this game at
 		switch(Global.GAME_STATE.timerCondition) {
@@ -145,12 +141,20 @@ public class TimersMenu  implements OnClickListener, ActivityMenu {
 	@Override
 	public void onClick(final View v) {
 		// Check if the button clicked is the new game button
-		if(v.equals(mNewGameButton)) {
-			// Restart the game
-			this.startup();
-			
-			// halt this method
-			return;
+		if(v.equals(mPauseButton)) {
+			switch(Global.GAME_STATE.timerCondition) {
+				// If running, pause the game
+				case TimerCondition.RUNNING:
+					this.paused();
+					return;
+				// TODO: once options is fixed, go to options screen 
+				case TimerCondition.STARTING:
+					return;
+				// If time's up, restart the game
+				case TimerCondition.TIMES_UP:
+					this.startup();
+					return;
+			}
 		}
 		
 		// Stop the handler
@@ -187,25 +191,11 @@ public class TimersMenu  implements OnClickListener, ActivityMenu {
 	}
 	
 	/**
-	 * Pauses the timer, while the menu is being opened.
-	 * @return true unless time's up
+	 * @return true
 	 * @see com.app.chessclock.menus.ActivityMenu#enableMenuButton()
 	 */
 	@Override
 	public boolean enableMenuButton() {
-		// Check if the timer is running
-		if(Global.GAME_STATE.timerCondition == TimerCondition.RUNNING) {
-			
-			// Stop the handler
-			mTimer.removeCallbacks(mTask);
-			
-			// Set condition to pause
-			Global.GAME_STATE.timerCondition = TimerCondition.PAUSE;
-			
-			// Pause the timer
-			this.paused();
-		}
-		
 		// Show the menu (by returning true)
 		return true;
 	}
@@ -229,6 +219,10 @@ public class TimersMenu  implements OnClickListener, ActivityMenu {
 		// Enable both buttons
 		mLeftButton.setEnabled(true);
 		mRightButton.setEnabled(true);
+		
+		// Update their text
+		mLeftButton.setText(mParentActivity.getString(R.string.playerButtonText));
+		mRightButton.setText(mParentActivity.getString(R.string.playerButtonText));
 		
 		// Set both layouts to be invisible
 		mPauseLayout.setVisibility(View.INVISIBLE);
