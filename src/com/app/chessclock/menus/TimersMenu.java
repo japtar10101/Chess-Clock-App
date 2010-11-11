@@ -3,7 +3,12 @@
  */
 package com.app.chessclock.menus;
 
+import android.content.Context;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.os.Handler;
+import android.os.Vibrator;
+import android.provider.Settings;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -20,7 +25,7 @@ import com.app.chessclock.enums.TimerCondition;
  * Menu for Timer
  * @author japtar10101
  */
-public class TimersMenu  implements OnClickListener, ActivityMenu {
+public class TimersMenu implements OnClickListener, ActivityMenu {
 	/* ===========================================================
 	 * Members
 	 * =========================================================== */
@@ -32,6 +37,8 @@ public class TimersMenu  implements OnClickListener, ActivityMenu {
 	private final Handler mTimer;
 	/** Task that decrements the timer */
 	private final DecrementTimerTask mTask;
+	/** Task that rings the alarm */
+	private final Runnable mStopAlarm;
 	
 	// == Buttons ==
 	/** Left player's button */
@@ -51,8 +58,11 @@ public class TimersMenu  implements OnClickListener, ActivityMenu {
 	/** A "Times Up!" screen, generally left invisible */
 	private RelativeLayout mTimesUpLayout = null;
 	
-	// == Sound ==
-	// FIXME: add a sound
+	// == Misc. ==
+	/** The vibrator */
+	private Vibrator mSmallVibrate = null;
+	/** Sound of alarm */
+	private Ringtone mRingtone = null;
 	
 	/* ===========================================================
 	 * Constructors
@@ -67,6 +77,13 @@ public class TimersMenu  implements OnClickListener, ActivityMenu {
 		// Setup the timer-related stuff
 		mTimer = new Handler();
 		mTask = new DecrementTimerTask(this, mTimer);
+		mStopAlarm = new Runnable() {
+			public void run() {
+				if(mRingtone != null && mRingtone.isPlaying()) {
+					mRingtone.stop();
+				}
+			}
+		};
 	}
 
 	/* ===========================================================
@@ -100,6 +117,12 @@ public class TimersMenu  implements OnClickListener, ActivityMenu {
 		mRightButton.setOnClickListener(this);
 		mPauseButton.setOnClickListener(this);
 		
+		// Get the vibrator and ringtone
+		mSmallVibrate = (Vibrator) mParentActivity.getSystemService(
+				Context.VIBRATOR_SERVICE);
+		mRingtone = RingtoneManager.getRingtone(mParentActivity,
+				Settings.System.DEFAULT_RINGTONE_URI);
+		
 		// Determine the condition to begin this game at
 		switch(Global.GAME_STATE.timerCondition) {
 			case TimerCondition.TIMES_UP:
@@ -122,6 +145,9 @@ public class TimersMenu  implements OnClickListener, ActivityMenu {
 	 */
 	@Override
 	public void exitMenu() {
+		// Stop the time handler
+		mTimer.removeCallbacks(mTask);
+
 		// Set the option's state
 		switch(Global.GAME_STATE.timerCondition) {
 			case TimerCondition.TIMES_UP:
@@ -140,6 +166,11 @@ public class TimersMenu  implements OnClickListener, ActivityMenu {
 	 */
 	@Override
 	public void onClick(final View v) {
+		// Vibrate in response to a button press
+		if(mSmallVibrate != null) {
+			mSmallVibrate.vibrate(100);
+		}
+		
 		// Check if the button clicked is the new game button
 		if(v.equals(mPauseButton)) {
 			switch(Global.GAME_STATE.timerCondition) {
@@ -154,11 +185,21 @@ public class TimersMenu  implements OnClickListener, ActivityMenu {
 				case TimerCondition.TIMES_UP:
 					this.startup();
 					return;
+				case TimerCondition.PAUSE:
+				default:
+					mPauseButton.setText(mParentActivity.getString(
+							R.string.pauseButtonText));
 			}
 		}
 		
 		// Stop the handler
 		mTimer.removeCallbacks(mTask);
+		
+		// If just starting, update the labels
+		if(Global.GAME_STATE.timerCondition == TimerCondition.STARTING) {
+			// Update to the time text
+			this.updateButtonAndLabelText();
+		}
 		
 		// Set condition to running
 		Global.GAME_STATE.timerCondition = TimerCondition.RUNNING;
@@ -175,6 +216,9 @@ public class TimersMenu  implements OnClickListener, ActivityMenu {
 			
 			// Update the Delay label
 			this.updateDelayLabel();
+			
+			// Update the pause button text
+			mPauseButton.setText(mParentActivity.getString(R.string.pauseButtonText));
 		}
 		
 		// Set both layouts to be invisible
@@ -213,16 +257,15 @@ public class TimersMenu  implements OnClickListener, ActivityMenu {
 		// Reset the time
 		Global.GAME_STATE.resetTime();
 		
-		// Update the buttons/labels text
-		this.updateButtonAndLabelText();
-		
 		// Enable both buttons
 		mLeftButton.setEnabled(true);
 		mRightButton.setEnabled(true);
 		
-		// Update their text
+		// Update button's text
 		mLeftButton.setText(mParentActivity.getString(R.string.playerButtonText));
 		mRightButton.setText(mParentActivity.getString(R.string.playerButtonText));
+		mPauseButton.setText(mParentActivity.getString(R.string.settingsMenuLabel));
+		mDelayLabel.setVisibility(View.INVISIBLE);
 		
 		// Set both layouts to be invisible
 		mPauseLayout.setVisibility(View.INVISIBLE);
@@ -233,6 +276,9 @@ public class TimersMenu  implements OnClickListener, ActivityMenu {
 	 * Indicate the game is paused
 	 */
 	private void paused() {
+		// Stop the handler
+		mTimer.removeCallbacks(mTask);
+
 		// Set the condition to time up
 		Global.GAME_STATE.timerCondition = TimerCondition.PAUSE;
 		
@@ -246,6 +292,9 @@ public class TimersMenu  implements OnClickListener, ActivityMenu {
 		// Set the pause layout as visible
 		mPauseLayout.setVisibility(View.VISIBLE);
 		mTimesUpLayout.setVisibility(View.INVISIBLE);
+		
+		// Update the pause button text
+		mPauseButton.setText(mParentActivity.getString(R.string.resumeButtonText));
 	}
 	
 	/**
@@ -269,7 +318,14 @@ public class TimersMenu  implements OnClickListener, ActivityMenu {
 		mPauseLayout.setVisibility(View.INVISIBLE);
 		mTimesUpLayout.setVisibility(View.VISIBLE);
 		
-		// FIXME: once sound is in there, start screaming!
+		// Start screaming!
+		if(mRingtone != null) {
+			mRingtone.play();
+			mTimer.postDelayed(mStopAlarm, 3000);
+		}
+		
+		// Update the pause button text
+		mPauseButton.setText(mParentActivity.getString(R.string.newGameButtonText));
 	}
 	
 	/**

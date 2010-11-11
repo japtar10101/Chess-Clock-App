@@ -148,24 +148,6 @@ public class MainActivity extends Activity {
 		return toReturn;
 	}
     
-	/**
-	 * TODO: once the options menu is finished, delete this.
-	 * If backing from the options menu, saves the options,
-	 * and go directly to the game menu.
-	 * @see android.app.Activity#onBackPressed()
-	 */
-	@Override
-	public void onBackPressed() {
-		// Check which menu we're on
-		if(mCurrentMenuId == MenuId.OPTIONS) {
-			// Go right back to the timer menu
-			this.setCurrentMenuId(MenuId.TIMER);
-		} else {
-			// Otherwise, let the super class figure it out
-			super.onBackPressed();
-		}
-	}
-	
 	/* ===========================================================
 	 * Public Methods
 	 * =========================================================== */
