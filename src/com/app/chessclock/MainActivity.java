@@ -1,8 +1,10 @@
 package com.app.chessclock;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,7 +20,7 @@ public class MainActivity extends Activity {
 	 * =========================================================== */
 	/** The current layout */
 	private final TimersMenu mMainMenu = new TimersMenu(this);
-	private final OptionsMenu mOptionsMenu = new OptionsMenu(this);
+	private final Intent mOptionsMenu = new Intent(MainActivity.this, OptionsMenu.class);
 	
 	/* ===========================================================
 	 * Overrides
@@ -41,6 +43,10 @@ public class MainActivity extends Activity {
         		GameStateModel.PREFERENCE_FILE_NAME, 0);
         Global.GAME_STATE.recallSettings(settings);
         
+        // Recall and update options.
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
+        Global.OPTIONS.recallSettings(settings);
+        
         // Also update the delay label
         Global.GAME_STATE.setDelayPrependString(
         		this.getString(R.string.delayLabelText));
@@ -56,8 +62,7 @@ public class MainActivity extends Activity {
      * @see android.app.Activity#onPause()
      */
     @Override
-    public void onPause() {
-    	
+    public void onPause() {    	
     	// Do whatever is in the super class first
         super.onPause();
         
@@ -90,10 +95,6 @@ public class MainActivity extends Activity {
         final MenuInflater inflater = this.getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         
-        // TODO: When the options menu is fixed, take this out
-        final MenuItem settings = (MenuItem) menu.getItem(1);
-        settings.setEnabled(false);
-        
         // Return true
         return true;
     }
@@ -110,7 +111,11 @@ public class MainActivity extends Activity {
 		switch(item.getItemId()) {
 			// TODO: If options is clicked, go to options menu
 			case R.id.menuOptions:
+				// Close out of the Main Menu
 				mMainMenu.exitMenu();
+				
+				// Launch Preference activity
+				this.startActivity(mOptionsMenu);
 				break;
 			    
 			// If reset is clicked, restart the timers menu

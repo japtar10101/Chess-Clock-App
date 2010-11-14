@@ -1,53 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:id="@+id/layoutOptions"
-android:layout_width="fill_parent" android:layout_height="fill_parent"
-xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<LinearLayout android:id="@+id/layoutOptionsButtons"
-	android:layout_width="fill_parent" android:layout_height="wrap_content"
-	android:layout_alignParentBottom="true" android:layout_alignParentLeft="true">
-		<Button android:id="@+id/buttonOk" android:layout_weight="1"
-		android:layout_width="wrap_content" android:layout_height="wrap_content"
-		android:text="OK">
-		</Button>
-		<Button android:id="@+id/buttonCancel" android:layout_weight="1"
-		android:layout_width="wrap_content" android:layout_height="wrap_content"
-		android:text="Cancel">
-	   </Button>
-	</LinearLayout>
+	<PreferenceCategory android:title="Timer">
 	
-	<TableLayout android:id="@+id/layoutOptionsTable"
-	android:layout_width="fill_parent" android:layout_height="wrap_content"
-	android:orientation="vertical" android:stretchColumns="1"
-	android:layout_alignParentTop="true" android:layout_alignParentLeft="true">
-	
-		<TableRow android:id="@+id/layoutOptionsLabels"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:orientation="horizontal">
-			<TextView android:id="@+id/labelTimeLimit"
-			android:layout_height="wrap_content" android:text="Time Limit"
-			android:layout_weight="1" android:layout_width="fill_parent">
-			</TextView>
-			<TextView android:id="@+id/labelDelayTime"
-			android:layout_height="wrap_content" android:text="Delay Time"
-			android:layout_weight="1" android:layout_width="fill_parent">
-			</TextView>
-		</TableRow>
+		<Preference android:title="Time Limit"
+		android:summary="The starting time for each player"
+		android:key="prefTimeLimit" />
 		
-		<TableRow android:id="@+id/layoutOptionsTimers"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:orientation="horizontal">
-			<TimePicker android:id="@+id/timeTimeLimit"
-			android:layout_height="wrap_content"
-			android:layout_weight="1" android:layout_width="fill_parent">
-			</TimePicker>
-			<TimePicker android:id="@+id/timeDelayTime"
-			android:layout_height="wrap_content"
-			android:layout_weight="1" android:layout_width="fill_parent">
-			</TimePicker>
+		<Preference android:title="Delay Time"
+		android:summary="The amount of time delayed after pressing a button"
+		android:key="prefDelayTime" />
+        
+	</PreferenceCategory>
+	
+	<PreferenceCategory android:title="Alarm">
+	
+		<RingtonePreference
+		android:name="Sound"
+		android:summary="Select a sound"
+		android:title="Sounds"
+		android:key="prefSound" />
 			
-		</TableRow>
-		
-	</TableLayout>
+	</PreferenceCategory>
 	
-</RelativeLayout>
+</PreferenceScreen>

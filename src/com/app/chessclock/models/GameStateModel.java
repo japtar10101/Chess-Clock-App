@@ -14,7 +14,7 @@ import com.app.chessclock.enums.TimerCondition;
  * Model indicating the game's current (or paused) conditions.
  * @author japtar10101
  */
-public class GameStateModel {
+public class GameStateModel implements SaveStateModel {
 	/* ===========================================================
 	 * Constants
 	 * =========================================================== */
@@ -62,13 +62,14 @@ public class GameStateModel {
 	private final TimeModel mDelayTime = new TimeModel();
 	
 	/* ===========================================================
-	 * Public Methods
+	 * Override Methods
 	 * =========================================================== */
 	/**
 	 * Saves the current settings to a SharedPreferences
 	 * @param saveState the SharedPreferences to save this app's options
 	 * @see SharedPreferences
 	 */
+	@Override
 	public void saveSettings(final SharedPreferences saveState) throws
 			IllegalArgumentException {
 		// Make sure the parameter isn't null
@@ -108,6 +109,7 @@ public class GameStateModel {
 	 * @see SharedPreferences
 	 * @param savedState shared Preference to save to
 	 */
+	@Override
 	public void recallSettings(final SharedPreferences savedState) throws
 			InvalidParameterException, IllegalArgumentException {
 		
@@ -156,6 +158,9 @@ public class GameStateModel {
 		}
 	}
 	
+	/* ===========================================================
+	 * Public Methods
+	 * =========================================================== */
 	/**
 	 * Decrements time.
 	 * @param numSeconds number of seconds to decrement

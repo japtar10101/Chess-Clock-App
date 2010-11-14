@@ -3,15 +3,13 @@
  */
 package com.app.chessclock.models;
 
-import java.security.InvalidParameterException;
-
-import android.os.Bundle;
+import android.content.SharedPreferences;
 
 /**
  * Options shared between each layout
  * @author japtar10101
  */
-public class SettingsModel {
+public class SettingsModel implements SaveStateModel {
 	/* ===========================================================
 	 * Constants
 	 * =========================================================== */
@@ -46,76 +44,74 @@ public class SettingsModel {
 	public final TimeModel savedDelayTime =
 		new TimeModel(DEFAULT_DELAY_TIME_MINUTES, DEFAULT_DELAY_TIME_SECONDS);
 	// FIXME: add a sound
-	/** The saved state */
-	private Bundle mSavedState = null;
+	// FIXME: add click or vibrate
 
 	/* ===========================================================
-	 * Public Methods
+	 * Override Methods
 	 * =========================================================== */
 	/**
 	 * Saves the current options state to a bundle
-	 * @param savedState the bundle to save this app's options
+	 * @see com.app.chessclock.models.SaveStateModel#recallSettings(android.content.SharedPreferences)
 	 */
-	public void saveSettings() {
-		// Make sure the bundle isn't null
-		if(mSavedState != null) {
-			// Save the attributes to the bundle
-			mSavedState.putInt(KEY_TIME_LIMIT_MINUTES, savedTimeLimit.getMinutes());
-			mSavedState.putInt(KEY_TIME_LIMIT_SECONDS, savedTimeLimit.getSeconds());
-			
-			mSavedState.putInt(KEY_DELAY_TIME_MINUTES, savedDelayTime.getMinutes());
-			mSavedState.putInt(KEY_DELAY_TIME_SECONDS, savedDelayTime.getSeconds());
-			
-			// FIXME: save this bundle to some personal SQL database
+	@Override
+	public void recallSettings(SharedPreferences savedState) throws
+			IllegalArgumentException {
+		// Make sure the parameter isn't null
+		if(savedState == null) {
+			// If so, complain
+			throw new IllegalArgumentException("savedState cannot be null");
 		}
-	}
-	
-	/* ===========================================================
-	 * Getters
-	 * =========================================================== */
-	/**
-	 * @return {@link mSavedState}
-	 */
-	public Bundle getSavedState() {
-		return mSavedState;
-	}
-	
-	/* ===========================================================
-	 * Setters
-	 * =========================================================== */
-	/**
-	 * @param savedState sets {@link mSavedState}
-	 */
-	public void setSavedState(final Bundle savedState) throws InvalidParameterException {
-		// Set mSavedState
-		mSavedState = savedState;
 		
-		// Make sure the parameter is correct
-		if(mSavedState != null) {
-			// Save the attributes to the bundle
-			int savedValue = savedState.getInt(
-					KEY_TIME_LIMIT_MINUTES, DEFAULT_TIME_LIMIT_MINUTES);
-			byte valueToSet = (savedValue <= Byte.MAX_VALUE ?
-					(byte) savedValue : Byte.MAX_VALUE);
-			savedTimeLimit.setMinutes(valueToSet);
-			
-			savedValue = savedState.getInt(
-					KEY_TIME_LIMIT_SECONDS, DEFAULT_TIME_LIMIT_SECONDS);
-			valueToSet = (savedValue <= Byte.MAX_VALUE ?
-					(byte) savedValue : Byte.MAX_VALUE);
-			savedTimeLimit.setSeconds(valueToSet);
-			
-			savedValue = savedState.getInt(
-					KEY_DELAY_TIME_MINUTES, DEFAULT_DELAY_TIME_MINUTES);
-			valueToSet = (savedValue <= Byte.MAX_VALUE ?
-					(byte) savedValue : Byte.MAX_VALUE);
-			savedDelayTime.setMinutes(valueToSet);
-			
-			savedValue = savedState.getInt(
-					KEY_DELAY_TIME_SECONDS, DEFAULT_DELAY_TIME_SECONDS);
-			valueToSet = (savedValue <= Byte.MAX_VALUE ?
-					(byte) savedValue : Byte.MAX_VALUE);
-			savedDelayTime.setSeconds(valueToSet);
+		// Save the attributes to the bundle
+		int savedValue = savedState.getInt(
+				KEY_TIME_LIMIT_MINUTES, DEFAULT_TIME_LIMIT_MINUTES);
+		byte valueToSet = (savedValue <= Byte.MAX_VALUE ?
+				(byte) savedValue : Byte.MAX_VALUE);
+		savedTimeLimit.setMinutes(valueToSet);
+		
+		savedValue = savedState.getInt(
+				KEY_TIME_LIMIT_SECONDS, DEFAULT_TIME_LIMIT_SECONDS);
+		valueToSet = (savedValue <= Byte.MAX_VALUE ?
+				(byte) savedValue : Byte.MAX_VALUE);
+		savedTimeLimit.setSeconds(valueToSet);
+		
+		savedValue = savedState.getInt(
+				KEY_DELAY_TIME_MINUTES, DEFAULT_DELAY_TIME_MINUTES);
+		valueToSet = (savedValue <= Byte.MAX_VALUE ?
+				(byte) savedValue : Byte.MAX_VALUE);
+		savedDelayTime.setMinutes(valueToSet);
+		
+		savedValue = savedState.getInt(
+				KEY_DELAY_TIME_SECONDS, DEFAULT_DELAY_TIME_SECONDS);
+		valueToSet = (savedValue <= Byte.MAX_VALUE ?
+				(byte) savedValue : Byte.MAX_VALUE);
+		savedDelayTime.setSeconds(valueToSet);
+	}
+
+	/**
+	 * Saves options
+	 * @see com.app.chessclock.models.SaveStateModel#saveSettings(android.content.SharedPreferences)
+	 */
+	@Override
+	public void saveSettings(final SharedPreferences saveState) throws
+			IllegalArgumentException {
+		// Make sure the parameter isn't null
+		if(saveState == null) {
+			// If so, complain
+			throw new IllegalArgumentException("saveState cannot be null");
 		}
+		
+		// Grab the editor, and start saving
+		final SharedPreferences.Editor saveEditor = saveState.edit();
+		
+		// Save the attributes to the bundle
+		saveEditor.putInt(KEY_TIME_LIMIT_MINUTES, savedTimeLimit.getMinutes());
+		saveEditor.putInt(KEY_TIME_LIMIT_SECONDS, savedTimeLimit.getSeconds());
+		
+		saveEditor.putInt(KEY_DELAY_TIME_MINUTES, savedDelayTime.getMinutes());
+		saveEditor.putInt(KEY_DELAY_TIME_SECONDS, savedDelayTime.getSeconds());
+		
+		// Write it in!
+		saveEditor.commit();
 	}
 }
