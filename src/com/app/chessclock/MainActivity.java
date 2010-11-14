@@ -43,18 +43,16 @@ public class MainActivity extends Activity {
         		GameStateModel.PREFERENCE_FILE_NAME, 0);
         Global.GAME_STATE.recallSettings(settings);
         
-        // Recall and update options.
-        settings = PreferenceManager.getDefaultSharedPreferences(this);
-        Global.OPTIONS.recallSettings(settings);
-        
         // Also update the delay label
         Global.GAME_STATE.setDelayPrependString(
         		this.getString(R.string.delayLabelText));
         
-        // TODO: once the options menu is done, recall the preferences from there
-//        SharedPreferences settings = this.getSharedPreferences(
-//        		GameStateModel.PREFERENCE_FILE_NAME, 0);
-//        Global.OPTIONS.setSavedState(savedInstanceState);
+        // Recall and update options.
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
+        Global.OPTIONS.recallSettings(settings);
+        
+        // Start the main menu
+        mMainMenu.setupMenu();
     }
         
     /**
@@ -109,7 +107,7 @@ public class MainActivity extends Activity {
 			
 		// Handle item selection
 		switch(item.getItemId()) {
-			// TODO: If options is clicked, go to options menu
+			// If options is clicked, go to options menu
 			case R.id.menuOptions:
 				// Close out of the Main Menu
 				mMainMenu.exitMenu();

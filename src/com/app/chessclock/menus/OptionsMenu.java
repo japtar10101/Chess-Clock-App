@@ -51,7 +51,6 @@ public class OptionsMenu extends PreferenceActivity implements ActivityMenu {
 	 */
 	@Override
 	public void setupMenu() {
-		// FIXME: launch an intent here.
 		// First, setup the UI
 		this.addPreferencesFromResource(R.layout.options);
 		
