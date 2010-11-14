@@ -25,7 +25,7 @@ import com.app.chessclock.enums.TimerCondition;
  * Menu for Timer
  * @author japtar10101
  */
-public class TimersMenu implements OnClickListener, ActivityMenu {
+public class TimersMenu implements OnClickListener {
 	/* ===========================================================
 	 * Members
 	 * =========================================================== */
@@ -168,7 +168,7 @@ public class TimersMenu implements OnClickListener, ActivityMenu {
 	public void onClick(final View v) {
 		// Vibrate in response to a button press
 		if(mSmallVibrate != null) {
-			mSmallVibrate.vibrate(100);
+			mSmallVibrate.vibrate(50);
 		}
 		
 		// Check if the button clicked is the new game button

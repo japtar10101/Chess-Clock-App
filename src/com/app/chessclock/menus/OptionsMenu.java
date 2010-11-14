@@ -12,7 +12,6 @@ import android.widget.TimePicker;
 import com.app.chessclock.Global;
 import com.app.chessclock.MainActivity;
 import com.app.chessclock.R;
-import com.app.chessclock.enums.MenuId;
 import com.app.chessclock.enums.TimerCondition;
 import com.app.chessclock.models.TimeModel;
 
@@ -20,7 +19,7 @@ import com.app.chessclock.models.TimeModel;
  * TODO: add a description
  * @author japtar10101
  */
-public class OptionsMenu extends PreferenceActivity implements ActivityMenu, OnClickListener {
+public class OptionsMenu extends PreferenceActivity {
 	/* ===========================================================
 	 * Members
 	 * =========================================================== */
