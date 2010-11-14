@@ -25,7 +25,7 @@ import com.app.chessclock.enums.TimerCondition;
  * Menu for Timer
  * @author japtar10101
  */
-public class TimersMenu implements OnClickListener {
+public class TimersMenu implements OnClickListener, ActivityMenu {
 	/* ===========================================================
 	 * Members
 	 * =========================================================== */
@@ -232,16 +232,6 @@ public class TimersMenu implements OnClickListener {
 		// Start the timer
 		mTask.reset();
 		mTimer.postDelayed(mTask, 1000);
-	}
-	
-	/**
-	 * @return true
-	 * @see com.app.chessclock.menus.ActivityMenu#enableMenuButton()
-	 */
-	@Override
-	public boolean enableMenuButton() {
-		// Show the menu (by returning true)
-		return true;
 	}
 	
 	/* ===========================================================

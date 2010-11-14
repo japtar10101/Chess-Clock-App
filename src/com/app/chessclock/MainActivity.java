@@ -1,8 +1,5 @@
 package com.app.chessclock;
 
-import java.security.InvalidParameterException;
-import java.util.HashMap;
-
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,7 +18,7 @@ public class MainActivity extends Activity {
 	 * =========================================================== */
 	/** The current layout */
 	private final TimersMenu mMainMenu = new TimersMenu(this);
-	private final TimersMenu mOptionsMenu = new OptionsMenu(this);
+	private final OptionsMenu mOptionsMenu = new OptionsMenu(this);
 	
 	/* ===========================================================
 	 * Overrides
