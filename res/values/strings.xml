@@ -6,12 +6,12 @@
     <string name="pauseLabelText">Paused</string>
     <string name="timesUpLabelText">Times Up!</string>
 
-    <string name="playerButtonText">Start</string>
+    <string name="playerButtonText">Press button to start</string>
     <string name="pauseButtonText">Pause</string>
 	<string name="resumeButtonText">Resume</string>
     <string name="newGameButtonText">New Game</string>
-    <string name="OkButton">OK</string>
-    <string name="CancelButton">Cancel</string>
+    <string name="okButton">OK</string>
+    <string name="cancelButton">Cancel</string>
     
 	<string name="settingsMenuLabel">Settings</string>
 </resources>

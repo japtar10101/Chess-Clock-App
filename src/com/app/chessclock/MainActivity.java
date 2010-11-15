@@ -20,7 +20,7 @@ public class MainActivity extends Activity {
 	 * =========================================================== */
 	/** The current layout */
 	private final TimersMenu mMainMenu = new TimersMenu(this);
-	private final Intent mOptionsMenu = new Intent(MainActivity.this, OptionsMenu.class);
+	private Intent mOptionsMenu;
 	
 	/* ===========================================================
 	 * Overrides
@@ -41,15 +41,22 @@ public class MainActivity extends Activity {
         // Recall and update the last game state.
         SharedPreferences settings = this.getSharedPreferences(
         		GameStateModel.PREFERENCE_FILE_NAME, 0);
-        Global.GAME_STATE.recallSettings(settings);
+        if(settings != null) {
+        	Global.GAME_STATE.recallSettings(settings);
+        }
         
         // Also update the delay label
         Global.GAME_STATE.setDelayPrependString(
         		this.getString(R.string.delayLabelText));
         
         // Recall and update options.
-        settings = PreferenceManager.getDefaultSharedPreferences(this);
-        Global.OPTIONS.recallSettings(settings);
+//        settings = PreferenceManager.getDefaultSharedPreferences(this);
+//        if(settings != null) {
+//        	Global.OPTIONS.recallSettings(settings);
+//        }
+        
+        // Create the options menu
+        mOptionsMenu = new Intent(MainActivity.this, OptionsMenu.class);
         
         // Start the main menu
         mMainMenu.setupMenu();
