@@ -18,6 +18,7 @@ public class GameStateModel implements SaveStateModel {
 	/* ===========================================================
 	 * Constants
 	 * =========================================================== */
+	// == Stored key values ==
 	/** The saved key value for who's turn it is */
 	public static final String KEY_LEFT_PLAYERS_TURN = "leftPlayersTurn";
 	/** The saved key value for the timer condition */

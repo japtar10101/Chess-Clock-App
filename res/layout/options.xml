@@ -3,23 +3,24 @@
 
 	<PreferenceCategory android:title="Timer">
 	
-		<com.app.chessclock.gui.TimerPreference android:title="Time Limit"
-		android:summary="The starting time for each player"
-		android:key="prefTimeLimit" />
+		<com.app.chessclock.gui.TimerPreference android:key="prefTimeLimit"
+		android:title="Time Limit" android:name="Time Limit"
+		android:summary="Confiugre the starting time for each player" />
 		
-		<com.app.chessclock.gui.TimerPreference android:title="Delay Time"
-		android:summary="The amount of time delayed after pressing a button"
-		android:key="prefTimeDelay" />
+		<com.app.chessclock.gui.TimerPreference android:key="prefTimeDelay"
+		android:title="Delay Time" android:name="Delay Time"
+		android:summary="Confiugre the amount of time delayed after pressing a button" />
         
 	</PreferenceCategory>
 	
-	<PreferenceCategory android:title="Alarm">
+	<PreferenceCategory android:title="Alerts">
 	
-		<RingtonePreference
-		android:name="Sound"
-		android:summary="Select a sound"
-		android:title="Sounds"
-		android:key="prefSound" />
+		<RingtonePreference android:key="prefSound"
+		android:title="Alarm" android:name="Alarm"
+		android:summary="Select an alarm that rings on time-up"
+		android:ringtoneType="alarm" />
+		
+		<!-- TODO: Make a list of options for click sounds -->
 			
 	</PreferenceCategory>
 	

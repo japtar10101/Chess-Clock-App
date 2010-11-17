@@ -8,7 +8,6 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.os.Handler;
 import android.os.Vibrator;
-import android.provider.Settings;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -121,7 +120,7 @@ public class TimersMenu implements OnClickListener, ActivityMenu {
 		mSmallVibrate = (Vibrator) mParentActivity.getSystemService(
 				Context.VIBRATOR_SERVICE);
 		mRingtone = RingtoneManager.getRingtone(mParentActivity,
-				Settings.System.DEFAULT_RINGTONE_URI);
+				Global.OPTIONS.alarmUri);
 		
 		// Determine the condition to begin this game at
 		switch(Global.GAME_STATE.timerCondition) {
@@ -178,8 +177,9 @@ public class TimersMenu implements OnClickListener, ActivityMenu {
 				case TimerCondition.RUNNING:
 					this.paused();
 					return;
-				// TODO: once options is fixed, go to options screen 
+				// go to options screen 
 				case TimerCondition.STARTING:
+					mParentActivity.displayOptionsMenu();
 					return;
 				// If time's up, restart the game
 				case TimerCondition.TIMES_UP:

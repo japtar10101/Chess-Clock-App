@@ -13,17 +13,18 @@ import android.widget.TimePicker;
 import com.app.chessclock.models.TimeModel;
 
 /**
- * TODO: add a description
+ * GUI element that opens a timer dialog
  * @author japtar10101
  */
-public class TimerPreference extends DialogPreference {
+public class TimerPreference extends DialogPreference implements
+		TimePicker.OnTimeChangedListener {
 	/* ===========================================================
 	 * Members
 	 * =========================================================== */
 	/** The TimeModel to model around */
 	private TimeModel mModel = null;
-	/** The dialog to display */
-	private final TimePicker mView;
+	private int mMinutes;
+	private int mSeconds;
 	
 	/* ===========================================================
 	 * Constructors
@@ -33,8 +34,6 @@ public class TimerPreference extends DialogPreference {
 	 */
 	public TimerPreference(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
-		mView = new TimePicker(context, attrs);
-		mView.setIs24HourView(true);
 	}
 	
 	/**
@@ -43,13 +42,21 @@ public class TimerPreference extends DialogPreference {
 	public TimerPreference(final Context context, final AttributeSet attrs,
 			final int defStyle) {
 		super(context, attrs, defStyle);
-		mView = new TimePicker(context, attrs, defStyle);
-		mView.setIs24HourView(true);
 	}
 	
 	/* ===========================================================
 	 * Overrides
-	 * =========================================================== */	
+	 * =========================================================== */
+	/**
+	 * Updates internal time variables
+	 * @see android.widget.TimePicker.OnTimeChangedListener#onTimeChanged(android.widget.TimePicker, int, int)
+	 */
+	@Override
+	public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+		mMinutes = hourOfDay;
+		mSeconds = minute;
+	}
+	
 	/**
 	 * Updates {@link mModel}, if user clicked "OK"
 	 * @see android.preference.DialogPreference#onDialogClosed(boolean)
@@ -58,17 +65,23 @@ public class TimerPreference extends DialogPreference {
 	public void onDialogClosed(boolean positiveResult) {
 		// Update model
 		if(positiveResult) {
-			mModel.setMinutes(mView.getCurrentHour().byteValue());
-			mModel.setSeconds(mView.getCurrentMinute().byteValue());
+			this.getKey();
+			mModel.setMinutes(TimeModel.intToByte(mMinutes));
+			mModel.setSeconds(TimeModel.intToByte(mSeconds));
 		}
 	}
 	
 	@Override
 	protected View onCreateDialogView() {
+		final TimePicker mView = new TimePicker(this.getContext());
+		mView.setIs24HourView(true);
+
 		// Update view
 		if(mModel != null) {
-			mView.setCurrentHour((int) mModel.getMinutes());
-			mView.setCurrentHour((int) mModel.getSeconds());
+			mMinutes = mModel.getMinutes();
+			mSeconds = mModel.getSeconds();
+			mView.setCurrentHour(mMinutes);
+			mView.setCurrentMinute(mSeconds);
 		}
 		
 		// Return view
