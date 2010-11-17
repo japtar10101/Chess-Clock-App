@@ -4,9 +4,7 @@
 package com.app.chessclock.gui;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Paint.Align;
 import android.util.AttributeSet;
 import android.widget.Button;
 import android.widget.ImageButton;

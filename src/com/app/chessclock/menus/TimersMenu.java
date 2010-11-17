@@ -36,8 +36,6 @@ public class TimersMenu implements OnClickListener, ActivityMenu {
 	private final Handler mTimer;
 	/** Task that decrements the timer */
 	private final DecrementTimerTask mTask;
-	/** Task that rings the alarm */
-	private final Runnable mStopAlarm;
 	
 	// == Buttons ==
 	/** Left player's button */
@@ -76,13 +74,6 @@ public class TimersMenu implements OnClickListener, ActivityMenu {
 		// Setup the timer-related stuff
 		mTimer = new Handler();
 		mTask = new DecrementTimerTask(this, mTimer);
-		mStopAlarm = new Runnable() {
-			public void run() {
-				if(mRingtone != null && mRingtone.isPlaying()) {
-					mRingtone.stop();
-				}
-			}
-		};
 	}
 
 	/* ===========================================================
@@ -311,7 +302,6 @@ public class TimersMenu implements OnClickListener, ActivityMenu {
 		// Start screaming!
 		if(mRingtone != null) {
 			mRingtone.play();
-			mTimer.postDelayed(mStopAlarm, 3000);
 		}
 		
 		// Update the pause button text

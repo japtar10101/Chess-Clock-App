@@ -10,22 +10,12 @@ import android.preference.PreferenceManager;
 
 import com.app.chessclock.Global;
 import com.app.chessclock.R;
-import com.app.chessclock.gui.TimerPreference;
 
 /**
  * Sets up the menu for options
  * @author japtar10101
  */
 public class OptionsMenu extends PreferenceActivity {
-	/* ===========================================================
-	 * Members
-	 * =========================================================== */
-	// == TimerPreference ==
-	/** "Time Limit" picker */
-	private TimerPreference mTimeLimit = null;
-	/** "Delay Time" picker */
-	private TimerPreference mDelayTime = null;
-	
 	/* ===========================================================
 	 * Overrides
 	 * =========================================================== */
@@ -39,14 +29,6 @@ public class OptionsMenu extends PreferenceActivity {
 	    
 	    // First, setup the UI
 		this.addPreferencesFromResource(R.layout.options);
-		
-		// Grab the TimePickers
-		mTimeLimit = (TimerPreference) this.findPreference("prefTimeLimit");
-		mDelayTime = (TimerPreference) this.findPreference("prefTimeDelay");
-		
-		// Update the TimePickers to current settings
-		mTimeLimit.setModel(Global.OPTIONS.savedTimeLimit);
-		mDelayTime.setModel(Global.OPTIONS.savedDelayTime);
 	}
     
     /**
@@ -61,9 +43,6 @@ public class OptionsMenu extends PreferenceActivity {
         // Retrieve the preference page
 		final SharedPreferences settings =
 			PreferenceManager.getDefaultSharedPreferences(this);
-		
-		// Save any un-saved options
-    	Global.OPTIONS.saveSettings(settings);
     	
 		// Update the options
     	Global.OPTIONS.recallSettings(settings);

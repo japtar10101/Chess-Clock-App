@@ -37,6 +37,9 @@ public class MainActivity extends Activity {
         // Grab the Display metrics
         this.getWindowManager().getDefaultDisplay().getMetrics(Global.DISPLAY);
         
+        // Default the options, if none was stored
+        PreferenceManager.setDefaultValues(this, R.layout.options, false);
+        
         // Recall the last game's state.
         SharedPreferences settings = this.getPreferences(MODE_PRIVATE);
     	Global.GAME_STATE.recallSettings(settings);
@@ -67,6 +70,19 @@ public class MainActivity extends Activity {
         
         // Exit the current layout
         mMainMenu.exitMenu();
+    }
+    
+    /**
+     * Called when the activity resumes.
+     * @see android.app.Activity#onResume()
+     */
+    @Override
+    public void onResume() {    	
+    	// Do whatever is in the super class first
+        super.onResume();
+        
+        // Exit the current layout
+        mMainMenu.setupMenu();
     }
     
     /**
@@ -109,7 +125,7 @@ public class MainActivity extends Activity {
 		switch(item.getItemId()) {
 			// If options is clicked, go to options menu
 			case R.id.menuOptions:
-				this.openOptionsMenu();
+				this.displayOptionsMenu();
 				break;
 			    
 			// If reset is clicked, restart the timers menu

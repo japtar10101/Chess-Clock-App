@@ -3,9 +3,11 @@
  */
 package com.app.chessclock.models;
 
+import com.app.chessclock.gui.TimerPreference;
+
 import android.content.SharedPreferences;
-import android.media.RingtoneManager;
 import android.net.Uri;
+import android.provider.Settings;
 
 /**
  * Options shared between each layout
@@ -16,15 +18,23 @@ public class SettingsModel implements SaveStateModel {
 	 * Constants
 	 * =========================================================== */
 	// == Stored key values ==
+	/** The saved key value for time limit */
+	public static final String KEY_TIME_LIMIT = "timeLimit";
 	/** The saved key value for time limit (minutes) */
-	public static final String KEY_TIME_LIMIT_MINUTES = "timeLimitMinutes";
+	public static final String KEY_TIME_LIMIT_MINUTES =
+		KEY_TIME_LIMIT + TimerPreference.APPEND_KEY_MINUTES;
 	/** The saved key value for time limit (seconds) */
-	public static final String KEY_TIME_LIMIT_SECONDS = "timeLimitSeconds";
+	public static final String KEY_TIME_LIMIT_SECONDS =
+		KEY_TIME_LIMIT + TimerPreference.APPEND_KEY_SECONDS;
 	
+	/** The saved key value for delay time */
+	public static final String KEY_DELAY_TIME = "delayTime";
 	/** The saved key value for delay time (minutes) */
-	public static final String KEY_DELAY_TIME_MINUTES = "delayTimeMinutes";
+	public static final String KEY_DELAY_TIME_MINUTES =
+		KEY_DELAY_TIME + TimerPreference.APPEND_KEY_MINUTES;
 	/** The saved key value for delay time (seconds) */
-	public static final String KEY_DELAY_TIME_SECONDS = "delayTimeSeconds";
+	public static final String KEY_DELAY_TIME_SECONDS =
+		KEY_DELAY_TIME + TimerPreference.APPEND_KEY_SECONDS;
 
 	/** The saved key value for delay time (seconds) */
 	public static final String KEY_ALARM = "alarm";
@@ -53,8 +63,7 @@ public class SettingsModel implements SaveStateModel {
 	public final TimeModel savedDelayTime =
 		new TimeModel(DEFAULT_DELAY_TIME_MINUTES, DEFAULT_DELAY_TIME_SECONDS);
 	/** The stored alarm */
-	public Uri alarmUri = RingtoneManager.getDefaultUri(
-			RingtoneManager.TYPE_ALARM);
+	public Uri alarmUri = Settings.System.DEFAULT_ALARM_ALERT_URI;
 	// FIXME: add click or vibrate
 
 	/* ===========================================================
@@ -76,33 +85,25 @@ public class SettingsModel implements SaveStateModel {
 		// Recall the attributes to the bundle
 		int savedValue = savedState.getInt(
 				KEY_TIME_LIMIT_MINUTES, DEFAULT_TIME_LIMIT_MINUTES);
-		byte valueToSet = (savedValue <= Byte.MAX_VALUE ?
-				(byte) savedValue : Byte.MAX_VALUE);
-		savedTimeLimit.setMinutes(valueToSet);
+		savedTimeLimit.setMinutes(TimeModel.intToByte(savedValue));
 		
 		savedValue = savedState.getInt(
 				KEY_TIME_LIMIT_SECONDS, DEFAULT_TIME_LIMIT_SECONDS);
-		valueToSet = (savedValue <= Byte.MAX_VALUE ?
-				(byte) savedValue : Byte.MAX_VALUE);
-		savedTimeLimit.setSeconds(valueToSet);
+		savedTimeLimit.setSeconds(TimeModel.intToByte(savedValue));
 		
 		savedValue = savedState.getInt(
 				KEY_DELAY_TIME_MINUTES, DEFAULT_DELAY_TIME_MINUTES);
-		valueToSet = (savedValue <= Byte.MAX_VALUE ?
-				(byte) savedValue : Byte.MAX_VALUE);
-		savedDelayTime.setMinutes(valueToSet);
+		savedDelayTime.setMinutes(TimeModel.intToByte(savedValue));
 		
 		savedValue = savedState.getInt(
 				KEY_DELAY_TIME_SECONDS, DEFAULT_DELAY_TIME_SECONDS);
-		valueToSet = (savedValue <= Byte.MAX_VALUE ?
-				(byte) savedValue : Byte.MAX_VALUE);
-		savedDelayTime.setSeconds(valueToSet);
+		savedDelayTime.setSeconds(TimeModel.intToByte(savedValue));
 		
 		String savedUri = savedState.getString(KEY_ALARM, null);
 		if(savedUri != null) {
 			alarmUri = Uri.parse(savedUri);
 		} else {
-			alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+			alarmUri = Settings.System.DEFAULT_ALARM_ALERT_URI;
 		}
 	}
 
@@ -128,6 +129,8 @@ public class SettingsModel implements SaveStateModel {
 		
 		saveEditor.putInt(KEY_DELAY_TIME_MINUTES, savedDelayTime.getMinutes());
 		saveEditor.putInt(KEY_DELAY_TIME_SECONDS, savedDelayTime.getSeconds());
+		
+		saveEditor.putString(KEY_ALARM, alarmUri.toString());
 		
 		// Write it in!
 		saveEditor.commit();

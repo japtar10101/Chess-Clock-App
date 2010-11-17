@@ -4,13 +4,13 @@
 package com.app.chessclock.gui;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.TypedArray;
 import android.preference.DialogPreference;
 import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TimePicker;
-
-import com.app.chessclock.models.TimeModel;
 
 /**
  * GUI element that opens a timer dialog
@@ -19,10 +19,14 @@ import com.app.chessclock.models.TimeModel;
 public class TimerPreference extends DialogPreference implements
 		TimePicker.OnTimeChangedListener {
 	/* ===========================================================
+	 * Constants
+	 * =========================================================== */
+	public static final String APPEND_KEY_MINUTES = "Minutes";
+	public static final String APPEND_KEY_SECONDS = "Seconds";
+	
+	/* ===========================================================
 	 * Members
 	 * =========================================================== */
-	/** The TimeModel to model around */
-	private TimeModel mModel = null;
 	private int mMinutes;
 	private int mSeconds;
 	
@@ -63,39 +67,88 @@ public class TimerPreference extends DialogPreference implements
 	 */
 	@Override
 	public void onDialogClosed(boolean positiveResult) {
-		// Update model
+		// If we clicked OK...
 		if(positiveResult) {
-			this.getKey();
-			mModel.setMinutes(TimeModel.intToByte(mMinutes));
-			mModel.setSeconds(TimeModel.intToByte(mSeconds));
+			// Save the values
+            this.saveValues();
 		}
 	}
 	
 	@Override
 	protected View onCreateDialogView() {
-		final TimePicker mView = new TimePicker(this.getContext());
-		mView.setIs24HourView(true);
-
+		// Create a new TimePicker
+		final TimePicker timer = new TimePicker(this.getContext());
+		timer.setIs24HourView(true);
+		
+		// Recall the stored values
+    	this.recallValues();
+		
 		// Update view
-		if(mModel != null) {
-			mMinutes = mModel.getMinutes();
-			mSeconds = mModel.getSeconds();
-			mView.setCurrentHour(mMinutes);
-			mView.setCurrentMinute(mSeconds);
-		}
+		timer.setCurrentHour(mMinutes);
+		timer.setCurrentMinute(mSeconds);
 		
 		// Return view
-		return mView;
+		timer.setOnTimeChangedListener(this);
+		return timer;
 	}
 	
-	/* ===========================================================
-	 * Setters
-	 * =========================================================== */
 	/**
-	 * @param model sets {@link mModel}
+	 * Returns a default integer
+	 * @see android.preference.Preference#onGetDefaultValue(android.content.res.TypedArray, int)
 	 */
-	public void setModel(final TimeModel model) {
-		// Update model
-		mModel = model;
-	}
+	@Override
+    protected Object onGetDefaultValue(TypedArray a, int index) {
+        // This preference type's value type is Integer, so we read the default
+        // value from the attributes as an Integer.
+        return a.getInteger(index, 0);
+    }
+
+    @Override
+    protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
+        if (restoreValue) {
+        	// Recall the stored values
+        	this.recallValues();
+        } else {
+            // Set state based on default value
+            int value = (Integer) defaultValue;
+            mMinutes = value / 60;
+            mSeconds = value % 60;
+            
+            // Save the values
+            this.saveValues();
+        }
+    }
+    
+    /* ===========================================================
+	 * Private/Protected Methods
+	 * =========================================================== */
+    /**
+     * Recalls the stored minutes and seconds
+     */
+    private void recallValues() {
+    	// Grab the key
+		final String key = this.getKey();
+		
+        // Restore state
+    	final SharedPreferences savedData = this.getSharedPreferences();
+		mMinutes = savedData.getInt(key + APPEND_KEY_MINUTES, 0);
+		mSeconds = savedData.getInt(key + APPEND_KEY_SECONDS, 0);
+    }
+    
+    /**
+     * Saves the minutes and seconds
+     */
+    private void saveValues() {
+    	// Grab the key
+		final String key = this.getKey();
+		
+		// Grab the editor
+		final SharedPreferences toSave = this.getSharedPreferences();
+		final SharedPreferences.Editor editor = toSave.edit();
+		
+		// Write in the preferences
+		editor.putInt(key + APPEND_KEY_MINUTES, mMinutes);
+		editor.putInt(key + APPEND_KEY_SECONDS, mSeconds);
+		editor.commit();
+    }
 }
