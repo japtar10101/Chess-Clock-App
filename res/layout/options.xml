@@ -9,7 +9,7 @@
 		
 		<com.app.chessclock.gui.TimerPreference android:title="Delay Time"
 		android:summary="The amount of time delayed after pressing a button"
-		android:key="prefDelayTime" />
+		android:key="prefTimeDelay" />
         
 	</PreferenceCategory>
 	

@@ -5,10 +5,10 @@ package com.app.chessclock.menus;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.widget.TimePicker;
 
 import com.app.chessclock.Global;
 import com.app.chessclock.R;
+import com.app.chessclock.gui.TimerPreference;
 import com.app.chessclock.models.TimeModel;
 
 /**
@@ -21,10 +21,10 @@ public class OptionsMenu extends PreferenceActivity implements ActivityMenu {
 	 * =========================================================== */
 	
 	// == TimePicker ==
-//	/** "Time Limit" picker */
-//	private TimePicker mTimeLimit = null;
-//	/** "Delay Time" picker */
-//	private TimePicker mDelayTime = null;
+	/** "Time Limit" picker */
+	private TimerPreference mTimeLimit = null;
+	/** "Delay Time" picker */
+	private TimerPreference mDelayTime = null;
 	
 	// == Selection box button ==
 	// FIXME: add sound-related GUI
@@ -55,21 +55,14 @@ public class OptionsMenu extends PreferenceActivity implements ActivityMenu {
 		this.addPreferencesFromResource(R.layout.options);
 		
 		// Grab the TimePickers
-//		mTimeLimit = (TimePicker)mParentActivity.findViewById(R.id.timeTimeLimit);
-//		mDelayTime = (TimePicker)mParentActivity.findViewById(R.id.timeDelayTime);
-//		
-//		// Hack: remove the AM/PM options
-//		mTimeLimit.setIs24HourView(true);
-//		mDelayTime.setIs24HourView(true);
-//		
-//		// Update the TimePickers to current settings
-//		TimeModel updateTime = Global.OPTIONS.savedTimeLimit;
-//		mTimeLimit.setCurrentHour(Integer.valueOf(updateTime.getMinutes()));
-//		mTimeLimit.setCurrentMinute(Integer.valueOf(updateTime.getSeconds()));
-//		
-//		updateTime = Global.OPTIONS.savedDelayTime;
-//		mDelayTime.setCurrentHour(Integer.valueOf(updateTime.getMinutes()));
-//		mDelayTime.setCurrentMinute(Integer.valueOf(updateTime.getSeconds()));
+		String guiKey = this.getString(R.string.prefTimeLimit);
+		mTimeLimit = (TimerPreference) this.findPreference(guiKey);
+		guiKey = this.getString(R.string.prefTimeDelay);
+		mDelayTime = (TimerPreference) this.findPreference(guiKey);
+		
+		// Update the TimePickers to current settings
+		mTimeLimit.setModel(Global.OPTIONS.savedTimeLimit);
+		mDelayTime.setModel(Global.OPTIONS.savedDelayTime);
 	}
 
 	/**

@@ -1,10 +1,10 @@
 package com.app.chessclock;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import com.app.chessclock.enums.TimerCondition;
 import com.app.chessclock.menus.OptionsMenu;
 import com.app.chessclock.menus.TimersMenu;
-import com.app.chessclock.models.GameStateModel;
 
 public class MainActivity extends Activity {
 	/* ===========================================================
@@ -38,22 +37,16 @@ public class MainActivity extends Activity {
         // Grab the Display metrics
         this.getWindowManager().getDefaultDisplay().getMetrics(Global.DISPLAY);
         
-        // Recall and update the last game state.
-        SharedPreferences settings = this.getSharedPreferences(
-        		GameStateModel.PREFERENCE_FILE_NAME, 0);
-        if(settings != null) {
-        	Global.GAME_STATE.recallSettings(settings);
+        // Recall and update the options and the last game's state.
+        Global.SAVED_DATA = this.getPreferences(Context.MODE_PRIVATE);
+        if(Global.SAVED_DATA != null) {
+        	Global.OPTIONS.recallSettings(Global.SAVED_DATA);
+        	Global.GAME_STATE.recallSettings(Global.SAVED_DATA);
         }
         
         // Also update the delay label
         Global.GAME_STATE.setDelayPrependString(
         		this.getString(R.string.delayLabelText));
-        
-        // Recall and update options.
-//        settings = PreferenceManager.getDefaultSharedPreferences(this);
-//        if(settings != null) {
-//        	Global.OPTIONS.recallSettings(settings);
-//        }
         
         // Create the options menu
         mOptionsMenu = new Intent(MainActivity.this, OptionsMenu.class);
@@ -85,9 +78,9 @@ public class MainActivity extends Activity {
         super.onStop();
 
         // Save pause state
-        final SharedPreferences settings = this.getSharedPreferences(
-        		GameStateModel.PREFERENCE_FILE_NAME, 0);
-        Global.GAME_STATE.saveSettings(settings);
+        if(Global.SAVED_DATA != null) {
+        	Global.GAME_STATE.saveSettings(Global.SAVED_DATA);
+        }
     }
     
     /**

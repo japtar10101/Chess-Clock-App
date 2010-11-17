@@ -14,4 +14,7 @@
     <string name="cancelButton">Cancel</string>
     
 	<string name="settingsMenuLabel">Settings</string>
+	
+	<string name="prefTimeLimit">prefTimeLimit</string>
+    <string name="prefTimeDelay">prefTimeDelay</string>
 </resources>

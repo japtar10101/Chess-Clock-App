@@ -3,6 +3,7 @@
  */
 package com.app.chessclock;
 
+import android.content.SharedPreferences;
 import android.util.DisplayMetrics;
 
 import com.app.chessclock.models.GameStateModel;
@@ -22,4 +23,6 @@ public interface Global {
 	public static final SettingsModel OPTIONS = new SettingsModel();
 	/** The game's state */
 	public static final GameStateModel GAME_STATE = new GameStateModel();
+	/** The shared data */
+	public static SharedPreferences SAVED_DATA = null;
 }

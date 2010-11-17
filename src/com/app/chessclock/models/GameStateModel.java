@@ -18,9 +18,6 @@ public class GameStateModel implements SaveStateModel {
 	/* ===========================================================
 	 * Constants
 	 * =========================================================== */
-	/** Shared preference name to recall/save */
-	public static final String PREFERENCE_FILE_NAME = "ChessClockAppPauseState";
-	
 	/** The saved key value for who's turn it is */
 	public static final String KEY_LEFT_PLAYERS_TURN = "leftPlayersTurn";
 	/** The saved key value for the timer condition */
