@@ -4,6 +4,7 @@
 package com.app.chessclock.menus;
 
 import android.content.Context;
+import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.os.Handler;
@@ -60,6 +61,7 @@ public class TimersMenu implements OnClickListener, ActivityMenu {
 	private Vibrator mSmallVibrate = null;
 	/** Sound of alarm */
 	private Ringtone mRingtone = null;
+	// TODO: add the click sound
 	
 	/* ===========================================================
 	 * Constructors
@@ -108,6 +110,7 @@ public class TimersMenu implements OnClickListener, ActivityMenu {
 		mPauseButton.setOnClickListener(this);
 		
 		// Get the vibrator and ringtone
+		// TODO: get click sound
 		mSmallVibrate = (Vibrator) mParentActivity.getSystemService(
 				Context.VIBRATOR_SERVICE);
 		mRingtone = RingtoneManager.getRingtone(mParentActivity,
@@ -299,8 +302,13 @@ public class TimersMenu implements OnClickListener, ActivityMenu {
 		mPauseLayout.setVisibility(View.INVISIBLE);
 		mTimesUpLayout.setVisibility(View.VISIBLE);
 		
-		// Start screaming!
-		if(mRingtone != null) {
+		// Check the volume and ringer
+		final AudioManager audioManager = (AudioManager)
+			mParentActivity.getSystemService(Context.AUDIO_SERVICE);
+		if(audioManager.getStreamVolume(AudioManager.STREAM_ALARM) > 0 &&
+				mRingtone != null) {
+			// If they're valid, play it as an alarm
+			mRingtone.setStreamType(AudioManager.STREAM_ALARM);
 			mRingtone.play();
 		}
 		

@@ -113,9 +113,6 @@ public class TimerPreference extends DialogPreference implements
             int value = (Integer) defaultValue;
             mMinutes = value / 60;
             mSeconds = value % 60;
-            
-            // Save the values
-            this.saveValues();
         }
     }
     
