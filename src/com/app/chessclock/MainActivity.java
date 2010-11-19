@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -38,19 +39,17 @@ public class MainActivity extends Activity {
      */
     @Override
     public void onCreate(final Bundle savedInstanceState) {
-    	
     	// Do whatever is in the super class first
         super.onCreate(savedInstanceState);
-
-        // Grab the Display metrics
+        
+        // Take care of this applications system settings
+        PreferenceManager.setDefaultValues(this, R.layout.options, false);
+        this.setVolumeControlStream(AudioManager.STREAM_ALARM);
         this.getWindowManager().getDefaultDisplay().getMetrics(Global.DISPLAY);
         
         // Determine the best text size
         this.calculateTextSize();
-        
-        // Default the options, if none was stored
-        PreferenceManager.setDefaultValues(this, R.layout.options, false);
-        
+       
         // Recall the last game's state.
         SharedPreferences settings = this.getPreferences(MODE_PRIVATE);
     	Global.GAME_STATE.recallSettings(settings);
@@ -59,7 +58,7 @@ public class MainActivity extends Activity {
         Global.GAME_STATE.setDelayPrependString(
         		this.getString(R.string.delayLabelText));
         
-        // Recall and the last game's state.
+        // Recall the options.
         settings = PreferenceManager.getDefaultSharedPreferences(this);
     	Global.OPTIONS.recallSettings(settings);
         

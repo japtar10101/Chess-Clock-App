@@ -17,22 +17,21 @@
 	
 	<PreferenceCategory android:title="Feedback">
 	
-		<RingtonePreference android:key="prefSound"
+		<RingtonePreference android:key="alarm"
 		android:title="Alarm" android:name="Alarm"
 		android:summary="Select an alarm that rings on time-up"
 		android:ringtoneType="alarm" android:showDefault="true" />
 		
-		<CheckBoxPreference
-		android:title="Checkbox Preference"
-		android:defaultValue="false"
-		android:summary="This preference can be true or false"
-		android:key="checkboxPref" />
+		<CheckBoxPreference android:key="vibrate"
+        android:title="Vibrate"
+        android:defaultValue="true"
+        android:summary="Vibrate the phone when any button is pressed" />
+        
+        <CheckBoxPreference android:key="click"
+		android:title="Enable Click Sound"
+		android:defaultValue="true"
+		android:summary="Play a 'click' sound when pressing a game button" />
 		
-		<CheckBoxPreference
-		android:title="Checkbox Preference"
-		android:defaultValue="false"
-		android:summary="This preference can be true or false"
-		android:key="checkboxPref" />
 	</PreferenceCategory>
 	
 </PreferenceScreen>

@@ -166,6 +166,9 @@ public class TimersMenu implements OnClickListener {
 	public void exitMenu() {
 		// Stop the time handler
 		mTimer.removeCallbacks(mTask);
+		
+		// Release this resource
+		mClickSound.release();
 
 		// Set the option's state
 		switch(Global.GAME_STATE.timerCondition) {
@@ -347,11 +350,9 @@ public class TimersMenu implements OnClickListener {
 			
 			// Play the click sound
 			if(mClickSound != null) {
-				try {
-					mClickSound.reset();
-					mClickSound.prepare();
-					mClickSound.start();
-				} catch (Exception e) { }
+				mClickSound.stop();
+				mClickSound.setAudioStreamType(AudioManager.STREAM_ALARM);
+				mClickSound.start();
 			}
 		}
 		
