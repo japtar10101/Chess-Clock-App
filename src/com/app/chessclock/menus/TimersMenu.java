@@ -49,12 +49,13 @@ public class TimersMenu implements OnClickListener, ActivityMenu {
 	// == Labels ==
 	/** Label indicating delay */
 	private TextView mDelayLabel = null;
+	/** Label that appears on the pause screen */
+	private TextView mPauseLabel = null;
 	
 	// == Dialog ==
+	// TODO: reduce the number of layouts to just 1, add 2 buttons for starting the game
 	/** A pause screen, generally left invisible */
 	private RelativeLayout mPauseLayout = null;
-	/** A "Times Up!" screen, generally left invisible */
-	private RelativeLayout mTimesUpLayout = null;
 	
 	// == Misc. ==
 	/** The vibrator */
@@ -92,12 +93,11 @@ public class TimersMenu implements OnClickListener, ActivityMenu {
 
 		// Grab the label
 		mDelayLabel = (TextView)mParentActivity.findViewById(R.id.labelDelay);
+		mPauseLabel = (TextView)mParentActivity.findViewById(R.id.labelPause);
 		
 		// Grab layouts
 		mPauseLayout = (RelativeLayout)
 			mParentActivity.findViewById(R.id.layoutPause);
-		mTimesUpLayout = (RelativeLayout)
-			mParentActivity.findViewById(R.id.layoutTimesUp);
 		
 		// Grab the buttons
 		mLeftButton = (Button)mParentActivity.findViewById(R.id.buttonLeftTime);
@@ -108,6 +108,12 @@ public class TimersMenu implements OnClickListener, ActivityMenu {
 		mLeftButton.setOnClickListener(this);
 		mRightButton.setOnClickListener(this);
 		mPauseButton.setOnClickListener(this);
+		
+		// Update the text size on everything
+		mLeftButton.setTextSize(MainActivity.msTextSize);
+		mRightButton.setTextSize(MainActivity.msTextSize);
+		mPauseButton.setTextSize(MainActivity.msTextSize * 0.5f);
+		mDelayLabel.setTextSize(MainActivity.msTextSize * 0.7f);
 		
 		// Get the vibrator and ringtone
 		// TODO: get click sound
@@ -217,7 +223,6 @@ public class TimersMenu implements OnClickListener, ActivityMenu {
 		
 		// Set both layouts to be invisible
 		mPauseLayout.setVisibility(View.INVISIBLE);
-		mTimesUpLayout.setVisibility(View.INVISIBLE);
 					
 		// Enable only one button
 		mLeftButton.setEnabled(Global.GAME_STATE.leftPlayersTurn);
@@ -246,14 +251,14 @@ public class TimersMenu implements OnClickListener, ActivityMenu {
 		mRightButton.setEnabled(true);
 		
 		// Update button's text
-		mLeftButton.setText(mParentActivity.getString(R.string.playerButtonText));
-		mRightButton.setText(mParentActivity.getString(R.string.playerButtonText));
-		mPauseButton.setText(mParentActivity.getString(R.string.settingsMenuLabel));
+		mLeftButton.setText(Global.GAME_STATE.leftPlayerTime());
+		mRightButton.setText(Global.GAME_STATE.rightPlayerTime());
+		mPauseButton.setText(
+				mParentActivity.getString(R.string.settingsMenuLabel));
 		mDelayLabel.setVisibility(View.INVISIBLE);
 		
 		// Set both layouts to be invisible
 		mPauseLayout.setVisibility(View.INVISIBLE);
-		mTimesUpLayout.setVisibility(View.INVISIBLE);
 	}
 	
 	/**
@@ -275,10 +280,12 @@ public class TimersMenu implements OnClickListener, ActivityMenu {
 		
 		// Set the pause layout as visible
 		mPauseLayout.setVisibility(View.VISIBLE);
-		mTimesUpLayout.setVisibility(View.INVISIBLE);
+		mPauseLabel.setText(
+				mParentActivity.getString(R.string.pauseLabelText));
 		
 		// Update the pause button text
-		mPauseButton.setText(mParentActivity.getString(R.string.resumeButtonText));
+		mPauseButton.setText(
+				mParentActivity.getString(R.string.resumeButtonText));
 	}
 	
 	/**
@@ -299,8 +306,9 @@ public class TimersMenu implements OnClickListener, ActivityMenu {
 		mDelayLabel.setVisibility(View.INVISIBLE);
 		
 		// Set the times-up layout as visible
-		mPauseLayout.setVisibility(View.INVISIBLE);
-		mTimesUpLayout.setVisibility(View.VISIBLE);
+		mPauseLayout.setVisibility(View.VISIBLE);
+		mPauseLabel.setText(
+				mParentActivity.getString(R.string.timesUpLabelText));
 		
 		// Check the volume and ringer
 		final AudioManager audioManager = (AudioManager)

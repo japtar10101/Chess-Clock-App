@@ -12,12 +12,14 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:layout_width="wrap_content" android:layout_height="fill_parent"
 		android:text="@string/playerButtonText" android:layout_weight="1"
 		android:typeface="monospace" android:textStyle="bold"
+		android:shadowColor="#ffffffff" android:shadowRadius="3"
 		android:textSize="80px" />
 		
 		<Button android:id="@+id/buttonRightTime"
 		android:layout_width="wrap_content" android:layout_height="fill_parent"
 		android:text="@string/playerButtonText" android:layout_weight="1"
 		android:typeface="monospace" android:textStyle="bold"
+		android:shadowColor="#ffffffff" android:shadowRadius="3"
 		android:textSize="80px" />
 	
 	</LinearLayout>
@@ -33,27 +35,18 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	<RelativeLayout android:id="@+id/layoutPause"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
     android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
-    android:visibility="invisible" android:background="#d0000000">
-    
-	    <TextView android:text="@string/pauseLabelText" android:textSize="80px"
+    android:visibility="invisible" android:background="#b0000000">
+        
+        <!-- TODO: add an image here -->
+	    
+	    <TextView android:id="@+id/labelPause"
+	    android:text="@string/pauseLabelText" android:textSize="80px"
 	    android:layout_width="wrap_content" android:layout_height="wrap_content"
 	    android:layout_centerVertical="true" android:layout_centerHorizontal="true"
 	    android:typeface="monospace" android:textStyle="bold" />
 	    
     </RelativeLayout>
 	
-    <RelativeLayout android:id="@+id/layoutTimesUp"
-    android:layout_width="fill_parent" android:layout_height="fill_parent"
-    android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
-    android:visibility="invisible" android:background="#d0000000">
-    
-        <TextView android:text="@string/timesUpLabelText" android:textSize="80px"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:layout_centerVertical="true" android:layout_centerHorizontal="true"
-        android:typeface="monospace" android:textStyle="bold" />
-        
-    </RelativeLayout>
-
     <Button android:id="@+id/buttonPause" android:text="@string/settingsMenuLabel"
     android:layout_width="wrap_content" android:layout_height="wrap_content"
     android:typeface="monospace" android:textStyle="bold" android:textSize="40px"
