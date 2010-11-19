@@ -121,26 +121,26 @@ public class GameStateModel implements SaveStateModel {
 		// First, the left player's time
 		mLeftPlayersTime.setMinutes(TimeModel.intToByte(
 				savedState.getInt(KEY_LEFT_PLAYERS_MINUTES,
-				SettingsModel.DEFAULT_TIME_LIMIT_MINUTES)));
+				OptionsModel.DEFAULT_TIME_LIMIT_MINUTES)));
 		mLeftPlayersTime.setSeconds(TimeModel.intToByte(
 				savedState.getInt(KEY_LEFT_PLAYERS_SECONDS,
-				SettingsModel.DEFAULT_TIME_LIMIT_SECONDS)));
+				OptionsModel.DEFAULT_TIME_LIMIT_SECONDS)));
 
 		// Then, the right player's time
 		mRightPlayersTime.setMinutes(TimeModel.intToByte(
 				savedState.getInt(KEY_RIGHT_PLAYERS_MINUTES,
-				SettingsModel.DEFAULT_TIME_LIMIT_MINUTES)));
+				OptionsModel.DEFAULT_TIME_LIMIT_MINUTES)));
 		mRightPlayersTime.setSeconds(TimeModel.intToByte(
 				savedState.getInt(KEY_RIGHT_PLAYERS_SECONDS,
-				SettingsModel.DEFAULT_TIME_LIMIT_SECONDS)));
+				OptionsModel.DEFAULT_TIME_LIMIT_SECONDS)));
 
 		// The delay time...
 		mDelayTime.setMinutes(TimeModel.intToByte(
 				savedState.getInt(KEY_DELAY_TIME_MINUTES,
-				SettingsModel.DEFAULT_DELAY_TIME_MINUTES)));
+				OptionsModel.DEFAULT_DELAY_TIME_MINUTES)));
 		mDelayTime.setSeconds(TimeModel.intToByte(
 				savedState.getInt(KEY_DELAY_TIME_SECONDS,
-				SettingsModel.DEFAULT_DELAY_TIME_SECONDS)));
+				OptionsModel.DEFAULT_DELAY_TIME_SECONDS)));
 		
 		// Who's turn it is...
 		leftPlayersTurn = savedState.getBoolean(KEY_LEFT_PLAYERS_TURN, true);

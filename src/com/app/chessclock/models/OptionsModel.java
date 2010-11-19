@@ -13,7 +13,7 @@ import android.provider.Settings;
  * Options shared between each layout
  * @author japtar10101
  */
-public class SettingsModel implements SaveStateModel {
+public class OptionsModel implements SaveStateModel {
 	/* ===========================================================
 	 * Constants
 	 * =========================================================== */
@@ -36,10 +36,12 @@ public class SettingsModel implements SaveStateModel {
 	public static final String KEY_DELAY_TIME_SECONDS =
 		KEY_DELAY_TIME + TimerPreference.APPEND_KEY_SECONDS;
 
-	/** The saved key value for delay time (seconds) */
+	/** The saved key value for alarm */
 	public static final String KEY_ALARM = "alarm";
-	/** The saved key value for delay time (seconds) */
-	public static final String KEY_CLICK_MODE = "clickMode";
+	/** The saved key value for enabling click sound */
+	public static final String KEY_CLICK = "click";
+	/** The saved key value for vibrating */
+	public static final String KEY_VIBRATE = "vibrate";
 	
 	// == Default values ==
 	/** The default time limit (minutes) */
@@ -52,6 +54,11 @@ public class SettingsModel implements SaveStateModel {
 	/** The default delay time (seconds) */
 	public static final byte DEFAULT_DELAY_TIME_SECONDS = 2;
 
+	/** The default value for {@link #enableClick} */
+	public static final boolean DEFAULT_ENABLE_CLICK = true;
+	/** The default value for {@link #enableVibrate} */
+	public static final boolean DEFAULT_ENABLE_VIBRATE = true;
+	
 	/* ===========================================================
 	 * Members
 	 * =========================================================== */
@@ -64,7 +71,10 @@ public class SettingsModel implements SaveStateModel {
 		new TimeModel(DEFAULT_DELAY_TIME_MINUTES, DEFAULT_DELAY_TIME_SECONDS);
 	/** The stored alarm */
 	public Uri alarmUri = Settings.System.DEFAULT_ALARM_ALERT_URI;
-	// FIXME: add click or vibrate
+	/** If true, make a sound when pressing a game button */
+	public boolean enableClick = DEFAULT_ENABLE_CLICK;
+	/** If true, vibrates when clicking any button */
+	public boolean enableVibrate = DEFAULT_ENABLE_VIBRATE;
 
 	/* ===========================================================
 	 * Override Methods
@@ -105,6 +115,9 @@ public class SettingsModel implements SaveStateModel {
 		} else {
 			alarmUri = Settings.System.DEFAULT_ALARM_ALERT_URI;
 		}
+		
+		enableClick = savedState.getBoolean(KEY_CLICK, DEFAULT_ENABLE_CLICK);
+		enableVibrate = savedState.getBoolean(KEY_VIBRATE, DEFAULT_ENABLE_VIBRATE);
 	}
 
 	/**
@@ -131,6 +144,9 @@ public class SettingsModel implements SaveStateModel {
 		saveEditor.putInt(KEY_DELAY_TIME_SECONDS, savedDelayTime.getSeconds());
 		
 		saveEditor.putString(KEY_ALARM, alarmUri.toString());
+		
+		saveEditor.putBoolean(KEY_CLICK, enableClick);
+		saveEditor.putBoolean(KEY_VIBRATE, enableVibrate);
 		
 		// Write it in!
 		saveEditor.commit();

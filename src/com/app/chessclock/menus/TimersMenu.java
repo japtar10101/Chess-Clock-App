@@ -5,6 +5,7 @@ package com.app.chessclock.menus;
 
 import android.content.Context;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.os.Handler;
@@ -53,16 +54,16 @@ public class TimersMenu implements OnClickListener {
 	private TextView mPauseLabel = null;
 	
 	// == Dialog ==
-	// TODO: reduce the number of layouts to just 1, add 2 buttons for starting the game
 	/** A pause screen, generally left invisible */
 	private RelativeLayout mPauseLayout = null;
 	
 	// == Misc. ==
 	/** The vibrator */
 	private Vibrator mSmallVibrate = null;
+	/** Click sound */
+	private MediaPlayer mClickSound = null; 
 	/** Sound of alarm */
 	private Ringtone mRingtone = null;
-	// TODO: add the click sound
 	
 	/* ===========================================================
 	 * Constructors
@@ -88,8 +89,8 @@ public class TimersMenu implements OnClickListener {
 	 */
 	@Override
 	public void onClick(final View v) {
-		// Vibrate in response to a button press
-		if(mSmallVibrate != null) {
+		// Vibrate in response to all button presses
+		if(mSmallVibrate != null && v != null) {
 			mSmallVibrate.vibrate(50);
 		}
 		
@@ -199,10 +200,20 @@ public class TimersMenu implements OnClickListener {
 		mRightButton = (Button)mParentActivity.findViewById(R.id.buttonRightTime);
 		mPauseButton = (Button)mParentActivity.findViewById(R.id.buttonPause);
 		
-		// Get the vibrator and ringtone
-		// TODO: get click sound
-		mSmallVibrate = (Vibrator) mParentActivity.getSystemService(
-				Context.VIBRATOR_SERVICE);
+		// Get the vibrator
+		mSmallVibrate = null;
+		if(Global.OPTIONS.enableVibrate) {
+			mSmallVibrate = (Vibrator) mParentActivity.getSystemService(
+					Context.VIBRATOR_SERVICE);
+		}
+		
+		// Get the click sound
+		mClickSound = null;
+		if(Global.OPTIONS.enableClick) {
+			mClickSound = MediaPlayer.create(mParentActivity, R.raw.snap);
+		}
+		
+		// Get the ringtone
 		mRingtone = RingtoneManager.getRingtone(mParentActivity,
 				Global.OPTIONS.alarmUri);
 	}
@@ -333,6 +344,15 @@ public class TimersMenu implements OnClickListener {
 			
 			// Update the pause button text
 			mPauseButton.setText(mParentActivity.getString(R.string.pauseButtonText));
+			
+			// Play the click sound
+			if(mClickSound != null) {
+				try {
+					mClickSound.reset();
+					mClickSound.prepare();
+					mClickSound.start();
+				} catch (Exception e) { }
+			}
 		}
 		
 		// Enable only one button

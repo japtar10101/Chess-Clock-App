@@ -15,15 +15,24 @@
         
 	</PreferenceCategory>
 	
-	<PreferenceCategory android:title="Alerts">
+	<PreferenceCategory android:title="Feedback">
 	
 		<RingtonePreference android:key="prefSound"
 		android:title="Alarm" android:name="Alarm"
 		android:summary="Select an alarm that rings on time-up"
 		android:ringtoneType="alarm" android:showDefault="true" />
 		
-		<!-- TODO: Make a list of options for click sounds -->
-			
+		<CheckBoxPreference
+		android:title="Checkbox Preference"
+		android:defaultValue="false"
+		android:summary="This preference can be true or false"
+		android:key="checkboxPref" />
+		
+		<CheckBoxPreference
+		android:title="Checkbox Preference"
+		android:defaultValue="false"
+		android:summary="This preference can be true or false"
+		android:key="checkboxPref" />
 	</PreferenceCategory>
 	
 </PreferenceScreen>
