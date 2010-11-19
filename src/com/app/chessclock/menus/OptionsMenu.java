@@ -50,7 +50,6 @@ public class OptionsMenu extends PreferenceActivity {
     public void onPause() {
     	// Do whatever is in the super class first
         super.onPause();
-        // TODO: save the results
         this.recallSettings();
     }
     

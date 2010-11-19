@@ -15,6 +15,6 @@
     
 	<string name="settingsMenuLabel">Settings</string>
 	
-	<string name="prefTimeLimit">prefTimeLimit</string>
-    <string name="prefTimeDelay">prefTimeDelay</string>
+    <string name="toastMessage">Click either button to start the timer.\n
+    Press the menu button to restart the timer.</string>
 </resources>

@@ -25,7 +25,7 @@ import com.app.chessclock.enums.TimerCondition;
  * Menu for Timer
  * @author japtar10101
  */
-public class TimersMenu implements OnClickListener, ActivityMenu {
+public class TimersMenu implements OnClickListener {
 	/* ===========================================================
 	 * Members
 	 * =========================================================== */
@@ -83,83 +83,6 @@ public class TimersMenu implements OnClickListener, ActivityMenu {
 	 * Overrides
 	 * =========================================================== */
 	/**
-	 * Resumes the timer if paused, or starts it over.
-	 * @see com.app.chessclock.menus.ActivityMenu#setupLayout(android.app.Activity)
-	 */
-	@Override
-	public void setupMenu() {
-		// First, setup the UI
-		mParentActivity.setContentView(R.layout.main);
-
-		// Grab the label
-		mDelayLabel = (TextView)mParentActivity.findViewById(R.id.labelDelay);
-		mPauseLabel = (TextView)mParentActivity.findViewById(R.id.labelPause);
-		
-		// Grab layouts
-		mPauseLayout = (RelativeLayout)
-			mParentActivity.findViewById(R.id.layoutPause);
-		
-		// Grab the buttons
-		mLeftButton = (Button)mParentActivity.findViewById(R.id.buttonLeftTime);
-		mRightButton = (Button)mParentActivity.findViewById(R.id.buttonRightTime);
-		mPauseButton = (Button)mParentActivity.findViewById(R.id.buttonPause);
-		
-		// Set the buttons click behavior to this class
-		mLeftButton.setOnClickListener(this);
-		mRightButton.setOnClickListener(this);
-		mPauseButton.setOnClickListener(this);
-		
-		// Update the text size on everything
-		mLeftButton.setTextSize(MainActivity.msTextSize);
-		mRightButton.setTextSize(MainActivity.msTextSize);
-		mPauseButton.setTextSize(MainActivity.msTextSize * 0.5f);
-		mDelayLabel.setTextSize(MainActivity.msTextSize * 0.7f);
-		
-		// Get the vibrator and ringtone
-		// TODO: get click sound
-		mSmallVibrate = (Vibrator) mParentActivity.getSystemService(
-				Context.VIBRATOR_SERVICE);
-		mRingtone = RingtoneManager.getRingtone(mParentActivity,
-				Global.OPTIONS.alarmUri);
-		
-		// Determine the condition to begin this game at
-		switch(Global.GAME_STATE.timerCondition) {
-			case TimerCondition.TIMES_UP:
-			case TimerCondition.STARTING:
-				this.startup();
-				Toast.makeText(mParentActivity,
-						"Click either button to start the timer.\n" +
-						"Press the menu button to pause.",
-						Toast.LENGTH_LONG).show();
-				break;
-			default:
-				this.paused();
-				break;
-		}
-	}
-
-	/**
-	 * Pauses the timer, unless the time is up.
-	 * @see com.app.chessclock.menus.ActivityMenu#exitLayout(android.app.Activity)
-	 */
-	@Override
-	public void exitMenu() {
-		// Stop the time handler
-		mTimer.removeCallbacks(mTask);
-
-		// Set the option's state
-		switch(Global.GAME_STATE.timerCondition) {
-			case TimerCondition.TIMES_UP:
-			case TimerCondition.STARTING:
-				Global.GAME_STATE.timerCondition = TimerCondition.STARTING;
-				break;
-			default:
-				Global.GAME_STATE.timerCondition = TimerCondition.PAUSE;
-				break;
-		}
-	}
-
-	/**
 	 * Updates the player's turns, based on the button clicked
 	 * @see android.view.View.OnClickListener#onClick(android.view.View)
 	 */
@@ -195,51 +118,102 @@ public class TimersMenu implements OnClickListener, ActivityMenu {
 		// Stop the handler
 		mTimer.removeCallbacks(mTask);
 		
-		// If just starting, update the labels
-		if(Global.GAME_STATE.timerCondition == TimerCondition.STARTING) {
-			// Update to the time text
-			this.updateButtonAndLabelText();
+		// If we pressed the player button instead...
+		pressedPlayerButton(v);
+	}
+
+	/* ===========================================================
+	 * Public Methods
+	 * =========================================================== */
+	/**
+	 * Resumes the timer if paused, or starts it over.
+	 */
+	public void setupMenu() {
+		// First, setup the UI
+		mParentActivity.setContentView(R.layout.main);
+
+		// Load up all the member variables
+		this.loadMemberVariables();
+		
+		// Set the buttons click behavior to this class
+		mLeftButton.setOnClickListener(this);
+		mRightButton.setOnClickListener(this);
+		mPauseButton.setOnClickListener(this);
+		
+		// Update the text size on everything
+		mLeftButton.setTextSize(MainActivity.msTextSize);
+		mRightButton.setTextSize(MainActivity.msTextSize);
+		mPauseButton.setTextSize(MainActivity.msTextSize * 0.5f);
+		mDelayLabel.setTextSize(MainActivity.msTextSize * 0.7f);
+		mPauseLabel.setTextSize(MainActivity.msTextSize);
+		
+		// Determine the condition to begin this game at
+		switch(Global.GAME_STATE.timerCondition) {
+			case TimerCondition.TIMES_UP:
+			case TimerCondition.STARTING:
+				this.startup();
+				break;
+			default:
+				this.paused();
+				break;
 		}
-		
-		// Set condition to running
-		Global.GAME_STATE.timerCondition = TimerCondition.RUNNING;
-		
-		// Check which button was pressed
-		final boolean isLeftPlayersTurn = v.equals(mRightButton);
-		if(isLeftPlayersTurn || v.equals(mLeftButton)) {
-			// If clicked by right/left player button,
-			// update the current player
-			Global.GAME_STATE.leftPlayersTurn = isLeftPlayersTurn;
-			
-			// Reset the delay time
-			Global.GAME_STATE.resetDelay();
-			
-			// Update the Delay label
-			this.updateDelayLabel();
-			
-			// Update the pause button text
-			mPauseButton.setText(mParentActivity.getString(R.string.pauseButtonText));
+	}
+
+	/**
+	 * Pauses the timer, unless the time is up.
+	 */
+	public void exitMenu() {
+		// Stop the time handler
+		mTimer.removeCallbacks(mTask);
+
+		// Set the option's state
+		switch(Global.GAME_STATE.timerCondition) {
+			case TimerCondition.TIMES_UP:
+			case TimerCondition.STARTING:
+				Global.GAME_STATE.timerCondition = TimerCondition.STARTING;
+				break;
+			default:
+				Global.GAME_STATE.timerCondition = TimerCondition.PAUSE;
+				break;
 		}
-		
-		// Set both layouts to be invisible
-		mPauseLayout.setVisibility(View.INVISIBLE);
-					
-		// Enable only one button
-		mLeftButton.setEnabled(Global.GAME_STATE.leftPlayersTurn);
-		mRightButton.setEnabled(!Global.GAME_STATE.leftPlayersTurn);
-		
-		// Start the timer
-		mTask.reset();
-		mTimer.postDelayed(mTask, 1000);
 	}
 	
 	/* ===========================================================
 	 * Private/Protected Methods
 	 * =========================================================== */
 	/**
+	 * From the parent's activity, loads all the member variables to
+	 * non-null values
+	 */
+	private void loadMemberVariables() {
+		// Grab the label
+		mDelayLabel = (TextView)mParentActivity.findViewById(R.id.labelDelay);
+		mPauseLabel = (TextView)mParentActivity.findViewById(R.id.labelPause);
+		
+		// Grab layouts
+		mPauseLayout = (RelativeLayout)
+			mParentActivity.findViewById(R.id.layoutPause);
+		
+		// Grab the buttons
+		mLeftButton = (Button)mParentActivity.findViewById(R.id.buttonLeftTime);
+		mRightButton = (Button)mParentActivity.findViewById(R.id.buttonRightTime);
+		mPauseButton = (Button)mParentActivity.findViewById(R.id.buttonPause);
+		
+		// Get the vibrator and ringtone
+		// TODO: get click sound
+		mSmallVibrate = (Vibrator) mParentActivity.getSystemService(
+				Context.VIBRATOR_SERVICE);
+		mRingtone = RingtoneManager.getRingtone(mParentActivity,
+				Global.OPTIONS.alarmUri);
+	}
+	
+	/**
 	 * Indicate the game just started
 	 */
 	private void startup() {
+		// Stop the handler
+		mTimer.removeCallbacks(mTask);
+
 		// Set the condition to time up
 		Global.GAME_STATE.timerCondition = TimerCondition.STARTING;
 		
@@ -259,6 +233,11 @@ public class TimersMenu implements OnClickListener, ActivityMenu {
 		
 		// Set both layouts to be invisible
 		mPauseLayout.setVisibility(View.INVISIBLE);
+		
+		// Display a message
+		Toast.makeText(mParentActivity,
+				mParentActivity.getString(R.string.toastMessage),
+				Toast.LENGTH_LONG).show();
 	}
 	
 	/**
@@ -322,6 +301,47 @@ public class TimersMenu implements OnClickListener, ActivityMenu {
 		
 		// Update the pause button text
 		mPauseButton.setText(mParentActivity.getString(R.string.newGameButtonText));
+	}
+	
+	/**
+	 * Updates layout based on which button is pressed
+	 * @param buttonPressed the button that was pressed
+	 */
+	private void pressedPlayerButton(final View buttonPressed) {
+		// If just starting, update the labels
+		if(Global.GAME_STATE.timerCondition == TimerCondition.STARTING) {
+			// Update to the time text
+			this.updateButtonAndLabelText();
+		}
+		
+		// Set both layouts to be invisible
+		mPauseLayout.setVisibility(View.INVISIBLE);
+		Global.GAME_STATE.timerCondition = TimerCondition.RUNNING;
+		
+		// Check which button was pressed
+		final boolean isLeftPlayersTurn = buttonPressed.equals(mRightButton);
+		if(isLeftPlayersTurn || buttonPressed.equals(mLeftButton)) {
+			// If clicked by right/left player button,
+			// update the current player
+			Global.GAME_STATE.leftPlayersTurn = isLeftPlayersTurn;
+			
+			// Reset the delay time
+			Global.GAME_STATE.resetDelay();
+			
+			// Update the Delay label
+			this.updateDelayLabel();
+			
+			// Update the pause button text
+			mPauseButton.setText(mParentActivity.getString(R.string.pauseButtonText));
+		}
+		
+		// Enable only one button
+		mLeftButton.setEnabled(Global.GAME_STATE.leftPlayersTurn);
+		mRightButton.setEnabled(!Global.GAME_STATE.leftPlayersTurn);
+		
+		// Start the timer
+		mTask.reset();
+		mTimer.postDelayed(mTask, 1000);
 	}
 	
 	/**
