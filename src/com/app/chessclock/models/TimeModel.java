@@ -5,6 +5,8 @@ package com.app.chessclock.models;
 
 import java.security.InvalidParameterException;
 
+import android.content.SharedPreferences;
+
 /**
  * Helper class representing time.
  * @author japtar10101
@@ -32,12 +34,29 @@ public class TimeModel {
 	 * Constructors
 	 * =========================================================== */
 	/**
-	 * Default constructor.  Sets the time to 0.
-	 * @see #setTime(int, int)
+	 * Constructor
 	 */
-	public TimeModel(final byte minutes, final byte seconds) {
+	public TimeModel(final byte minutes, final byte seconds) throws
+			InvalidParameterException {
 		this.setSeconds(seconds);
 		mMinutes = minutes;
+	}
+	
+	/**
+	 * Constructor for saved values.
+	 */
+	public TimeModel(final int storedValue) throws InvalidParameterException {
+		// Make sure this value is valid
+		if(storedValue < 0) {
+			throw new InternalError(
+					"The stored value must be a non-negative value");
+		}
+		
+		// Convert the stored value into seconds
+		this.setSeconds(TimeModel.intToByte(storedValue % 60));
+		
+		// Convert the stored value into seconds
+		mMinutes = TimeModel.intToByte(storedValue / 60);
 	}
 	
 	/**
@@ -94,8 +113,65 @@ public class TimeModel {
 	 */
 	public void setTime(final TimeModel time) {
 		if(time != null) {
-			this.setTime(time.getMinutes(), time.getSeconds());
+			this.setSeconds(time.getSeconds());
+			mMinutes = time.getMinutes();
 		}
+	}
+	
+	/**
+	 * Sets the time based on the saved state's value
+	 * @param savedState
+	 * @param key
+	 * @param defaultValue
+	 * @throws InvalidParameterException 
+	 * @throws InternalError 
+	 */
+	public void recallTime(final SharedPreferences savedState,
+			final String key, final int defaultValue) throws
+			InvalidParameterException, InternalError {
+		// Make sure the parameters are valid
+		if(savedState == null) {
+			throw new InvalidParameterException("SharedPreference is null");
+		} else if(key == null) {
+			throw new InvalidParameterException("String is null");
+		}
+		
+		// Recall the attributes from the bundle
+		final int savedValue = savedState.getInt(key, defaultValue);
+		
+		// Make sure this value is valid
+		if(savedValue < 0) {
+			throw new InternalError(
+					"The stored value must be a non-negative value");
+		}
+		
+		// Convert the stored value into seconds
+		this.setSeconds(TimeModel.intToByte(savedValue % 60));
+		
+		// Convert the stored value into seconds
+		mMinutes = TimeModel.intToByte(savedValue / 60);
+	}
+	
+	/**
+	 * Stores the time
+	 * @param saveEditor
+	 * @param key
+	 * @throws InvalidParameterException
+	 */
+	public void saveTime(final SharedPreferences.Editor saveEditor,
+			final String key) throws InvalidParameterException {
+		// Make sure the parameters are valid
+		if(saveEditor == null) {
+			throw new InvalidParameterException("SharedPreference is null");
+		} else if(key == null) {
+			throw new InvalidParameterException("String is null");
+		}
+		
+		// Calculate the accumulative number of seconds 
+		final int valueToSave = (mMinutes * 60) + mSeconds;
+	
+		// Save the attributes to the bundle
+		saveEditor.putInt(key, valueToSave);
 	}
 	
 	/**
@@ -104,7 +180,7 @@ public class TimeModel {
 	 * @see #getSeconds() 
 	 */
 	public boolean isTimeZero() {
-		return this.getMinutes() + this.getSeconds() == 0;
+		return mMinutes + mSeconds == 0;
 	}
 	
 	/**

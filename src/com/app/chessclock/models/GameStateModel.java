@@ -24,20 +24,14 @@ public class GameStateModel implements SaveStateModel {
 	/** The saved key value for the timer condition */
 	public static final String KEY_TIMER_CONDITION = "timerCondition";
 	
-	/** The saved key value for left player's time (minutes) */
-	public static final String KEY_LEFT_PLAYERS_MINUTES = "leftPlayersMinutes";
-	/** The saved key value for left player's (seconds) */
-	public static final String KEY_LEFT_PLAYERS_SECONDS = "leftPlayersSeconds";
+	/** The saved key value for left player's time */
+	public static final String KEY_LEFT_PLAYER = "leftPlayersTime";
 	
-	/** The saved key value for left player's time (minutes) */
-	public static final String KEY_RIGHT_PLAYERS_MINUTES = "rightPlayersMinutes";
-	/** The saved key value for left player's time (seconds) */
-	public static final String KEY_RIGHT_PLAYERS_SECONDS = "rightPlayersSeconds";
+	/** The saved key value for left player's time */
+	public static final String KEY_RIGHT_PLAYER = "rightPlayersTime";
 	
-	/** The saved key value for delay time (minutes) */
-	public static final String KEY_DELAY_TIME_MINUTES = "gameDelayMinutes";
-	/** The saved key value for delay time (seconds) */
-	public static final String KEY_DELAY_TIME_SECONDS = "gameDelaySeconds";
+	/** The saved key value for delay time */
+	public static final String KEY_DELAY_TIME = "gameDelayTime";
 	
 	/* ===========================================================
 	 * Members
@@ -79,22 +73,15 @@ public class GameStateModel implements SaveStateModel {
 		// Grab the editor, and start saving
 		final SharedPreferences.Editor saveEditor = saveState.edit();
 		
-		// First, the left player time
-		saveEditor.putInt(KEY_LEFT_PLAYERS_MINUTES, mLeftPlayersTime.getMinutes());
-		saveEditor.putInt(KEY_LEFT_PLAYERS_SECONDS, mLeftPlayersTime.getSeconds());
-		
-		// Then, the right player time
-		saveEditor.putInt(KEY_RIGHT_PLAYERS_MINUTES, mRightPlayersTime.getMinutes());
-		saveEditor.putInt(KEY_RIGHT_PLAYERS_SECONDS, mRightPlayersTime.getSeconds());
-		
-		// The delay time
-		saveEditor.putInt(KEY_DELAY_TIME_MINUTES, mDelayTime.getMinutes());
-		saveEditor.putInt(KEY_DELAY_TIME_SECONDS, mDelayTime.getSeconds());
+		// First, save all the time variables
+		mLeftPlayersTime.saveTime(saveEditor, KEY_LEFT_PLAYER);
+		mRightPlayersTime.saveTime(saveEditor, KEY_RIGHT_PLAYER);
+		mDelayTime.saveTime(saveEditor, KEY_DELAY_TIME);
 		
 		// Who's turn it is
 		saveEditor.putBoolean(KEY_LEFT_PLAYERS_TURN, leftPlayersTurn);
 		
-		// The ordinal value of timerCondition
+		// The value of timerCondition
 		saveEditor.putInt(KEY_TIMER_CONDITION, timerCondition);
 		
 		// Write it in!
@@ -118,29 +105,13 @@ public class GameStateModel implements SaveStateModel {
 		}
 		
 		// Recall the attributes from the preference
-		// First, the left player's time
-		mLeftPlayersTime.setMinutes(TimeModel.intToByte(
-				savedState.getInt(KEY_LEFT_PLAYERS_MINUTES,
-				OptionsModel.DEFAULT_TIME_LIMIT_MINUTES)));
-		mLeftPlayersTime.setSeconds(TimeModel.intToByte(
-				savedState.getInt(KEY_LEFT_PLAYERS_SECONDS,
-				OptionsModel.DEFAULT_TIME_LIMIT_SECONDS)));
-
-		// Then, the right player's time
-		mRightPlayersTime.setMinutes(TimeModel.intToByte(
-				savedState.getInt(KEY_RIGHT_PLAYERS_MINUTES,
-				OptionsModel.DEFAULT_TIME_LIMIT_MINUTES)));
-		mRightPlayersTime.setSeconds(TimeModel.intToByte(
-				savedState.getInt(KEY_RIGHT_PLAYERS_SECONDS,
-				OptionsModel.DEFAULT_TIME_LIMIT_SECONDS)));
-
-		// The delay time...
-		mDelayTime.setMinutes(TimeModel.intToByte(
-				savedState.getInt(KEY_DELAY_TIME_MINUTES,
-				OptionsModel.DEFAULT_DELAY_TIME_MINUTES)));
-		mDelayTime.setSeconds(TimeModel.intToByte(
-				savedState.getInt(KEY_DELAY_TIME_SECONDS,
-				OptionsModel.DEFAULT_DELAY_TIME_SECONDS)));
+		// First, the time variables
+		mLeftPlayersTime.recallTime(savedState, KEY_LEFT_PLAYER,
+				OptionsModel.DEFAULT_TIME_LIMIT);
+		mRightPlayersTime.recallTime(savedState, KEY_RIGHT_PLAYER,
+				OptionsModel.DEFAULT_TIME_LIMIT);
+		mDelayTime.recallTime(savedState, KEY_DELAY_TIME,
+				OptionsModel.DEFAULT_DELAY_TIME);
 		
 		// Who's turn it is...
 		leftPlayersTurn = savedState.getBoolean(KEY_LEFT_PLAYERS_TURN, true);

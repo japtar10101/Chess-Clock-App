@@ -12,6 +12,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TimePicker;
 
+import com.app.chessclock.models.TimeModel;
+
 /**
  * GUI element that opens a timer dialog
  * @author japtar10101
@@ -19,16 +21,12 @@ import android.widget.TimePicker;
 public class TimerPreference extends DialogPreference implements
 		TimePicker.OnTimeChangedListener {
 	/* ===========================================================
-	 * Constants
-	 * =========================================================== */
-	public static final String APPEND_KEY_MINUTES = "Minutes";
-	public static final String APPEND_KEY_SECONDS = "Seconds";
-	
-	/* ===========================================================
 	 * Members
 	 * =========================================================== */
-	private int mMinutes;
-	private int mSeconds;
+	/** This preference's time */
+	private final TimeModel mTime = new TimeModel();
+	/** The default value */
+	private int mDefaultValue = 0;;
 	
 	/* ===========================================================
 	 * Constructors
@@ -57,8 +55,8 @@ public class TimerPreference extends DialogPreference implements
 	 */
 	@Override
 	public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-		mMinutes = hourOfDay;
-		mSeconds = minute;
+		mTime.setTime(TimeModel.intToByte(hourOfDay),
+				TimeModel.intToByte(minute));
 	}
 	
 	/**
@@ -84,8 +82,8 @@ public class TimerPreference extends DialogPreference implements
     	this.recallValues();
 		
 		// Update view
-		timer.setCurrentHour(mMinutes);
-		timer.setCurrentMinute(mSeconds);
+		timer.setCurrentHour((int) mTime.getMinutes());
+		timer.setCurrentMinute((int) mTime.getSeconds());
 		
 		// Return view
 		timer.setOnTimeChangedListener(this);
@@ -104,16 +102,14 @@ public class TimerPreference extends DialogPreference implements
     }
 
     /**
-     * TODO: add a description
+     * Sets the initial value.
      * @see android.preference.Preference#onSetInitialValue(boolean, java.lang.Object)
      */
     @Override
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
         // By default, set state based on default value (if available)
     	if(defaultValue instanceof Integer) {
-	        int value = (Integer) defaultValue;
-	        mMinutes = value / 60;
-	        mSeconds = value % 60;
+    		mDefaultValue = (Integer) defaultValue;
     	}
         
     	// Check if we should recall the values instead
@@ -130,29 +126,21 @@ public class TimerPreference extends DialogPreference implements
      * Recalls the stored minutes and seconds
      */
     private void recallValues() {
-    	// Grab the key
-		final String key = this.getKey();
-		
         // Restore state
-    	final SharedPreferences savedData = this.getSharedPreferences();
-		mMinutes = savedData.getInt(key + APPEND_KEY_MINUTES, 0);
-		mSeconds = savedData.getInt(key + APPEND_KEY_SECONDS, 0);
+    	mTime.recallTime(this.getSharedPreferences(),
+    			this.getKey(), mDefaultValue);
     }
     
     /**
      * Saves the minutes and seconds
      */
     private void saveValues() {
-    	// Grab the key
-		final String key = this.getKey();
-		
 		// Grab the editor
 		final SharedPreferences toSave = this.getSharedPreferences();
 		final SharedPreferences.Editor editor = toSave.edit();
 		
 		// Write in the preferences
-		editor.putInt(key + APPEND_KEY_MINUTES, mMinutes);
-		editor.putInt(key + APPEND_KEY_SECONDS, mSeconds);
+		mTime.saveTime(editor, this.getKey());
 		editor.commit();
     }
 }

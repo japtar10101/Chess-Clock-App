@@ -29,8 +29,11 @@ public class MainActivity extends Activity {
 	 * =========================================================== */
 	/** The current layout */
 	private final TimersMenu mMainMenu = new TimersMenu(this);
+	/** The preference page */
 	private Intent mOptionsMenu;
+	/** The sound effects */
 	private SoundPool mSoundPlayer = null;
+	/** The sound effect ID */
 	private int mSoundID;
 	
 	/* ===========================================================
@@ -187,6 +190,9 @@ public class MainActivity extends Activity {
 	
 	public void playSound(boolean leftSide) {
 		if(mSoundPlayer != null) {
+			// Stop the previously playing sound
+			mSoundPlayer.stop(mSoundID);
+			
 			// Determine the volume on the left side
 			float leftVolume = 0f;
 			if(leftSide) {
