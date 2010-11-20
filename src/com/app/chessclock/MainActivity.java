@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -29,6 +30,8 @@ public class MainActivity extends Activity {
 	/** The current layout */
 	private final TimersMenu mMainMenu = new TimersMenu(this);
 	private Intent mOptionsMenu;
+	private SoundPool mSoundPlayer = null;
+	private int mSoundID;
 	
 	/* ===========================================================
 	 * Overrides
@@ -63,7 +66,11 @@ public class MainActivity extends Activity {
     	Global.OPTIONS.recallSettings(settings);
         
         // Create the options menu
-        mOptionsMenu = new Intent(MainActivity.this, OptionsMenu.class);
+        mOptionsMenu = new Intent(this, OptionsMenu.class);
+        
+        // Create sound pool
+        mSoundPlayer = new SoundPool(1, AudioManager.STREAM_ALARM, 0);
+        mSoundID = mSoundPlayer.load(this, R.raw.snap, 1);
         
         // Start the main menu
         mMainMenu.setupMenu();
@@ -80,6 +87,12 @@ public class MainActivity extends Activity {
         
         // Exit the current layout
         mMainMenu.exitMenu();
+        
+        // Destroy the sound player
+        if(mSoundPlayer != null) {
+	        mSoundPlayer.release();
+	        mSoundPlayer = null;
+        }
     }
     
     /**
@@ -93,16 +106,22 @@ public class MainActivity extends Activity {
         
         // Exit the current layout
         mMainMenu.setupMenu();
+
+        // Create sound pool
+        if(mSoundPlayer == null) {
+	        mSoundPlayer = new SoundPool(1, AudioManager.STREAM_ALARM, 0);
+	        mSoundID = mSoundPlayer.load(this, R.raw.snap, 1);
+        }
     }
     
     /**
      * Called when the activity pauses.
-     * @see android.app.Activity#onPause()
+     * @see android.app.Activity#onDestroy()
      */
     @Override
-    public void onStop() {
+    public void onDestroy() {
     	// Do whatever is in the super class first
-        super.onStop();
+        super.onDestroy();
 
         // Save pause state
         SharedPreferences settings = this.getPreferences(MODE_PRIVATE);
@@ -166,6 +185,23 @@ public class MainActivity extends Activity {
 		this.startActivity(mOptionsMenu);
 	}
 	
+	public void playSound(boolean leftSide) {
+		if(mSoundPlayer != null) {
+			// Determine the volume on the left side
+			float leftVolume = 0f;
+			if(leftSide) {
+				leftVolume = 1f;
+			}
+			
+			// Play the sound
+			mSoundPlayer.play(mSoundID, leftVolume, 1f - leftVolume,
+					1, 0, 1f);
+		}
+	}
+	
+	/* ===========================================================
+	 * Private/Protected method
+	 * =========================================================== */
 	/**
 	 * Calculates the best text size, and sets the {@link Global#msTextSize}
 	 */

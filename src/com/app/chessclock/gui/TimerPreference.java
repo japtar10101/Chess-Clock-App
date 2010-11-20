@@ -103,16 +103,23 @@ public class TimerPreference extends DialogPreference implements
         return a.getInteger(index, 0);
     }
 
+    /**
+     * TODO: add a description
+     * @see android.preference.Preference#onSetInitialValue(boolean, java.lang.Object)
+     */
     @Override
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
-        if (restoreValue) {
-        	// Recall the stored values
+        // By default, set state based on default value (if available)
+    	if(defaultValue instanceof Integer) {
+	        int value = (Integer) defaultValue;
+	        mMinutes = value / 60;
+	        mSeconds = value % 60;
+    	}
+        
+    	// Check if we should recall the values instead
+        if(restoreValue && this.shouldPersist()) {
+        	// If so, recall or save the values
         	this.recallValues();
-        } else {
-            // Set state based on default value
-            int value = (Integer) defaultValue;
-            mMinutes = value / 60;
-            mSeconds = value % 60;
         }
     }
     

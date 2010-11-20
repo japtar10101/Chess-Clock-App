@@ -5,7 +5,6 @@ package com.app.chessclock.menus;
 
 import android.content.Context;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.os.Handler;
@@ -60,8 +59,6 @@ public class TimersMenu implements OnClickListener {
 	// == Misc. ==
 	/** The vibrator */
 	private Vibrator mSmallVibrate = null;
-	/** Click sound */
-	private MediaPlayer mClickSound = null; 
 	/** Sound of alarm */
 	private Ringtone mRingtone = null;
 	
@@ -167,9 +164,6 @@ public class TimersMenu implements OnClickListener {
 		// Stop the time handler
 		mTimer.removeCallbacks(mTask);
 		
-		// Release this resource
-		mClickSound.release();
-
 		// Set the option's state
 		switch(Global.GAME_STATE.timerCondition) {
 			case TimerCondition.TIMES_UP:
@@ -208,12 +202,6 @@ public class TimersMenu implements OnClickListener {
 		if(Global.OPTIONS.enableVibrate) {
 			mSmallVibrate = (Vibrator) mParentActivity.getSystemService(
 					Context.VIBRATOR_SERVICE);
-		}
-		
-		// Get the click sound
-		mClickSound = null;
-		if(Global.OPTIONS.enableClick) {
-			mClickSound = MediaPlayer.create(mParentActivity, R.raw.snap);
 		}
 		
 		// Get the ringtone
@@ -349,10 +337,8 @@ public class TimersMenu implements OnClickListener {
 			mPauseButton.setText(mParentActivity.getString(R.string.pauseButtonText));
 			
 			// Play the click sound
-			if(mClickSound != null) {
-				mClickSound.stop();
-				mClickSound.setAudioStreamType(AudioManager.STREAM_ALARM);
-				mClickSound.start();
+			if(Global.OPTIONS.enableClick) {
+				mParentActivity.playSound(isLeftPlayersTurn);
 			}
 		}
 		

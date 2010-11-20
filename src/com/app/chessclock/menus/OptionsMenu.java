@@ -36,23 +36,18 @@ public class OptionsMenu extends PreferenceActivity {
      * @see android.app.Activity#onPause()
      */
     @Override
-    public void onResume() {
-    	// Do whatever is in the super class first
-        super.onResume();
-        this.recallSettings();
-    }
-    
-    /**
-     * Called when the activity pauses.
-     * @see android.app.Activity#onPause()
-     */
-    @Override
     public void onPause() {
     	// Do whatever is in the super class first
         super.onPause();
         this.recallSettings();
     }
     
+    /* ===========================================================
+	 * Private/Protected Methods
+	 * =========================================================== */
+    /**
+     * Recalls the preferences values into Global.Options
+     */
     private void recallSettings() {
     	// Retrieve the preference page
 		final SharedPreferences settings =
