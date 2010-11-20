@@ -107,16 +107,14 @@ public class TimerPreference extends DialogPreference implements
      */
     @Override
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
-        // By default, set state based on default value (if available)
-    	if(defaultValue instanceof Integer) {
-    		mDefaultValue = (Integer) defaultValue;
-    	}
-        
-    	// Check if we should recall the values instead
+        // Check if we should recall the values instead
         if(restoreValue && this.shouldPersist()) {
         	// If so, recall or save the values
         	this.recallValues();
-        }
+        } else if(defaultValue instanceof Integer) {
+        	// Set state based on default value
+        	mDefaultValue = (Integer) defaultValue;
+    	}
     }
     
     /* ===========================================================
