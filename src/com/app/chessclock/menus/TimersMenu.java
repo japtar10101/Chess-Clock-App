@@ -242,8 +242,8 @@ public class TimersMenu implements OnClickListener {
 		mDelayLabel.setVisibility(View.INVISIBLE);
 		
 		// Set both layouts to be invisible
-		mAds.setVisibility(View.INVISIBLE);
 		mPauseLayout.setVisibility(View.INVISIBLE);
+		mAds.setVisibility(View.INVISIBLE);
 		
 		// Display a message
 		Toast.makeText(mParentActivity,
