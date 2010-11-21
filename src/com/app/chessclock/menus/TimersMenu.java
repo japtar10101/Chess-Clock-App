@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.admob.android.ads.AdView;
 import com.app.chessclock.Global;
 import com.app.chessclock.MainActivity;
 import com.app.chessclock.R;
@@ -43,17 +44,20 @@ public class TimersMenu implements OnClickListener {
 	private Button mLeftButton = null;
 	/** Right player's button */
 	private Button mRightButton = null;
-	/** The All-purpose (mainly for pausing the game) button */
+	/** The All-purpose (mainly for pausing the game) button
+	 * TODO: refactor this into PauseMenu */
 	private Button mPauseButton = null;
 	
 	// == Labels ==
 	/** Label indicating delay */
 	private TextView mDelayLabel = null;
-	/** Label that appears on the pause screen */
+	/** Label that appears on the pause screen
+	 * TODO: refactor this into PauseMenu */
 	private TextView mPauseLabel = null;
 	
 	// == Dialog ==
-	/** A pause screen, generally left invisible */
+	/** A pause screen, generally left invisible
+	 * TODO: refactor this into PauseMenu */
 	private RelativeLayout mPauseLayout = null;
 	
 	// == Misc. ==
@@ -61,6 +65,9 @@ public class TimersMenu implements OnClickListener {
 	private Vibrator mSmallVibrate = null;
 	/** Sound of alarm */
 	private Ringtone mRingtone = null;
+	/** The visible adds
+	 * TODO: refactor this into PauseMenu */
+	private AdView mAds = null; 
 	
 	/* ===========================================================
 	 * Constructors
@@ -191,6 +198,7 @@ public class TimersMenu implements OnClickListener {
 		// Grab layouts
 		mPauseLayout = (RelativeLayout)
 			mParentActivity.findViewById(R.id.layoutPause);
+		mAds = (AdView) mParentActivity.findViewById(R.id.ad);
 		
 		// Grab the buttons
 		mLeftButton = (Button)mParentActivity.findViewById(R.id.buttonLeftTime);
@@ -234,6 +242,7 @@ public class TimersMenu implements OnClickListener {
 		mDelayLabel.setVisibility(View.INVISIBLE);
 		
 		// Set both layouts to be invisible
+		mAds.setVisibility(View.INVISIBLE);
 		mPauseLayout.setVisibility(View.INVISIBLE);
 		
 		// Display a message
@@ -264,6 +273,9 @@ public class TimersMenu implements OnClickListener {
 		mPauseLabel.setText(
 				mParentActivity.getString(R.string.pauseLabelText));
 		
+		// Hide the add (as to not cover the delay label)
+		mAds.setVisibility(View.INVISIBLE);
+
 		// Update the pause button text
 		mPauseButton.setText(
 				mParentActivity.getString(R.string.resumeButtonText));
@@ -290,6 +302,7 @@ public class TimersMenu implements OnClickListener {
 		mPauseLayout.setVisibility(View.VISIBLE);
 		mPauseLabel.setText(
 				mParentActivity.getString(R.string.timesUpLabelText));
+		mAds.setVisibility(View.VISIBLE);
 		
 		// Check the volume and ringer
 		final AudioManager audioManager = (AudioManager)

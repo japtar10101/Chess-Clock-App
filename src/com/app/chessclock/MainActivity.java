@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.admob.android.ads.AdManager;
 import com.app.chessclock.enums.TimerCondition;
 import com.app.chessclock.menus.OptionsMenu;
 import com.app.chessclock.menus.TimersMenu;
@@ -53,33 +54,26 @@ public class MainActivity extends Activity {
         this.setVolumeControlStream(AudioManager.STREAM_ALARM);
         this.getWindowManager().getDefaultDisplay().getMetrics(Global.DISPLAY);
         
+        // Setup the add test devices
+        AdManager.setTestDevices( new String[] {AdManager.TEST_EMULATOR });
+        
         // Determine the best text size
         this.calculateTextSize();
        
-        // Recall the last game's state.
-        SharedPreferences settings = this.getPreferences(MODE_PRIVATE);
-    	Global.GAME_STATE.recallSettings(settings);
-        
-        // Also update the delay label
-        Global.GAME_STATE.setDelayPrependString(
-        		this.getString(R.string.delayLabelText));
-        
-        // Recall the options.
-        settings = PreferenceManager.getDefaultSharedPreferences(this);
-    	Global.OPTIONS.recallSettings(settings);
+        // Recall all the stored settings
+        this.recallAllSettings();
         
         // Create the options menu
         mOptionsMenu = new Intent(this, OptionsMenu.class);
         
         // Create sound pool
-        mSoundPlayer = new SoundPool(1, AudioManager.STREAM_ALARM, 0);
-        mSoundID = mSoundPlayer.load(this, R.raw.snap, 1);
+        this.setupSoundEffects();
         
         // Start the main menu
         mMainMenu.setupMenu();
     }
-        
-    /**
+
+	/**
      * Called when the activity pauses.
      * @see android.app.Activity#onPause()
      */
@@ -111,10 +105,7 @@ public class MainActivity extends Activity {
         mMainMenu.setupMenu();
 
         // Create sound pool
-        if(mSoundPlayer == null) {
-	        mSoundPlayer = new SoundPool(1, AudioManager.STREAM_ALARM, 0);
-	        mSoundID = mSoundPlayer.load(this, R.raw.snap, 1);
-        }
+        this.setupSoundEffects();
     }
     
     /**
@@ -237,5 +228,32 @@ public class MainActivity extends Activity {
 	    }
 	    --msTextSize;
 	    testTextWidth.destroyDrawingCache();
+	}
+	
+	/**
+	 * Recalls the stored game settings
+	 */
+	private void recallAllSettings() {
+		// Recall the last game's state.
+        SharedPreferences settings = this.getPreferences(MODE_PRIVATE);
+    	Global.GAME_STATE.recallSettings(settings);
+        
+        // Also update the delay label
+        Global.GAME_STATE.setDelayPrependString(
+        		this.getString(R.string.delayLabelText));
+        
+        // Recall the options.
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
+    	Global.OPTIONS.recallSettings(settings);
+	}
+
+	/**
+	 * Sets up the sound effects
+	 */
+	private void setupSoundEffects() {
+		if(mSoundPlayer == null) {
+		    mSoundPlayer = new SoundPool(1, AudioManager.STREAM_ALARM, 0);
+		    mSoundID = mSoundPlayer.load(this, R.raw.snap, 1);
+		}
 	}
 }
