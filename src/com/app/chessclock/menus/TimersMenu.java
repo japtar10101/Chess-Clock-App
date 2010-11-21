@@ -170,6 +170,9 @@ public class TimersMenu implements OnClickListener {
 	public void exitMenu() {
 		// Stop the time handler
 		mTimer.removeCallbacks(mTask);
+		if(mRingtone != null) {
+			mRingtone.stop();
+		}
 		
 		// Set the option's state
 		switch(Global.GAME_STATE.timerCondition) {
@@ -223,6 +226,9 @@ public class TimersMenu implements OnClickListener {
 	private void startup() {
 		// Stop the handler
 		mTimer.removeCallbacks(mTask);
+		if(mRingtone != null) {
+			mRingtone.stop();
+		}
 
 		// Set the condition to time up
 		Global.GAME_STATE.timerCondition = TimerCondition.STARTING;
