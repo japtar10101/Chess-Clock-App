@@ -12,14 +12,14 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:layout_width="wrap_content" android:layout_height="fill_parent"
 		android:text="@string/playerButtonText" android:layout_weight="1"
 		android:typeface="monospace" android:textStyle="bold"
-		android:shadowColor="#ffffffff" android:shadowRadius="3"
+		android:shadowColor="#ffffffff" android:shadowRadius="6"
 		android:textSize="80px" />
 		
 		<Button android:id="@+id/buttonRightTime"
 		android:layout_width="wrap_content" android:layout_height="fill_parent"
 		android:text="@string/playerButtonText" android:layout_weight="1"
 		android:typeface="monospace" android:textStyle="bold"
-		android:shadowColor="#ffffffff" android:shadowRadius="3"
+		android:shadowColor="#ffffffff" android:shadowRadius="6"
 		android:textSize="80px" />
 	
 	</LinearLayout>
