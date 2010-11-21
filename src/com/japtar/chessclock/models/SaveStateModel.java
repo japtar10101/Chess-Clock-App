@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.app.chessclock.models;
+package com.japtar.chessclock.models;
 
 import android.content.SharedPreferences;
 

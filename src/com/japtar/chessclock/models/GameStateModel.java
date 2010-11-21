@@ -1,14 +1,14 @@
 /**
  * Helper classes
  */
-package com.app.chessclock.models;
+package com.japtar.chessclock.models;
 
 import java.security.InvalidParameterException;
 
 import android.content.SharedPreferences;
 
-import com.app.chessclock.Global;
-import com.app.chessclock.enums.TimerCondition;
+import com.japtar.chessclock.Global;
+import com.japtar.chessclock.enums.TimerCondition;
 
 /**
  * Model indicating the game's current (or paused) conditions.

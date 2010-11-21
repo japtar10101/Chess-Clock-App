@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.app.chessclock.gui;
+package com.japtar.chessclock.gui;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,7 +12,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TimePicker;
 
-import com.app.chessclock.models.TimeModel;
+import com.japtar.chessclock.models.TimeModel;
 
 /**
  * GUI element that opens a timer dialog

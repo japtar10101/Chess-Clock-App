@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.app.chessclock.gui;
+package com.japtar.chessclock.gui;
 
 import android.content.Context;
 import android.graphics.Paint;

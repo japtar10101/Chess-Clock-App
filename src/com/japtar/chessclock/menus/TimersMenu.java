@@ -1,7 +1,7 @@
 /**
  * Package of menus
  */
-package com.app.chessclock.menus;
+package com.japtar.chessclock.menus;
 
 import android.content.Context;
 import android.media.AudioManager;
@@ -17,10 +17,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.admob.android.ads.AdView;
-import com.app.chessclock.Global;
-import com.app.chessclock.MainActivity;
 import com.app.chessclock.R;
-import com.app.chessclock.enums.TimerCondition;
+import com.japtar.chessclock.Global;
+import com.japtar.chessclock.MainActivity;
+import com.japtar.chessclock.enums.TimerCondition;
 
 /**
  * Menu for Timer

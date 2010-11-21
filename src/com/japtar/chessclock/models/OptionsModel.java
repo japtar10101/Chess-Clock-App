@@ -1,7 +1,7 @@
 /**
  * Helper classes
  */
-package com.app.chessclock.models;
+package com.japtar.chessclock.models;
 
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -61,7 +61,7 @@ public class OptionsModel implements SaveStateModel {
 	 * =========================================================== */
 	/**
 	 * Saves the current options state to a bundle
-	 * @see com.app.chessclock.models.SaveStateModel#recallSettings(android.content.SharedPreferences)
+	 * @see com.japtar.chessclock.models.SaveStateModel#recallSettings(android.content.SharedPreferences)
 	 */
 	@Override
 	public void recallSettings(final SharedPreferences savedState) throws
@@ -91,7 +91,7 @@ public class OptionsModel implements SaveStateModel {
 
 	/**
 	 * Saves options
-	 * @see com.app.chessclock.models.SaveStateModel#saveSettings(android.content.SharedPreferences)
+	 * @see com.japtar.chessclock.models.SaveStateModel#saveSettings(android.content.SharedPreferences)
 	 */
 	@Override
 	public void saveSettings(final SharedPreferences saveState) throws

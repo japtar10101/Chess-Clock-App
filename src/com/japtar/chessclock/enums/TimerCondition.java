@@ -1,7 +1,7 @@
 /**
  * Package of enumerators
  */
-package com.app.chessclock.enums;
+package com.japtar.chessclock.enums;
 
 /**
  * All the possible game state conditions

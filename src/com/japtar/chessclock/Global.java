@@ -1,12 +1,12 @@
 /**
  * 
  */
-package com.app.chessclock;
+package com.japtar.chessclock;
 
 import android.util.DisplayMetrics;
 
-import com.app.chessclock.models.GameStateModel;
-import com.app.chessclock.models.OptionsModel;
+import com.japtar.chessclock.models.GameStateModel;
+import com.japtar.chessclock.models.OptionsModel;
 
 /**
  * Retains global variables

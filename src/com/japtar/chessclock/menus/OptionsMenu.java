@@ -1,15 +1,15 @@
 /**
  * Package of menus
  */
-package com.app.chessclock.menus;
+package com.japtar.chessclock.menus;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
-import com.app.chessclock.Global;
 import com.app.chessclock.R;
+import com.japtar.chessclock.Global;
 
 /**
  * Sets up the menu for options

@@ -1,13 +1,13 @@
 /**
  * Package of menus
  */
-package com.app.chessclock.menus;
+package com.japtar.chessclock.menus;
 
 import android.os.Handler;
 import android.os.SystemClock;
 
-import com.app.chessclock.Global;
-import com.app.chessclock.enums.TimerCondition;
+import com.japtar.chessclock.Global;
+import com.japtar.chessclock.enums.TimerCondition;
 
 /**
  * Helper class for TimersMenu.  Progressively decreases a player's time.

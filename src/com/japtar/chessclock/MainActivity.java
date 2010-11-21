@@ -1,4 +1,4 @@
-package com.app.chessclock;
+package com.japtar.chessclock;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,9 +14,10 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.admob.android.ads.AdManager;
-import com.app.chessclock.enums.TimerCondition;
-import com.app.chessclock.menus.OptionsMenu;
-import com.app.chessclock.menus.TimersMenu;
+import com.app.chessclock.R;
+import com.japtar.chessclock.enums.TimerCondition;
+import com.japtar.chessclock.menus.OptionsMenu;
+import com.japtar.chessclock.menus.TimersMenu;
 
 public class MainActivity extends Activity {
 	/* ===========================================================
