@@ -13,7 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.admob.android.ads.AdManager;
 import com.japtar.chessclock.R;
 import com.japtar.chessclock.enums.TimerCondition;
 import com.japtar.chessclock.menus.OptionsMenu;
@@ -54,9 +53,6 @@ public class MainActivity extends Activity {
         PreferenceManager.setDefaultValues(this, R.layout.options, false);
         this.setVolumeControlStream(AudioManager.STREAM_ALARM);
         this.getWindowManager().getDefaultDisplay().getMetrics(Global.DISPLAY);
-        
-        // Setup the add test devices
-        //AdManager.setTestDevices( new String[] {AdManager.TEST_EMULATOR });
         
         // Determine the best text size
         this.calculateTextSize();

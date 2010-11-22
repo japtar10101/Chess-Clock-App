@@ -12,11 +12,9 @@ import android.os.Vibrator;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.admob.android.ads.AdView;
 import com.japtar.chessclock.R;
 import com.japtar.chessclock.Global;
 import com.japtar.chessclock.MainActivity;
@@ -31,7 +29,9 @@ public class TimersMenu implements OnClickListener {
 	 * Members
 	 * =========================================================== */
 	/** The main activities class */
-	protected MainActivity mParentActivity;
+	private final MainActivity mParentActivity;
+	/** Helper class taking care of the Pause Menu functionality */
+	private final PauseMenu mPauseMenu;
 	
 	// == Timer ==
 	/** The handler running {@link mTask} */
@@ -44,30 +44,16 @@ public class TimersMenu implements OnClickListener {
 	private Button mLeftButton = null;
 	/** Right player's button */
 	private Button mRightButton = null;
-	/** The All-purpose (mainly for pausing the game) button
-	 * TODO: refactor this into PauseMenu */
-	private Button mPauseButton = null;
 	
 	// == Labels ==
 	/** Label indicating delay */
 	private TextView mDelayLabel = null;
-	/** Label that appears on the pause screen
-	 * TODO: refactor this into PauseMenu */
-	private TextView mPauseLabel = null;
-	
-	// == Dialog ==
-	/** A pause screen, generally left invisible
-	 * TODO: refactor this into PauseMenu */
-	private RelativeLayout mPauseLayout = null;
 	
 	// == Misc. ==
 	/** The vibrator */
 	private Vibrator mSmallVibrate = null;
 	/** Sound of alarm */
 	private Ringtone mRingtone = null;
-	/** The visible adds
-	 * TODO: refactor this into PauseMenu */
-	private AdView mAds = null; 
 	
 	/* ===========================================================
 	 * Constructors
@@ -82,6 +68,9 @@ public class TimersMenu implements OnClickListener {
 		// Setup the timer-related stuff
 		mTimer = new Handler();
 		mTask = new DecrementTimerTask(this, mTimer);
+		
+		// Setup the pause menu
+		mPauseMenu = new PauseMenu(mParentActivity, this);
 	}
 
 	/* ===========================================================
@@ -99,31 +88,32 @@ public class TimersMenu implements OnClickListener {
 		}
 		
 		// Check if the button clicked is the new game button
-		if(v.equals(mPauseButton)) {
+		if(mPauseMenu.isPauseButtonClicked(v)) {
 			switch(Global.GAME_STATE.timerCondition) {
+			
 				// If running, pause the game
 				case TimerCondition.RUNNING:
 					this.paused();
 					return;
+					
 				// go to options screen 
 				case TimerCondition.STARTING:
 					mParentActivity.displayOptionsMenu();
 					return;
+					
 				// If time's up, restart the game
 				case TimerCondition.TIMES_UP:
 					this.startup();
 					return;
+					
+				// If paused, hide the pause menu (setup for resuming)
 				case TimerCondition.PAUSE:
 				default:
-					mPauseButton.setText(mParentActivity.getString(
-							R.string.pauseButtonText));
+					mPauseMenu.hideMenu();
 			}
 		}
 		
-		// Stop the handler
-		mTimer.removeCallbacks(mTask);
-		
-		// If we pressed the player button instead...
+		// If we're past this case statement, we're resuming the game
 		pressedPlayerButton(v);
 	}
 
@@ -138,19 +128,35 @@ public class TimersMenu implements OnClickListener {
 		mParentActivity.setContentView(R.layout.main);
 
 		// Load up all the member variables
-		this.loadMemberVariables();
+		// Grab the label
+		mDelayLabel = (TextView)mParentActivity.findViewById(R.id.labelDelay);
+		
+		// Grab the buttons
+		mLeftButton = (Button)mParentActivity.findViewById(R.id.buttonLeftTime);
+		mRightButton = (Button)mParentActivity.findViewById(R.id.buttonRightTime);
+		
+		// Get the vibrator
+		mSmallVibrate = null;
+		if(Global.OPTIONS.enableVibrate) {
+			mSmallVibrate = (Vibrator) mParentActivity.getSystemService(
+					Context.VIBRATOR_SERVICE);
+		}
+		
+		// Get the ringtone
+		mRingtone = RingtoneManager.getRingtone(mParentActivity,
+				Global.OPTIONS.alarmUri);
 		
 		// Set the buttons click behavior to this class
 		mLeftButton.setOnClickListener(this);
 		mRightButton.setOnClickListener(this);
-		mPauseButton.setOnClickListener(this);
 		
 		// Update the text size on everything
 		mLeftButton.setTextSize(MainActivity.msTextSize);
 		mRightButton.setTextSize(MainActivity.msTextSize);
-		mPauseButton.setTextSize(MainActivity.msTextSize * 0.5f);
 		mDelayLabel.setTextSize(MainActivity.msTextSize * 0.7f);
-		mPauseLabel.setTextSize(MainActivity.msTextSize);
+		
+		// Update the pause menu
+		mPauseMenu.setupMenu();
 		
 		// Determine the condition to begin this game at
 		switch(Global.GAME_STATE.timerCondition) {
@@ -189,36 +195,6 @@ public class TimersMenu implements OnClickListener {
 	/* ===========================================================
 	 * Private/Protected Methods
 	 * =========================================================== */
-	/**
-	 * From the parent's activity, loads all the member variables to
-	 * non-null values
-	 */
-	private void loadMemberVariables() {
-		// Grab the label
-		mDelayLabel = (TextView)mParentActivity.findViewById(R.id.labelDelay);
-		mPauseLabel = (TextView)mParentActivity.findViewById(R.id.labelPause);
-		
-		// Grab layouts
-		mPauseLayout = (RelativeLayout)
-			mParentActivity.findViewById(R.id.layoutPause);
-		mAds = (AdView) mParentActivity.findViewById(R.id.ad);
-		
-		// Grab the buttons
-		mLeftButton = (Button)mParentActivity.findViewById(R.id.buttonLeftTime);
-		mRightButton = (Button)mParentActivity.findViewById(R.id.buttonRightTime);
-		mPauseButton = (Button)mParentActivity.findViewById(R.id.buttonPause);
-		
-		// Get the vibrator
-		mSmallVibrate = null;
-		if(Global.OPTIONS.enableVibrate) {
-			mSmallVibrate = (Vibrator) mParentActivity.getSystemService(
-					Context.VIBRATOR_SERVICE);
-		}
-		
-		// Get the ringtone
-		mRingtone = RingtoneManager.getRingtone(mParentActivity,
-				Global.OPTIONS.alarmUri);
-	}
 	
 	/**
 	 * Indicate the game just started
@@ -243,13 +219,10 @@ public class TimersMenu implements OnClickListener {
 		// Update button's text
 		mLeftButton.setText(Global.GAME_STATE.leftPlayerTime());
 		mRightButton.setText(Global.GAME_STATE.rightPlayerTime());
-		mPauseButton.setText(
-				mParentActivity.getString(R.string.settingsMenuLabel));
 		mDelayLabel.setVisibility(View.INVISIBLE);
 		
-		// Set both layouts to be invisible
-		mPauseLayout.setVisibility(View.INVISIBLE);
-		mAds.setVisibility(View.INVISIBLE);
+		// Update the pause menu
+		mPauseMenu.startup();
 		
 		// Display a message
 		Toast.makeText(mParentActivity,
@@ -274,17 +247,8 @@ public class TimersMenu implements OnClickListener {
 		mLeftButton.setEnabled(false);
 		mRightButton.setEnabled(false);
 		
-		// Set the pause layout as visible
-		mPauseLayout.setVisibility(View.VISIBLE);
-		mPauseLabel.setText(
-				mParentActivity.getString(R.string.pauseLabelText));
-		
-		// Hide the add (as to not cover the delay label)
-		mAds.setVisibility(View.INVISIBLE);
-
-		// Update the pause button text
-		mPauseButton.setText(
-				mParentActivity.getString(R.string.resumeButtonText));
+		// Setup the pause Menu
+		mPauseMenu.paused();
 	}
 	
 	/**
@@ -304,12 +268,6 @@ public class TimersMenu implements OnClickListener {
 		// Hide the delay label
 		mDelayLabel.setVisibility(View.INVISIBLE);
 		
-		// Set the times-up layout as visible
-		mPauseLayout.setVisibility(View.VISIBLE);
-		mPauseLabel.setText(
-				mParentActivity.getString(R.string.timesUpLabelText));
-		mAds.setVisibility(View.VISIBLE);
-		
 		// Check the volume and ringer
 		final AudioManager audioManager = (AudioManager)
 			mParentActivity.getSystemService(Context.AUDIO_SERVICE);
@@ -320,8 +278,8 @@ public class TimersMenu implements OnClickListener {
 			mRingtone.play();
 		}
 		
-		// Update the pause button text
-		mPauseButton.setText(mParentActivity.getString(R.string.newGameButtonText));
+		// Setup the pause menu
+		mPauseMenu.timesUp();
 	}
 	
 	/**
@@ -329,14 +287,14 @@ public class TimersMenu implements OnClickListener {
 	 * @param buttonPressed the button that was pressed
 	 */
 	private void pressedPlayerButton(final View buttonPressed) {
+		// Stop the handler
+		mTimer.removeCallbacks(mTask);
+		
 		// If just starting, update the labels
 		if(Global.GAME_STATE.timerCondition == TimerCondition.STARTING) {
 			// Update to the time text
 			this.updateButtonAndLabelText();
 		}
-		
-		// Set both layouts to be invisible
-		mPauseLayout.setVisibility(View.INVISIBLE);
 		Global.GAME_STATE.timerCondition = TimerCondition.RUNNING;
 		
 		// Check which button was pressed
@@ -351,9 +309,6 @@ public class TimersMenu implements OnClickListener {
 			
 			// Update the Delay label
 			this.updateDelayLabel();
-			
-			// Update the pause button text
-			mPauseButton.setText(mParentActivity.getString(R.string.pauseButtonText));
 			
 			// Play the click sound
 			if(Global.OPTIONS.enableClick) {
