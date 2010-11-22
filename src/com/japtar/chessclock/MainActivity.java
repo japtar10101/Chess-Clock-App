@@ -56,7 +56,7 @@ public class MainActivity extends Activity {
         this.getWindowManager().getDefaultDisplay().getMetrics(Global.DISPLAY);
         
         // Setup the add test devices
-        AdManager.setTestDevices( new String[] {AdManager.TEST_EMULATOR });
+        //AdManager.setTestDevices( new String[] {AdManager.TEST_EMULATOR });
         
         // Determine the best text size
         this.calculateTextSize();
