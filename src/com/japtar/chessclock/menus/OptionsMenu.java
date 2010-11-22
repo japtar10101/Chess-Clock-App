@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
-import com.app.chessclock.R;
+import com.japtar.chessclock.R;
 import com.japtar.chessclock.Global;
 
 /**

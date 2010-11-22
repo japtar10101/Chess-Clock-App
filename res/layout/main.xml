@@ -3,7 +3,7 @@
 <RelativeLayout android:keepScreenOn="true"
 android:layout_width="fill_parent" android:layout_height="fill_parent"
 xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:myapp="http://schemas.android.com/apk/res/com.app.ChessClockApp">
+xmlns:myapp="http://schemas.android.com/apk/res/com.japtar.ChessClockApp">
 
 	<LinearLayout 
 	android:layout_width="fill_parent" android:layout_height="fill_parent"

@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.admob.android.ads.AdManager;
-import com.app.chessclock.R;
+import com.japtar.chessclock.R;
 import com.japtar.chessclock.enums.TimerCondition;
 import com.japtar.chessclock.menus.OptionsMenu;
 import com.japtar.chessclock.menus.TimersMenu;
@@ -32,7 +32,7 @@ public class MainActivity extends Activity {
 	/** The current layout */
 	private final TimersMenu mMainMenu = new TimersMenu(this);
 	/** The preference page */
-	private Intent mOptionsMenu;
+	private Intent mOptionsMenu = null;
 	/** The sound effects */
 	private SoundPool mSoundPlayer = null;
 	/** The sound effect ID */

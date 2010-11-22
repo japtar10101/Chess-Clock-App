@@ -3,12 +3,12 @@
 
 	<PreferenceCategory android:title="Timer">
 	
-		<com.app.chessclock.gui.TimerPreference android:key="timeLimit"
+		<com.japtar.chessclock.gui.TimerPreference android:key="timeLimit"
 		android:title="Time Limit" android:name="Time Limit"
 		android:summary="Configure the starting time for each player"
 		android:defaultValue="300" />
 		
-		<com.app.chessclock.gui.TimerPreference android:key="delayTime"
+		<com.japtar.chessclock.gui.TimerPreference android:key="delayTime"
 		android:title="Delay Time" android:name="Delay Time"
 		android:summary="Configure the amount of time delayed after pressing a button"
 		android:defaultValue="2" />

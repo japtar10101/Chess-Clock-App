@@ -17,7 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.admob.android.ads.AdView;
-import com.app.chessclock.R;
+import com.japtar.chessclock.R;
 import com.japtar.chessclock.Global;
 import com.japtar.chessclock.MainActivity;
 import com.japtar.chessclock.enums.TimerCondition;
