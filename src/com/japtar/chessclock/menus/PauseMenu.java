@@ -23,27 +23,23 @@ class PauseMenu {
 	 * =========================================================== */
 	/** The main activities class */
 	private final MainActivity mParentActivity;
-	/** TODO: add a description */
+	/** The button listener! */
 	private final OnClickListener mButtonListener;
 	
 	// == Layouts ==
-	/** A pause screen, generally left invisible
-	 * TODO: refactor this into PauseMenu */
+	/** A pause screen, generally left invisible */
 	private RelativeLayout mPauseLayout = null;
 	
 	// == Buttons ==
-	/** The All-purpose (mainly for pausing the game) button
-	 * TODO: refactor this into PauseMenu */
+	/** The All-purpose (mainly for pausing the game) button */
 	private Button mPauseButton = null;
 	
 	// == Labels ==
-	/** Label that appears on the pause screen
-	 * TODO: refactor this into PauseMenu */
+	/** Label that appears on the pause screen */
 	private TextView mPauseLabel = null;
 	
 	// == Misc. ==
-	/** The visible adds
-	 * TODO: refactor this into PauseMenu */
+	/** The visible adds */
 	private AdView mAds = null; 
 	
 	/* ===========================================================
@@ -81,6 +77,7 @@ class PauseMenu {
 	 * Hides the pause menu
 	 */
 	public void hideMenu() {
+		mPauseLayout.setVisibility(View.INVISIBLE);
 		mPauseButton.setText(mParentActivity.getString(
 				R.string.pauseButtonText));
 	}

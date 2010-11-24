@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Chess Clock App</string>
+
+    <string name="delayLabelText">Delay -</string>
+    <string name="pauseLabelText">Paused</string>
+    <string name="timesUpLabelText">Times Up!</string>
+
+    <string name="playerButtonText">Press button to start</string>
+    <string name="pauseButtonText">Pause</string>
+	<string name="resumeButtonText">Resume</string>
+    <string name="newGameButtonText">New Game</string>
+    <string name="okButton">OK</string>
+    <string name="cancelButton">Cancel</string>
+    
+	<string name="settingsMenuLabel">Settings</string>
+	
+    <string name="toastMessage">Click either button to start the timer.\n
+    Press the menu button to restart the timer.</string>
+</resources>

@@ -105,13 +105,11 @@ public class TimersMenu implements OnClickListener {
 				case TimerCondition.TIMES_UP:
 					this.startup();
 					return;
-					
-				// If paused, hide the pause menu (setup for resuming)
-				case TimerCondition.PAUSE:
-				default:
-					mPauseMenu.hideMenu();
 			}
 		}
+		
+		// Hide the pause menu (setup for resuming)
+		mPauseMenu.hideMenu();
 		
 		// If we're past this case statement, we're resuming the game
 		pressedPlayerButton(v);
@@ -312,7 +310,7 @@ public class TimersMenu implements OnClickListener {
 			
 			// Play the click sound
 			if(Global.OPTIONS.enableClick) {
-				mParentActivity.playSound(isLeftPlayersTurn);
+				mParentActivity.playSound();
 			}
 		}
 		

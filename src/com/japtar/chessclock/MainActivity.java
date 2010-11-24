@@ -176,19 +176,13 @@ public class MainActivity extends Activity {
 		this.startActivity(mOptionsMenu);
 	}
 	
-	public void playSound(boolean leftSide) {
+	public void playSound() {
 		if(mSoundPlayer != null) {
 			// Stop the previously playing sound
 			mSoundPlayer.stop(mSoundID);
-			
-			// Determine the volume on the left side
-			float leftVolume = 0f;
-			if(leftSide) {
-				leftVolume = 1f;
-			}
-			
+						
 			// Play the sound
-			mSoundPlayer.play(mSoundID, leftVolume, 1f - leftVolume,
+			mSoundPlayer.play(mSoundID, 1f, 1f,
 					1, 0, 1f);
 		}
 	}
