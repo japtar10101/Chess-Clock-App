@@ -8,23 +8,24 @@ import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.os.Handler;
-import android.os.Vibrator;
+import android.view.HapticFeedbackConstants;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.japtar.chessclock.R;
 import com.japtar.chessclock.Global;
 import com.japtar.chessclock.MainActivity;
+import com.japtar.chessclock.R;
 import com.japtar.chessclock.enums.TimerCondition;
 
 /**
  * Menu for Timer
  * @author japtar10101
  */
-public class TimersMenu implements OnClickListener {
+public class TimersMenu implements MenuInterface,
+		View.OnClickListener, View.OnTouchListener {
 	/* ===========================================================
 	 * Members
 	 * =========================================================== */
@@ -50,8 +51,6 @@ public class TimersMenu implements OnClickListener {
 	private TextView mDelayLabel = null;
 	
 	// == Misc. ==
-	/** The vibrator */
-	private Vibrator mSmallVibrate = null;
 	/** Sound of alarm */
 	private Ringtone mRingtone = null;
 	
@@ -82,42 +81,51 @@ public class TimersMenu implements OnClickListener {
 	 */
 	@Override
 	public void onClick(final View v) {
-		// Vibrate in response to all button presses
-		if(mSmallVibrate != null && v != null) {
-			mSmallVibrate.vibrate(50);
-		}
-		
-		// Check if the button clicked is the new game button
-		if(mPauseMenu.isPauseButtonClicked(v)) {
-			switch(Global.GAME_STATE.timerCondition) {
-			
-				// If running, pause the game
-				case TimerCondition.RUNNING:
-					this.paused();
-					return;
-					
-				// go to options screen 
-				case TimerCondition.STARTING:
-					mParentActivity.displayOptionsMenu();
-					return;
-					
-				// If time's up, restart the game
-				case TimerCondition.TIMES_UP:
-					this.startup();
-					return;
+		if(v != null) {
+			// Check if the button clicked is the new game button
+			if(mPauseMenu.isPauseButtonClicked(v)) {
+				switch(Global.GAME_STATE.timerCondition) {
+				
+					// If running, pause the game
+					case TimerCondition.RUNNING:
+						this.paused();
+						return;
+						
+					// go to options screen 
+					case TimerCondition.STARTING:
+						mParentActivity.displayOptionsMenu();
+						return;
+						
+					// If time's up, restart the game
+					case TimerCondition.TIMES_UP:
+						this.startup();
+						return;
+				}
 			}
+			
+			// Hide the pause menu (setup for resuming)
+			mPauseMenu.hideMenu();
+			
+			// If we're past this case statement, we're resuming the game
+			pressedPlayerButton(v);
 		}
-		
-		// Hide the pause menu (setup for resuming)
-		mPauseMenu.hideMenu();
-		
-		// If we're past this case statement, we're resuming the game
-		pressedPlayerButton(v);
 	}
-
-	/* ===========================================================
-	 * Public Methods
-	 * =========================================================== */
+	
+	/**
+	 * @param arg0
+	 * @param arg1
+	 */
+	@Override
+	public boolean onTouch(final View v, final MotionEvent event) {
+		// Make sure if the vibration is enabled or not
+		if(Global.OPTIONS.enableVibrate && (v != null) &&
+				(event.getAction() == MotionEvent.ACTION_DOWN)) {
+			// Play haptic feedback on mouse down
+			v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+		}
+		return false;
+	}
+	
 	/**
 	 * Resumes the timer if paused, or starts it over.
 	 */
@@ -125,28 +133,24 @@ public class TimersMenu implements OnClickListener {
 		// First, setup the UI
 		mParentActivity.setContentView(R.layout.main);
 
-		// Load up all the member variables
+		// == Load up all the member variables ==
+		
 		// Grab the label
 		mDelayLabel = (TextView)mParentActivity.findViewById(R.id.labelDelay);
 		
 		// Grab the buttons
-		mLeftButton = (Button)mParentActivity.findViewById(R.id.buttonLeftTime);
-		mRightButton = (Button)mParentActivity.findViewById(R.id.buttonRightTime);
-		
-		// Get the vibrator
-		mSmallVibrate = null;
-		if(Global.OPTIONS.enableVibrate) {
-			mSmallVibrate = (Vibrator) mParentActivity.getSystemService(
-					Context.VIBRATOR_SERVICE);
-		}
+		mLeftButton = this.getButton(R.id.buttonLeftTime);
+		mRightButton = this.getButton(R.id.buttonRightTime);
 		
 		// Get the ringtone
 		mRingtone = RingtoneManager.getRingtone(mParentActivity,
 				Global.OPTIONS.alarmUri);
 		
-		// Set the buttons click behavior to this class
-		mLeftButton.setOnClickListener(this);
-		mRightButton.setOnClickListener(this);
+		// == Setup the member variables ==
+		
+		// Update the haptic feedback
+		mLeftButton.setHapticFeedbackEnabled(Global.OPTIONS.enableVibrate);
+		mRightButton.setHapticFeedbackEnabled(Global.OPTIONS.enableVibrate);
 		
 		// Update the text size on everything
 		mLeftButton.setTextSize(MainActivity.msTextSize);
@@ -155,6 +159,8 @@ public class TimersMenu implements OnClickListener {
 		
 		// Update the pause menu
 		mPauseMenu.setupMenu();
+		
+		// == Determine the game state to jump to ==
 		
 		// Determine the condition to begin this game at
 		switch(Global.GAME_STATE.timerCondition) {
@@ -168,6 +174,27 @@ public class TimersMenu implements OnClickListener {
 		}
 	}
 
+	/* ===========================================================
+	 * Public Methods
+	 * =========================================================== */
+	/**
+	 * @param button
+	 * @param menu
+	 */
+	public Button getButton(final int buttonId) {
+		// Return value
+		Button toReturn = null;
+		
+		// Find a view based on ID
+		final View foundView = mParentActivity.findViewById(buttonId);
+		if(foundView instanceof Button) {
+			toReturn = (Button) foundView;
+			toReturn.setOnClickListener(this);
+			toReturn.setOnTouchListener(this);
+		}
+		return toReturn;
+	}
+	
 	/**
 	 * Pauses the timer, unless the time is up.
 	 */

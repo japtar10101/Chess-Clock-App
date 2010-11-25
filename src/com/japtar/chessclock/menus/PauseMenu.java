@@ -4,7 +4,6 @@
 package com.japtar.chessclock.menus;
 
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,17 +13,17 @@ import com.japtar.chessclock.MainActivity;
 import com.japtar.chessclock.R;
 
 /**
- * TODO: Add the layouts, activity, and what-not
+ * Menu for the pause layout
  * @author japtar10101
  */
-class PauseMenu {
+class PauseMenu implements MenuInterface {
 	/* ===========================================================
 	 * Members
 	 * =========================================================== */
 	/** The main activities class */
 	private final MainActivity mParentActivity;
 	/** The button listener! */
-	private final OnClickListener mButtonListener;
+	private final TimersMenu mParentMenu;
 	
 	// == Layouts ==
 	/** A pause screen, generally left invisible */
@@ -49,12 +48,39 @@ class PauseMenu {
 	 * @param parent the menu's parent activity
 	 */
 	public PauseMenu(final MainActivity parent,
-			final OnClickListener buttonListener) {
+			final TimersMenu buttonListener) {
 		// Setup variables
 		mParentActivity = parent;
-		mButtonListener = buttonListener;
+		mParentMenu = buttonListener;
 	}
 
+	/* ===========================================================
+	 * Override Methods
+	 * =========================================================== */
+	/**
+	 * Resumes the timer if paused, or starts it over.
+	 */
+	public void setupMenu() {
+		// == Load up all the member variables ==
+		
+		// Grab layouts
+		mPauseLayout = (RelativeLayout)
+			mParentActivity.findViewById(R.id.layoutPause);
+		mAds = (AdView) mParentActivity.findViewById(R.id.ad);
+		
+		// Grab the button
+		mPauseButton = mParentMenu.getButton(R.id.buttonPause);
+		
+		// Grab the label
+		mPauseLabel = (TextView)mParentActivity.findViewById(R.id.labelPause);
+
+		// == Setup the member variables ==
+
+		// Update the text size on everything
+		mPauseButton.setTextSize(MainActivity.msTextSize * 0.5f);
+		mPauseLabel.setTextSize(MainActivity.msTextSize);
+	}
+	
 	/* ===========================================================
 	 * Public Methods
 	 * =========================================================== */
@@ -81,30 +107,7 @@ class PauseMenu {
 		mPauseButton.setText(mParentActivity.getString(
 				R.string.pauseButtonText));
 	}
-	
-	/**
-	 * Resumes the timer if paused, or starts it over.
-	 */
-	public void setupMenu() {
-		// Grab layouts
-		mPauseLayout = (RelativeLayout)
-			mParentActivity.findViewById(R.id.layoutPause);
-		mAds = (AdView) mParentActivity.findViewById(R.id.ad);
 		
-		// Grab the button
-		mPauseButton = (Button)mParentActivity.findViewById(R.id.buttonPause);
-		
-		// Grab the label
-		mPauseLabel = (TextView)mParentActivity.findViewById(R.id.labelPause);
-
-		// Set the buttons click behavior to the one stored
-		mPauseButton.setOnClickListener(mButtonListener);
-
-		// Update the text size on everything
-		mPauseButton.setTextSize(MainActivity.msTextSize * 0.5f);
-		mPauseLabel.setTextSize(MainActivity.msTextSize);
-	}
-	
 	/**
 	 * Indicate the game just started
 	 */
