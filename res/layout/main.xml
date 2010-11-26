@@ -33,12 +33,16 @@ xmlns:myapp="http://schemas.android.com/apk/res/com.japtar.ChessClockApp">
 	android:typeface="monospace" android:textStyle="bold" android:textSize="60px"
 	android:visibility="invisible" />
 	
+    <Button android:id="@+id/buttonPause" android:text="@string/settingsMenuLabel"
+    android:layout_width="wrap_content" android:layout_height="wrap_content"
+    android:typeface="monospace" android:textStyle="bold" android:textSize="40px"
+    android:layout_centerHorizontal="true" android:layout_alignParentBottom="true" />
+    
 	<RelativeLayout android:id="@+id/layoutPause"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
     android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
     android:visibility="invisible" android:background="#b0000000">
         
-        <!-- TODO: add an image here -->
         <com.admob.android.ads.AdView android:id="@+id/ad"
 		android:layout_width="wrap_content" android:layout_height="wrap_content"
 		backgroundColor="#b0000000" primaryTextColor="#b0ffffff" secondaryTextColor="#b0cccccc"
@@ -52,9 +56,4 @@ xmlns:myapp="http://schemas.android.com/apk/res/com.japtar.ChessClockApp">
 	    
     </RelativeLayout>
 	
-    <Button android:id="@+id/buttonPause" android:text="@string/settingsMenuLabel"
-    android:layout_width="wrap_content" android:layout_height="wrap_content"
-    android:typeface="monospace" android:textStyle="bold" android:textSize="40px"
-    android:layout_centerHorizontal="true" android:layout_alignParentBottom="true" />
-    
 </RelativeLayout>

@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<PreferenceCategory android:title="Timer">
+	<PreferenceCategory android:title="@string/timePrefGroup">
 	
 		<com.japtar.chessclock.gui.TimerPreference android:key="timeLimit"
-		android:title="Game Duration" android:name="Game Duration"
-		android:summary="Configure the length of the game"
+		android:title="@string/gameDurationPref"
+		android:summary="@string/gameDurationSummaryPref"
 		android:defaultValue="300" />
 		
 		<com.japtar.chessclock.gui.TimerPreference android:key="delayTime"
-		android:title="Delay Duration" android:name="Delay Duration"
-		android:summary="Configure the amount of time delayed before a button"
+		android:title="@string/delayDurationPref"
+		android:summary="@string/delayDurationSummaryPref"
 		android:defaultValue="2" />
         
 	</PreferenceCategory>
 	
-	<PreferenceCategory android:title="Feedback">
+	<PreferenceCategory android:title="@string/feedbackPrefGroup">
 	
 		<RingtonePreference android:key="alarm"
-		android:title="Time Expired Alert" android:name="Time Expired Alert"
-		android:summary="Select a ringtone that rings when a player expires"
+		android:title="@string/alarmPref"
+		android:summary="@string/alarmSummaryPref"
 		android:ringtoneType="alarm" android:showDefault="true" />
 		
 		<CheckBoxPreference android:key="vibrate"
-        android:title="Enable Vibration" android:name="Enable Vibration"
+        android:title="@string/vibratePref"
         android:defaultValue="true"
-        android:summary="Vibrate the phone when any button is pressed" />
+        android:summary="@string/vibrateSummaryPref" />
         
         <CheckBoxPreference android:key="click"
-		android:title="Enable Click Sound" android:name="Enable Click Sound"
+		android:title="@string/clickPref"
 		android:defaultValue="true"
-		android:summary="Play a 'click' sound when pressing a game button" />
+		android:summary="@string/clickSummaryPref" />
 		
 	</PreferenceCategory>
 	
