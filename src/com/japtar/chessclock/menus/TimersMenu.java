@@ -253,6 +253,9 @@ public class TimersMenu implements MenuInterface,
 		// Reset the time
 		Global.GAME_STATE.resetTime();
 		
+		// Show the start menu
+		mStartMenu.showMenu();
+		
 		// Do whatever else is necessary
 		this.changeConditionSetup();
 		
@@ -293,6 +296,9 @@ public class TimersMenu implements MenuInterface,
 			mRingtone.setStreamType(AudioManager.STREAM_ALARM);
 			mRingtone.play();
 		}
+		
+		// Show the time-up menu
+		mTimesUpMenu.showMenu();
 		
 		// Do whatever else is necessary
 		this.changeConditionSetup();

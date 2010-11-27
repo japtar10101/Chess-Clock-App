@@ -62,8 +62,8 @@ public class StartSubMenu extends SubMenu {
 				// Hide this menu
 				this.hideMenu();
 				
-				// Open the options menu
-				mParentActivity.openOptionsMenu();
+				// TODO: Open the options menu
+				//mParentActivity
 			} else {
 				final boolean leftPlayersTurn = v.equals(mRightButton);
 				if(leftPlayersTurn || v.equals(mLeftButton)) {
