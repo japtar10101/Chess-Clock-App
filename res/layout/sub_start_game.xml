@@ -7,13 +7,15 @@ android:layout_width="fill_parent" android:layout_height="fill_parent">
 	android:layout_width="fill_parent" android:layout_height="wrap_content"
 	android:layout_alignParentLeft="true" android:layout_centerVertical="true">
 	
-		<Button android:id="@+id/buttonLeftStart" android:layout_margin="20px"
+		<Button android:id="@+id/buttonLeftStart"
+		android:layout_marginLeft="20px" android:layout_marginRight="20px"
 		android:layout_width="wrap_content" android:layout_height="wrap_content"
 		android:text="@string/playerButtonText" android:layout_weight="1"
 		android:typeface="monospace" android:textStyle="bold"
 		android:textSize="40px" />
 		
-		<Button android:id="@+id/buttonRightStart" android:layout_margin="20px"
+		<Button android:id="@+id/buttonRightStart"
+		android:layout_marginLeft="20px" android:layout_marginRight="20px"
 		android:layout_width="wrap_content" android:layout_height="wrap_content"
 		android:text="@string/playerButtonText" android:layout_weight="1"
 		android:typeface="monospace" android:textStyle="bold"

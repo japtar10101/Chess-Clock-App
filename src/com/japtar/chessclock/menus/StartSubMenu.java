@@ -2,7 +2,9 @@ package com.japtar.chessclock.menus;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout.LayoutParams;
 
+import com.japtar.chessclock.Global;
 import com.japtar.chessclock.MainActivity;
 import com.japtar.chessclock.R;
 
@@ -49,9 +51,17 @@ public class StartSubMenu extends SubMenu {
 		// == Setup the member variables ==
 
 		// Update the text size on everything
-		mRightButton.setTextSize(MainActivity.msTextSize * 0.7f);
-		mLeftButton.setTextSize(MainActivity.msTextSize * 0.7f);
+		mRightButton.setTextSize(MainActivity.msTextSize * 0.6f);
+		mLeftButton.setTextSize(MainActivity.msTextSize * 0.6f);
 		mSettingsButton.setTextSize(MainActivity.msTextSize * 0.5f);
+		
+		// Update the margins
+		LayoutParams params = (LayoutParams) mRightButton.getLayoutParams();
+		params.rightMargin = Global.DISPLAY.widthPixels / 40;
+		params.leftMargin = Global.DISPLAY.widthPixels / 40;
+		params = (LayoutParams) mLeftButton.getLayoutParams();
+		params.rightMargin = Global.DISPLAY.widthPixels / 40;
+		params.leftMargin = Global.DISPLAY.widthPixels / 40;
 	}
 
 	@Override

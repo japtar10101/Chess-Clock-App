@@ -22,6 +22,9 @@ abstract class SubMenu implements MenuInterface, View.OnClickListener {
 	private View mSubMenu = null;
 	/** An overlapping layout from the parent's menu */
 	private ViewGroup mEmbedding = null;
+	/** {@link #mEmbedding}'s dimensions */
+	private final ViewGroup.LayoutParams mParams =
+		new ViewGroup.LayoutParams(0, 0);
 
 	/* ===========================================================
 	 * Constructors
@@ -49,6 +52,10 @@ abstract class SubMenu implements MenuInterface, View.OnClickListener {
 		// Inflate the sub-menu
 		mSubMenu = View.inflate(mParentActivity, getLayoutId(), null);
 		
+		// Create the 
+		mParams.width = mEmbedding.getLayoutParams().width;
+		mParams.height = mEmbedding.getLayoutParams().height;
+		
 		// Setup the rest
 		this.setupLayout(mSubMenu);
 	}
@@ -75,7 +82,7 @@ abstract class SubMenu implements MenuInterface, View.OnClickListener {
 		if((mSubMenu != null) && (mEmbedding != null) &&
 				(mEmbedding.getVisibility() == View.INVISIBLE)) {
 			// Add the sub-menu to this layout
-			mEmbedding.addView(mSubMenu);
+			mEmbedding.addView(mSubMenu, mParams);
 			
 			// Make the layout visible
 			mEmbedding.setVisibility(View.VISIBLE);
