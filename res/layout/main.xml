@@ -5,6 +5,7 @@ android:layout_width="fill_parent" android:layout_height="fill_parent"
 xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:myapp="http://schemas.android.com/apk/res/com.japtar.ChessClockApp">
 
+	<!-- Displaying Game Buttons -->
 	<LinearLayout 
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
 	android:layout_alignParentTop="true" android:layout_alignParentLeft="true">
@@ -25,6 +26,7 @@ xmlns:myapp="http://schemas.android.com/apk/res/com.japtar.ChessClockApp">
 	
 	</LinearLayout>
 	
+	<!-- Displaying Delay Label -->
 	<TextView android:id="@+id/labelDelay"
 	android:layout_width="wrap_content" android:layout_height="wrap_content"
 	android:padding="5px"
@@ -33,27 +35,16 @@ xmlns:myapp="http://schemas.android.com/apk/res/com.japtar.ChessClockApp">
 	android:typeface="monospace" android:textStyle="bold" android:textSize="60px"
 	android:visibility="invisible" />
 	
-    <Button android:id="@+id/buttonPause" android:text="@string/settingsMenuLabel"
+	<!-- Displaying Pause Button -->
+    <Button android:id="@+id/buttonPause" android:text="@string/pauseButtonText"
     android:layout_width="wrap_content" android:layout_height="wrap_content"
-    android:typeface="monospace" android:textStyle="bold" android:textSize="40px"
+    android:typeface="monospace" android:textSize="40px" android:textStyle="normal"
     android:layout_centerHorizontal="true" android:layout_alignParentBottom="true" />
     
-	<RelativeLayout android:id="@+id/layoutPause"
+    <!-- Declare an external layout -->
+	<RelativeLayout android:id="@+id/layoutOverlap"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
-    android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
-    android:visibility="invisible" android:background="#b0000000">
-        
-        <com.admob.android.ads.AdView android:id="@+id/ad"
-		android:layout_width="wrap_content" android:layout_height="wrap_content"
-		backgroundColor="#b0000000" primaryTextColor="#b0ffffff" secondaryTextColor="#b0cccccc"
-		android:layout_alignParentTop="true" android:layout_centerHorizontal="true"/>
-	    
-	    <TextView android:id="@+id/labelPause"
-	    android:text="@string/pauseLabelText" android:textSize="80px"
-	    android:layout_width="wrap_content" android:layout_height="wrap_content"
-	    android:layout_centerVertical="true" android:layout_centerHorizontal="true"
-	    android:typeface="monospace" android:textStyle="bold" />
-	    
-    </RelativeLayout>
+	android:visibility="invisible" android:background="#b0000000"
+    android:layout_alignParentTop="true" android:layout_alignParentLeft="true" />
 	
 </RelativeLayout>

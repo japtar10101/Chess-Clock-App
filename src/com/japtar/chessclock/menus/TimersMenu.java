@@ -13,7 +13,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.japtar.chessclock.Global;
 import com.japtar.chessclock.MainActivity;
@@ -32,7 +31,7 @@ public class TimersMenu implements MenuInterface,
 	/** The main activities class */
 	private final MainActivity mParentActivity;
 	/** Helper class taking care of the Pause Menu functionality */
-	private final PauseMenu mPauseMenu;
+	private final PauseSubMenu mPauseMenu;
 	
 	// == Timer ==
 	/** The handler running {@link mTask} */
@@ -45,7 +44,9 @@ public class TimersMenu implements MenuInterface,
 	private Button mLeftButton = null;
 	/** Right player's button */
 	private Button mRightButton = null;
-	
+	/** Pause button */
+	private Button mPauseButton = null;
+		
 	// == Labels ==
 	/** Label indicating delay */
 	private TextView mDelayLabel = null;
@@ -69,7 +70,7 @@ public class TimersMenu implements MenuInterface,
 		mTask = new DecrementTimerTask(this, mTimer);
 		
 		// Setup the pause menu
-		mPauseMenu = new PauseMenu(mParentActivity, this);
+		mPauseMenu = new PauseSubMenu(mParentActivity, this);
 	}
 
 	/* ===========================================================
@@ -81,27 +82,11 @@ public class TimersMenu implements MenuInterface,
 	 */
 	@Override
 	public void onClick(final View v) {
+		// Stop the handler
+		mTimer.removeCallbacks(mTask);
+		
 		if(v != null) {
-			// Check if the button clicked is the new game button
-			if(mPauseMenu.isPauseButtonClicked(v)) {
-				switch(Global.GAME_STATE.timerCondition) {
-				
-					// If running, pause the game
-					case TimerCondition.RUNNING:
-						this.paused();
-						return;
-						
-					// go to options screen 
-					case TimerCondition.STARTING:
-						mParentActivity.displayOptionsMenu();
-						return;
-						
-					// If time's up, restart the game
-					case TimerCondition.TIMES_UP:
-						this.startup();
-						return;
-				}
-			}
+			// TODO: Check the sub-menus first
 			
 			// Hide the pause menu (setup for resuming)
 			mPauseMenu.hideMenu();
@@ -132,16 +117,20 @@ public class TimersMenu implements MenuInterface,
 	public void setupMenu() {
 		// First, setup the UI
 		mParentActivity.setContentView(R.layout.main);
+		
+		// Stop the handler
+		mTimer.removeCallbacks(mTask);
 
 		// == Load up all the member variables ==
 		
 		// Grab the label
-		mDelayLabel = (TextView)mParentActivity.findViewById(R.id.labelDelay);
+		mDelayLabel = (TextView) mParentActivity.findViewById(R.id.labelDelay);
 		
 		// Grab the buttons
 		mLeftButton = this.getButton(R.id.buttonLeftTime);
 		mRightButton = this.getButton(R.id.buttonRightTime);
-		
+		mPauseButton = this.getButton(R.id.buttonPause);
+				
 		// Get the ringtone
 		mRingtone = RingtoneManager.getRingtone(mParentActivity,
 				Global.OPTIONS.alarmUri);
@@ -155,6 +144,7 @@ public class TimersMenu implements MenuInterface,
 		// Update the text size on everything
 		mLeftButton.setTextSize(MainActivity.msTextSize);
 		mRightButton.setTextSize(MainActivity.msTextSize);
+		mPauseButton.setTextSize(MainActivity.msTextSize * 0.5f);
 		mDelayLabel.setTextSize(MainActivity.msTextSize * 0.7f);
 		
 		// Update the pause menu
@@ -178,24 +168,6 @@ public class TimersMenu implements MenuInterface,
 	 * Public Methods
 	 * =========================================================== */
 	/**
-	 * @param button
-	 * @param menu
-	 */
-	public Button getButton(final int buttonId) {
-		// Return value
-		Button toReturn = null;
-		
-		// Find a view based on ID
-		final View foundView = mParentActivity.findViewById(buttonId);
-		if(foundView instanceof Button) {
-			toReturn = (Button) foundView;
-			toReturn.setOnClickListener(this);
-			toReturn.setOnTouchListener(this);
-		}
-		return toReturn;
-	}
-	
-	/**
 	 * Pauses the timer, unless the time is up.
 	 */
 	public void exitMenu() {
@@ -218,6 +190,34 @@ public class TimersMenu implements MenuInterface,
 	}
 	
 	/* ===========================================================
+	 * Package-space Methods
+	 * =========================================================== */
+	/**
+	 * Updates the text on {@link mLeftButton}, {@link mRightButton},
+	 * and {@link mDelayLabel}
+	 */
+	void updateButtonAndLabelText() {
+		// Update button texts
+		mLeftButton.setText(Global.GAME_STATE.leftPlayerTime());
+		mRightButton.setText(Global.GAME_STATE.rightPlayerTime());
+		
+		// Update the delay label's text or visibility
+		this.updateDelayLabel();
+	}
+	
+	Button getButton(final View v, final int buttonId) {
+		// Find a view based on ID
+		final View foundView = v.findViewById(buttonId);
+		return this.convertToButton(foundView);
+	}
+	
+	Button getButton(final int buttonId) {
+		// Find a view based on ID
+		final View foundView = mParentActivity.findViewById(buttonId);
+		return this.convertToButton(foundView);
+	}
+		
+	/* ===========================================================
 	 * Private/Protected Methods
 	 * =========================================================== */
 	
@@ -225,8 +225,7 @@ public class TimersMenu implements MenuInterface,
 	 * Indicate the game just started
 	 */
 	private void startup() {
-		// Stop the handler
-		mTimer.removeCallbacks(mTask);
+		// Stop the ringtone
 		if(mRingtone != null) {
 			mRingtone.stop();
 		}
@@ -237,22 +236,11 @@ public class TimersMenu implements MenuInterface,
 		// Reset the time
 		Global.GAME_STATE.resetTime();
 		
-		// Enable both buttons
-		mLeftButton.setEnabled(true);
-		mRightButton.setEnabled(true);
+		// Do whatever else is necessary
+		this.changeConditionSetup();
 		
-		// Update button's text
-		mLeftButton.setText(Global.GAME_STATE.leftPlayerTime());
-		mRightButton.setText(Global.GAME_STATE.rightPlayerTime());
-		mDelayLabel.setVisibility(View.INVISIBLE);
-		
-		// Update the pause menu
-		mPauseMenu.startup();
-		
-		// Display a message
-		Toast.makeText(mParentActivity,
-				mParentActivity.getString(R.string.toastMessage),
-				Toast.LENGTH_LONG).show();
+		// Hide the delay label
+		mDelayLabel.setVisibility(View.INVISIBLE);		
 	}
 	
 	/**
@@ -265,15 +253,11 @@ public class TimersMenu implements MenuInterface,
 		// Set the condition to time up
 		Global.GAME_STATE.timerCondition = TimerCondition.PAUSE;
 		
-		// Update the buttons/labels text
-		this.updateButtonAndLabelText();
+		// Show the pause menu
+		mPauseMenu.showMenu();
 		
-		// Disable both buttons
-		mLeftButton.setEnabled(false);
-		mRightButton.setEnabled(false);
-		
-		// Setup the pause Menu
-		mPauseMenu.paused();
+		// Do whatever else is necessary
+		this.changeConditionSetup();
 	}
 	
 	/**
@@ -282,17 +266,7 @@ public class TimersMenu implements MenuInterface,
 	void timesUp() {
 		// Set the condition to time up
 		Global.GAME_STATE.timerCondition = TimerCondition.TIMES_UP;
-		
-		// Update the buttons/labels text
-		this.updateButtonAndLabelText();
-		
-		// Disable both buttons
-		mLeftButton.setEnabled(false);
-		mRightButton.setEnabled(false);
-		
-		// Hide the delay label
-		mDelayLabel.setVisibility(View.INVISIBLE);
-		
+				
 		// Check the volume and ringer
 		final AudioManager audioManager = (AudioManager)
 			mParentActivity.getSystemService(Context.AUDIO_SERVICE);
@@ -303,8 +277,21 @@ public class TimersMenu implements MenuInterface,
 			mRingtone.play();
 		}
 		
-		// Setup the pause menu
-		mPauseMenu.timesUp();
+		// Do whatever else is necessary
+		this.changeConditionSetup();
+		
+		// Hide the delay label
+		mDelayLabel.setVisibility(View.INVISIBLE);		
+	}
+	
+	private void changeConditionSetup() {
+		// Update the buttons/labels text
+		this.updateButtonAndLabelText();
+		
+		// Disable game buttons, hide pause
+		mLeftButton.setEnabled(false);
+		mRightButton.setEnabled(false);
+		mPauseButton.setVisibility(View.INVISIBLE);
 	}
 	
 	/**
@@ -312,9 +299,6 @@ public class TimersMenu implements MenuInterface,
 	 * @param buttonPressed the button that was pressed
 	 */
 	private void pressedPlayerButton(final View buttonPressed) {
-		// Stop the handler
-		mTimer.removeCallbacks(mTask);
-		
 		// If just starting, update the labels
 		if(Global.GAME_STATE.timerCondition == TimerCondition.STARTING) {
 			// Update to the time text
@@ -345,22 +329,12 @@ public class TimersMenu implements MenuInterface,
 		mLeftButton.setEnabled(Global.GAME_STATE.leftPlayersTurn);
 		mRightButton.setEnabled(!Global.GAME_STATE.leftPlayersTurn);
 		
+		// Make the pause button visible
+		mPauseButton.setVisibility(View.VISIBLE);
+		
 		// Start the timer
 		mTask.reset();
 		mTimer.postDelayed(mTask, 1000);
-	}
-	
-	/**
-	 * Updates the text on {@link mLeftButton}, {@link mRightButton},
-	 * and {@link mDelayLabel}
-	 */
-	void updateButtonAndLabelText() {
-		// Update button texts
-		mLeftButton.setText(Global.GAME_STATE.leftPlayerTime());
-		mRightButton.setText(Global.GAME_STATE.rightPlayerTime());
-		
-		// Update the delay label's text or visibility
-		this.updateDelayLabel();
 	}
 	
 	/**
@@ -377,5 +351,16 @@ public class TimersMenu implements MenuInterface,
 			mDelayLabel.setVisibility(View.VISIBLE);
 			mDelayLabel.setText(delayText);
 		}
+	}
+	
+	private Button convertToButton(final View v) {
+		// Return value
+		Button toReturn = null;
+		if(v instanceof Button) {
+			toReturn = (Button) v;
+			toReturn.setOnClickListener(this);
+			toReturn.setOnTouchListener(this);
+		}
+		return toReturn;
 	}
 }

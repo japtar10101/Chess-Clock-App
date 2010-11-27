@@ -9,7 +9,7 @@ package com.japtar.chessclock.menus;
  */
 interface MenuInterface {
 	/**
-	 * Prepares this menu on creation
+	 * Prepares this menu
 	 */
 	public void setupMenu();
 }

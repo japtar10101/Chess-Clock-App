@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="fill_parent" android:layout_height="fill_parent"
+android:id="@+id/layoutBase">
+
+	<!-- Displaying Start Buttons -->
+	<LinearLayout
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:layout_alignParentTop="true" android:layout_alignParentLeft="true">
+	
+		<Button android:id="@+id/buttonLeftStart" android:layout_margin="20px"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:text="@string/playerButtonText" android:layout_weight="1"
+		android:typeface="monospace" android:textStyle="bold"
+		android:textSize="40px" />
+		
+		<Button android:id="@+id/buttonRightStart" android:layout_margin="20px"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:text="@string/playerButtonText" android:layout_weight="1"
+		android:typeface="monospace" android:textStyle="bold"
+		android:textSize="40px" />
+	
+	</LinearLayout>
+
+	<!-- Displaying Settings Button -->
+    <Button android:id="@+id/buttonSettings" android:text="@string/optionsButtonText"
+    android:layout_width="wrap_content" android:layout_height="wrap_content"
+    android:typeface="monospace" android:textStyle="normal" android:textSize="40px"
+    android:layout_centerHorizontal="true" android:layout_alignParentBottom="true" />
+
+</RelativeLayout>

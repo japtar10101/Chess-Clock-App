@@ -8,13 +8,9 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.japtar.chessclock.R;
-import com.japtar.chessclock.enums.TimerCondition;
 import com.japtar.chessclock.menus.OptionsMenu;
 import com.japtar.chessclock.menus.TimersMenu;
 
@@ -118,49 +114,6 @@ public class MainActivity extends Activity {
         SharedPreferences settings = this.getPreferences(MODE_PRIVATE);
     	Global.GAME_STATE.saveSettings(settings);
     }
-    
-    /**
-     * Creates the initial menu layout
-     * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
-     */
-    @Override
-    public boolean onCreateOptionsMenu(final Menu menu) {
-    	// Generate the menu
-        final MenuInflater inflater = this.getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        
-        // Return true
-        return true;
-    }
-
-	/**
-	 * Switches the layout based on the item selected
-	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
-	 */
-	@Override
-	public boolean onOptionsItemSelected(final MenuItem item) {
-		boolean toReturn = true;
-			
-		// Handle item selection
-		switch(item.getItemId()) {
-			// If options is clicked, go to options menu
-			case R.id.menuOptions:
-				this.displayOptionsMenu();
-				break;
-			    
-			// If reset is clicked, restart the timers menu
-			case R.id.menuReset:
-				Global.GAME_STATE.timerCondition = TimerCondition.STARTING;
-				mMainMenu.setupMenu();
-				break;
-			
-			// Otherwise, let the super class figure it out
-			default:
-				toReturn = super.onOptionsItemSelected(item);
-				break;
-		}
-		return toReturn;
-	}
 	
 	/* ===========================================================
 	 * Public method

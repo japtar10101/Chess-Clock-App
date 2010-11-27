@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="fill_parent" android:layout_height="fill_parent"
+android:id="@+id/layoutBase">
+
+	<!-- Displaying Ads -->
+	<com.admob.android.ads.AdView android:id="@+id/ad"
+	android:layout_width="wrap_content" android:layout_height="wrap_content"
+	backgroundColor="#b0000000" primaryTextColor="#b0ffffff" secondaryTextColor="#b0cccccc"
+	android:layout_alignParentTop="true" android:layout_centerHorizontal="true"/>
+	
+	<!-- Displaying Times up Label -->
+    <TextView android:id="@+id/labelTimesUp"
+    android:text="@string/timesUpLabelText" android:textSize="80px"
+    android:layout_width="wrap_content" android:layout_height="wrap_content"
+    android:layout_centerVertical="true" android:layout_centerHorizontal="true"
+    android:typeface="monospace" android:textStyle="bold" />
+	
+	<!-- Displaying Resume Button -->
+    <Button android:id="@+id/buttonNewGame" android:text="@string/newGameButtonText"
+    android:layout_width="wrap_content" android:layout_height="wrap_content"
+    android:typeface="monospace" android:textStyle="bold" android:textSize="40px"
+    android:layout_centerHorizontal="true" android:layout_alignParentBottom="true" />
+	
+</RelativeLayout>

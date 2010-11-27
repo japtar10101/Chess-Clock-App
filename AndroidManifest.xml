@@ -23,8 +23,7 @@ android:versionName="0.9.3" android:versionCode="4">
         </activity>
         
         <!-- Preference Activity -->
-        <activity android:name=".menus.OptionsMenu"
-        android:label="@string/settingsMenuLabel">
+        <activity android:name=".menus.OptionsMenu">
         </activity>
         
         <!-- The application's publisher ID assigned by AdMob -->
