@@ -43,20 +43,10 @@ class PauseSubMenu extends SubMenu {
 	 * Override Methods
 	 * =========================================================== */
 	@Override
-	public boolean onClick(View v) {
-		// By default, return true
-		boolean toReturn = false;
-		
-		// Check if the button clicked is the pause button
-		if(mResumeButton.equals(v)) {
-			this.hideMenu();
-			toReturn = true;
-		} else if(mNewGameButton.equals(v)) {
-			
-		}
-		return toReturn;
+	protected int getLayoutId() {
+		return R.layout.sub_pause;
 	}
-
+	
 	@Override
 	protected void setupLayout(final View v) {
 		// == Load up all the member variables ==
@@ -75,9 +65,24 @@ class PauseSubMenu extends SubMenu {
 		mNewGameButton.setTextSize(MainActivity.msTextSize * 0.5f);
 		mPauseLabel.setTextSize(MainActivity.msTextSize);
 	}
-
+	
 	@Override
-	protected int getLayoutId() {
-		return R.layout.sub_pause;
+	public void onClick(final View v) {
+		if(v != null) {
+			// Check which button is clicked
+			if(v.equals(mResumeButton)) {
+				// Hide this menu
+				this.hideMenu();
+				
+				// Resume the timer
+				mParentMenu.resume();
+			} else if(v.equals(mNewGameButton)) {
+				// Hide this menu
+				this.hideMenu();
+				
+				// Start over the timer
+				mParentMenu.startup();
+			}
+		}
 	}
 }

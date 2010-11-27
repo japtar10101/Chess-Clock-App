@@ -1,12 +1,12 @@
 package com.japtar.chessclock.menus;
 
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.view.ViewGroup;
 
 import com.japtar.chessclock.MainActivity;
 import com.japtar.chessclock.R;
 
-abstract class SubMenu implements MenuInterface {
+abstract class SubMenu implements MenuInterface, View.OnClickListener {
 	/* ===========================================================
 	 * Members
 	 * =========================================================== */
@@ -21,7 +21,7 @@ abstract class SubMenu implements MenuInterface {
 	/** The generated sub-menu*/
 	private View mSubMenu = null;
 	/** An overlapping layout from the parent's menu */
-	private RelativeLayout mLayout = null;
+	private ViewGroup mEmbedding = null;
 
 	/* ===========================================================
 	 * Constructors
@@ -44,8 +44,7 @@ abstract class SubMenu implements MenuInterface {
 	 */
 	public void setupMenu() {
 		// Grab the overlap layout from the parents, first
-		mLayout = (RelativeLayout) mParentActivity.findViewById(
-				R.id.layoutOverlap);
+		mEmbedding = (ViewGroup) mParentActivity.findViewById(R.id.layoutOverlap);
 		
 		// Inflate the sub-menu
 		mSubMenu = View.inflate(mParentActivity, getLayoutId(), null);
@@ -57,11 +56,6 @@ abstract class SubMenu implements MenuInterface {
 	/* ===========================================================
 	 * Abstract Methods
 	 * =========================================================== */
-	/**
-	 * @param v the clicked view
-	 * @return true if a button from this sub-menu is clicked
-	 */
-	public abstract boolean onClick(final View v);
 	/**
 	 * @param v the newly-created view
 	 */
@@ -78,13 +72,13 @@ abstract class SubMenu implements MenuInterface {
 	 * Sets up this sub-menu
 	 */
 	public void showMenu() {
-		if((mSubMenu != null) && (mLayout != null) &&
-				(mLayout.getVisibility() == View.INVISIBLE)) {
+		if((mSubMenu != null) && (mEmbedding != null) &&
+				(mEmbedding.getVisibility() == View.INVISIBLE)) {
 			// Add the sub-menu to this layout
-			mLayout.addView(mSubMenu);
+			mEmbedding.addView(mSubMenu);
 			
 			// Make the layout visible
-			mLayout.setVisibility(View.VISIBLE);
+			mEmbedding.setVisibility(View.VISIBLE);
 			
 			mShown = true;
 		}
@@ -94,13 +88,13 @@ abstract class SubMenu implements MenuInterface {
 	 * Destroy this sub-menu
 	 */
 	public void hideMenu() {
-		if((mSubMenu != null) && (mLayout != null) &&
-				(mLayout.getVisibility() == View.VISIBLE)) {
+		if((mSubMenu != null) && (mEmbedding != null) &&
+				(mEmbedding.getVisibility() == View.VISIBLE)) {
 			// Remove the sub-menu
-			mLayout.removeView(mSubMenu);
+			mEmbedding.removeView(mSubMenu);
 			
 			// Make the layout invisible
-			mLayout.setVisibility(View.INVISIBLE);
+			mEmbedding.setVisibility(View.INVISIBLE);
 			
 			mShown = false;
 		}
