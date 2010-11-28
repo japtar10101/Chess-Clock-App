@@ -264,7 +264,6 @@ public class TimersMenu implements MenuInterface,
 			case TimerCondition.RUNNING:
 			case TimerCondition.PAUSE:
 				this.updateDelayLabel();
-				break;
 		}
 	}
 	
