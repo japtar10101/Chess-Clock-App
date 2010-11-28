@@ -217,6 +217,18 @@ public class GameStateModel implements SaveStateModel {
 		}
 	}
 	
+	/**
+	 * @return A default delay label string
+	 */
+	public String defaultDelayLabelString() {
+		// Prepend the string, if available
+		if(mDelayPrependString != null) {
+			return mDelayPrependString + " 0";
+		} else {
+			return "0";
+		}
+	}
+	
 	/* ===========================================================
 	 * Setters
 	 * =========================================================== */

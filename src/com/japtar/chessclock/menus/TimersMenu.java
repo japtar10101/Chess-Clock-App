@@ -433,20 +433,21 @@ public class TimersMenu implements MenuInterface,
 	 */
 	private void updateDelayLabel() {
 		// Update the delay label's text or visibility
-		final String delayText = Global.GAME_STATE.delayTime();
-		mDelayLabel.setVisibility(View.VISIBLE);
-		
-		if((delayText == null) &&
-				(mDelayLabel.getVisibility() == View.VISIBLE)) {
-			// If no text is provided, set it invisible
-			mDelayLabel.startAnimation(mHideAnimation);
-		} else if(delayText != null) {
-			// If text IS provided, make the label visible
-			if(mDelayLabel.getVisibility() == View.INVISIBLE) {
-				mDelayLabel.startAnimation(mShowAnimation);
+		String delayText = Global.GAME_STATE.delayTime();
+		if(delayText == null) {
+			// If no text is provided, play the hide animation
+			if(mDelayLabel.getVisibility() == View.VISIBLE) {
+				mDelayLabel.startAnimation(mHideAnimation);
 			}
-			mDelayLabel.setText(delayText);
+			// Update the delay text
+			delayText = Global.GAME_STATE.defaultDelayLabelString();
+		} else if(mDelayLabel.getVisibility() == View.INVISIBLE) {
+			// If text IS provided, play the show-label animation
+			mDelayLabel.startAnimation(mShowAnimation);
 		}
+		
+		// Update the text
+		mDelayLabel.setText(delayText);
 	}
 	
 	private Button getButton(final int buttonId) {
