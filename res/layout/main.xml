@@ -31,9 +31,9 @@ xmlns:myapp="http://schemas.android.com/apk/res/com.japtar.ChessClockApp">
 	android:layout_width="wrap_content" android:layout_height="wrap_content"
 	android:padding="5px"
 	android:text="@string/delayLabelText" android:background="#b0000000"
-	android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
+	android:layout_above="@+id/layoutOverlap" android:layout_centerHorizontal="true"
 	android:typeface="monospace" android:textStyle="bold" android:textSize="60px"
-	android:visibility="invisible" />
+	android:visibility="visible" />
 	
 	<!-- Displaying Pause Button -->
     <Button android:id="@+id/buttonPause" android:text="@string/pauseButtonText"

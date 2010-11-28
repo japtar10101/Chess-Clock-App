@@ -11,6 +11,8 @@ import android.os.Handler;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -56,6 +58,12 @@ public class TimersMenu implements MenuInterface,
 	// == Labels ==
 	/** Label indicating delay */
 	private TextView mDelayLabel = null;
+	
+	// == Animations ==
+	/** Shows the delay label */
+	private Animation mShowAnimation = null;
+	/** Hides the delay label */
+	private Animation mHideAnimation = null;
 	
 	// == Misc. ==
 	/** Sound of alarm */
@@ -151,6 +159,8 @@ public class TimersMenu implements MenuInterface,
 		
 		// Grab the label
 		mDelayLabel = (TextView) mParentActivity.findViewById(R.id.labelDelay);
+		mShowAnimation = AnimationUtils.loadAnimation(mParentActivity,
+				R.anim.translate_delay_label);
 		
 		// Grab the buttons
 		mLeftButton = this.getButton(R.id.buttonLeftTime);
@@ -263,7 +273,9 @@ public class TimersMenu implements MenuInterface,
 		this.changeConditionSetup();
 		
 		// Hide the delay label
-		mDelayLabel.setVisibility(View.INVISIBLE);		
+		if(mDelayLabel.getVisibility() == View.VISIBLE) {
+			mDelayLabel.startAnimation(mHideAnimation);
+		}
 	}
 	
 	/**
@@ -308,7 +320,9 @@ public class TimersMenu implements MenuInterface,
 		this.changeConditionSetup();
 		
 		// Hide the delay label
-		mDelayLabel.setVisibility(View.INVISIBLE);		
+		if(mDelayLabel.getVisibility() == View.VISIBLE) {
+			mDelayLabel.startAnimation(mHideAnimation);
+		}
 	}
 	
 	/**
@@ -374,12 +388,15 @@ public class TimersMenu implements MenuInterface,
 	private void updateDelayLabel() {
 		// Update the delay label's text or visibility
 		final String delayText = Global.GAME_STATE.delayTime();
-		if(delayText == null) {
+		if((delayText == null) &&
+				(mDelayLabel.getVisibility() == View.VISIBLE)) {
 			// If no text is provided, set it invisible
-			mDelayLabel.setVisibility(View.INVISIBLE);
-		} else {
+			mDelayLabel.startAnimation(mHideAnimation);
+		} else if(delayText != null) {
 			// If text IS provided, make the label visible
-			mDelayLabel.setVisibility(View.VISIBLE);
+			if(mDelayLabel.getVisibility() == View.INVISIBLE) {
+				mDelayLabel.startAnimation(mShowAnimation);
+			}
 			mDelayLabel.setText(delayText);
 		}
 	}
