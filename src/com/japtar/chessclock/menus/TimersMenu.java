@@ -260,7 +260,12 @@ public class TimersMenu implements MenuInterface,
 		mRightButton.setText(Global.GAME_STATE.rightPlayerTime());
 		
 		// Update the delay label's text or visibility
-		this.updateDelayLabel();
+		switch(Global.GAME_STATE.timerCondition) {
+			case TimerCondition.RUNNING:
+			case TimerCondition.PAUSE:
+				this.updateDelayLabel();
+				break;
+		}
 	}
 	
 	Button getButton(final View v, final int buttonId) {
