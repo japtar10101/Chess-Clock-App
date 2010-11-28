@@ -159,8 +159,6 @@ public class TimersMenu implements MenuInterface,
 		
 		// Grab the label
 		mDelayLabel = (TextView) mParentActivity.findViewById(R.id.labelDelay);
-		mShowAnimation = AnimationUtils.loadAnimation(mParentActivity,
-				R.anim.translate_delay_label);
 		
 		// Grab the buttons
 		mLeftButton = this.getButton(R.id.buttonLeftTime);
@@ -173,6 +171,12 @@ public class TimersMenu implements MenuInterface,
 			mRingtone = RingtoneManager.getRingtone(mParentActivity,
 					Global.OPTIONS.alarmUri);
 		}
+		
+		// Get animations
+		mShowAnimation = AnimationUtils.loadAnimation(mParentActivity,
+				R.anim.show_delay_label);
+		mHideAnimation = AnimationUtils.loadAnimation(mParentActivity,
+				R.anim.hide_delay_label);
 		
 		// == Setup the member variables ==
 		
@@ -273,9 +277,7 @@ public class TimersMenu implements MenuInterface,
 		this.changeConditionSetup();
 		
 		// Hide the delay label
-		if(mDelayLabel.getVisibility() == View.VISIBLE) {
-			mDelayLabel.startAnimation(mHideAnimation);
-		}
+		mDelayLabel.setVisibility(View.INVISIBLE);
 	}
 	
 	/**
@@ -320,9 +322,7 @@ public class TimersMenu implements MenuInterface,
 		this.changeConditionSetup();
 		
 		// Hide the delay label
-		if(mDelayLabel.getVisibility() == View.VISIBLE) {
-			mDelayLabel.startAnimation(mHideAnimation);
-		}
+		mDelayLabel.setVisibility(View.INVISIBLE);
 	}
 	
 	/**
@@ -388,13 +388,14 @@ public class TimersMenu implements MenuInterface,
 	private void updateDelayLabel() {
 		// Update the delay label's text or visibility
 		final String delayText = Global.GAME_STATE.delayTime();
-		if((delayText == null) &&
-				(mDelayLabel.getVisibility() == View.VISIBLE)) {
+		mDelayLabel.setVisibility(View.VISIBLE);
+		
+		if((delayText == null) && (mDelayLabel.getTop() >= 0)) {
 			// If no text is provided, set it invisible
 			mDelayLabel.startAnimation(mHideAnimation);
 		} else if(delayText != null) {
 			// If text IS provided, make the label visible
-			if(mDelayLabel.getVisibility() == View.INVISIBLE) {
+			if(mDelayLabel.getTop() < 0) {
 				mDelayLabel.startAnimation(mShowAnimation);
 			}
 			mDelayLabel.setText(delayText);
