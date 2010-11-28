@@ -158,8 +158,11 @@ public class TimersMenu implements MenuInterface,
 		mPauseButton = this.getButton(R.id.buttonPause);
 				
 		// Get the ringtone
-		mRingtone = RingtoneManager.getRingtone(mParentActivity,
-				Global.OPTIONS.alarmUri);
+		mRingtone = null;
+		if(Global.OPTIONS.alarmUri != null) {
+			mRingtone = RingtoneManager.getRingtone(mParentActivity,
+					Global.OPTIONS.alarmUri);
+		}
 		
 		// == Setup the member variables ==
 		
@@ -288,13 +291,14 @@ public class TimersMenu implements MenuInterface,
 		Global.GAME_STATE.timerCondition = TimerCondition.TIMES_UP;
 				
 		// Check the volume and ringer
-		final AudioManager audioManager = (AudioManager)
-			mParentActivity.getSystemService(Context.AUDIO_SERVICE);
-		if(audioManager.getStreamVolume(AudioManager.STREAM_ALARM) > 0 &&
-				mRingtone != null) {
-			// If they're valid, play it as an alarm
-			mRingtone.setStreamType(AudioManager.STREAM_ALARM);
-			mRingtone.play();
+		if(mRingtone != null) {
+			final AudioManager audioManager = (AudioManager)
+				mParentActivity.getSystemService(Context.AUDIO_SERVICE);
+			if(audioManager.getStreamVolume(AudioManager.STREAM_ALARM) > 0) {
+				// If they're valid, play it as an alarm
+				mRingtone.setStreamType(AudioManager.STREAM_ALARM);
+				mRingtone.play();
+			}
 		}
 		
 		// Show the time-up menu

@@ -5,7 +5,6 @@ package com.japtar.chessclock.models;
 
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.provider.Settings;
 
 /**
  * Options shared between each layout
@@ -50,7 +49,7 @@ public class OptionsModel implements SaveStateModel {
 	/** The delay time */
 	public final TimeModel savedDelayTime = new TimeModel(DEFAULT_DELAY_TIME);
 	/** The stored alarm */
-	public Uri alarmUri = Settings.System.DEFAULT_ALARM_ALERT_URI;
+	public Uri alarmUri = null;
 	/** If true, make a sound when pressing a game button */
 	public boolean enableClick = DEFAULT_ENABLE_CLICK;
 	/** If true, vibrates when clicking any button */
@@ -78,11 +77,10 @@ public class OptionsModel implements SaveStateModel {
 		savedDelayTime.recallTime(savedState, KEY_DELAY_TIME,
 				DEFAULT_DELAY_TIME);
 		
-		String savedUri = savedState.getString(KEY_ALARM, null);
-		if(savedUri != null) {
+		final String savedUri = savedState.getString(KEY_ALARM, null);
+		alarmUri = null;
+		if((savedUri != null) && (savedUri.length() > 0)) {
 			alarmUri = Uri.parse(savedUri);
-		} else {
-			alarmUri = Settings.System.DEFAULT_ALARM_ALERT_URI;
 		}
 		
 		enableClick = savedState.getBoolean(KEY_CLICK, DEFAULT_ENABLE_CLICK);

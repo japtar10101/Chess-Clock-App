@@ -1,1 +1,31 @@
-../values/strings.xml
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- Application-related strings -->
+    <string name="app_name">Chess Clock App</string>
+
+	<!-- Label strings -->
+    <string name="delayLabelText">Delay -</string>
+    <string name="pauseLabelText">Paused</string>
+    <string name="timesUpLabelText">Times Up!</string>
+
+	<!-- Button strings -->
+    <string name="playerButtonText">Press to Start</string>
+    <string name="pauseButtonText">Pause</string>
+	<string name="resumeButtonText">Resume</string>
+    <string name="newGameButtonText">New Game</string>
+	<string name="optionsButtonText">Options</string>
+	
+    <!-- Options strings -->
+    <string name="timePrefGroup">Time-Related Configuration</string>
+    <string name="gameDurationPref">Game Duration</string>
+    <string name="gameDurationSummaryPref">Configure the game\'s duration</string>
+    <string name="delayDurationPref">Delay Duration</string>
+    <string name="delayDurationSummaryPref">Configure the time delayed before a player\'s turn</string>
+    <string name="feedbackPrefGroup">Clock\'s Feedback</string>
+    <string name="alarmPref">Time Expired Alert</string>
+    <string name="alarmSummaryPref">Configure the alarm indicating a player expires</string>
+    <string name="vibratePref">Enable Vibration</string>
+    <string name="vibrateSummaryPref">Vibrate the phone when any button is pressed</string>
+    <string name="clickPref">Enable \"Click\" Sound</string>
+    <string name="clickSummaryPref">Play a \"click\" sound when pressing a game button</string>
+</resources>
