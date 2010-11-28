@@ -5,6 +5,7 @@ package com.japtar.chessclock.models;
 
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.provider.Settings;
 
 /**
  * Options shared between each layout
@@ -80,7 +81,12 @@ public class OptionsModel implements SaveStateModel {
 		final String savedUri = savedState.getString(KEY_ALARM, null);
 		alarmUri = null;
 		if((savedUri != null) && (savedUri.length() > 0)) {
-			alarmUri = Uri.parse(savedUri);
+			if(savedUri.equals("defaultRingtone")) {
+				alarmUri = Settings.System.DEFAULT_ALARM_ALERT_URI;
+				this.saveSettings(savedState);
+			} else {
+				alarmUri = Uri.parse(savedUri);
+			}
 		}
 		
 		enableClick = savedState.getBoolean(KEY_CLICK, DEFAULT_ENABLE_CLICK);

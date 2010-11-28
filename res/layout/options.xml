@@ -20,7 +20,8 @@
 		<RingtonePreference android:key="alarm"
 		android:title="@string/alarmPref"
 		android:summary="@string/alarmSummaryPref"
-		android:ringtoneType="alarm" android:showDefault="true" />
+		android:ringtoneType="alarm" android:showDefault="true"
+		android:defaultValue="defaultRingtone" />
 		
 		<CheckBoxPreference android:key="vibrate"
         android:title="@string/vibratePref"
