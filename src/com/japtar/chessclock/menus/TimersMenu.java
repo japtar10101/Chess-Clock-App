@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.Animation.AnimationListener;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -64,6 +65,8 @@ public class TimersMenu implements MenuInterface,
 	private Animation mShowAnimation = null;
 	/** Hides the delay label */
 	private Animation mHideAnimation = null;
+	private final AnimationListener mShowDelayLabel;
+	private final AnimationListener mHideDelayLabel;
 	
 	// == Misc. ==
 	/** Sound of alarm */
@@ -87,6 +90,32 @@ public class TimersMenu implements MenuInterface,
 		mPauseMenu = new PauseSubMenu(mParentActivity, this);
 		mStartMenu = new StartSubMenu(mParentActivity, this);
 		mTimesUpMenu = new TimesUpSubMenu(mParentActivity, this);
+		
+		// Setup animation listeners
+		mShowDelayLabel = new AnimationListener() {
+			@Override
+			public void onAnimationStart(Animation animation) {
+				if(mDelayLabel != null) {
+					mDelayLabel.setVisibility(View.VISIBLE);
+				}
+			}
+			@Override
+			public void onAnimationEnd(Animation animation) { }
+			@Override
+			public void onAnimationRepeat(Animation animation) { }
+		};
+		mHideDelayLabel = new AnimationListener() {
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				if(mDelayLabel != null) {
+					mDelayLabel.setVisibility(View.INVISIBLE);
+				}
+			}
+			@Override
+			public void onAnimationStart(Animation animation) { }
+			@Override
+			public void onAnimationRepeat(Animation animation) { }
+		};
 	}
 
 	/* ===========================================================
@@ -156,27 +185,7 @@ public class TimersMenu implements MenuInterface,
 		mTimer.removeCallbacks(mTask);
 
 		// == Load up all the member variables ==
-		
-		// Grab the label
-		mDelayLabel = (TextView) mParentActivity.findViewById(R.id.labelDelay);
-		
-		// Grab the buttons
-		mLeftButton = this.getButton(R.id.buttonLeftTime);
-		mRightButton = this.getButton(R.id.buttonRightTime);
-		mPauseButton = this.getButton(R.id.buttonPause);
-				
-		// Get the ringtone
-		mRingtone = null;
-		if(Global.OPTIONS.alarmUri != null) {
-			mRingtone = RingtoneManager.getRingtone(mParentActivity,
-					Global.OPTIONS.alarmUri);
-		}
-		
-		// Get animations
-		mShowAnimation = AnimationUtils.loadAnimation(mParentActivity,
-				R.anim.show_delay_label);
-		mHideAnimation = AnimationUtils.loadAnimation(mParentActivity,
-				R.anim.hide_delay_label);
+		this.setupMemberVariables();
 		
 		// == Setup the member variables ==
 		
@@ -194,6 +203,10 @@ public class TimersMenu implements MenuInterface,
 		mStartMenu.setupMenu();
 		mPauseMenu.setupMenu();
 		mTimesUpMenu.setupMenu();
+		
+		// Update the animations
+		mShowAnimation.setAnimationListener(mShowDelayLabel);
+		mHideAnimation.setAnimationListener(mHideDelayLabel);
 		
 		// == Determine the game state to jump to ==
 		
@@ -293,6 +306,13 @@ public class TimersMenu implements MenuInterface,
 		// Show the pause menu
 		mPauseMenu.showMenu();
 		
+		// Hide the delay label if at zero
+		if(Global.GAME_STATE.delayTime() == null) {
+			mDelayLabel.setVisibility(View.INVISIBLE);
+		} else {
+			mDelayLabel.setVisibility(View.VISIBLE);
+		}
+		
 		// Do whatever else is necessary
 		this.changeConditionSetup();
 	}
@@ -372,6 +392,32 @@ public class TimersMenu implements MenuInterface,
 	/* ===========================================================
 	 * Private/Protected Methods
 	 * =========================================================== */	
+	/**
+	 * Grabs all the member variables from the parent activity
+	 */
+	private void setupMemberVariables() {
+		// Grab the label
+		mDelayLabel = (TextView) mParentActivity.findViewById(R.id.labelDelay);
+		
+		// Grab the buttons
+		mLeftButton = this.getButton(R.id.buttonLeftTime);
+		mRightButton = this.getButton(R.id.buttonRightTime);
+		mPauseButton = this.getButton(R.id.buttonPause);
+				
+		// Get the ringtone
+		mRingtone = null;
+		if(Global.OPTIONS.alarmUri != null) {
+			mRingtone = RingtoneManager.getRingtone(mParentActivity,
+					Global.OPTIONS.alarmUri);
+		}
+		
+		// Get animations
+		mShowAnimation = AnimationUtils.loadAnimation(mParentActivity,
+				R.anim.show_delay_label);
+		mHideAnimation = AnimationUtils.loadAnimation(mParentActivity,
+				R.anim.hide_delay_label);
+	}
+	
 	private void changeConditionSetup() {
 		// Update the buttons/labels text
 		this.updateButtonAndLabelText();
@@ -390,12 +436,13 @@ public class TimersMenu implements MenuInterface,
 		final String delayText = Global.GAME_STATE.delayTime();
 		mDelayLabel.setVisibility(View.VISIBLE);
 		
-		if((delayText == null) && (mDelayLabel.getTop() >= 0)) {
+		if((delayText == null) &&
+				(mDelayLabel.getVisibility() == View.VISIBLE)) {
 			// If no text is provided, set it invisible
 			mDelayLabel.startAnimation(mHideAnimation);
 		} else if(delayText != null) {
 			// If text IS provided, make the label visible
-			if(mDelayLabel.getTop() < 0) {
+			if(mDelayLabel.getVisibility() == View.INVISIBLE) {
 				mDelayLabel.startAnimation(mShowAnimation);
 			}
 			mDelayLabel.setText(delayText);
