@@ -26,7 +26,7 @@ android:layout_width="fill_parent" android:layout_height="fill_parent">
 	<!-- Displaying Settings Button -->
     <Button android:id="@+id/buttonSettings" android:text="@string/optionsButtonText"
     android:layout_width="wrap_content" android:layout_height="wrap_content"
-    android:typeface="monospace" android:textStyle="normal" android:textSize="40px"
+    android:typeface="monospace" android:textStyle="bold" android:textSize="40px"
     android:layout_centerHorizontal="true" android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

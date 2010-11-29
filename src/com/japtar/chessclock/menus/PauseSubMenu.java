@@ -20,6 +20,8 @@ class PauseSubMenu extends SubMenu {
 	 * =========================================================== */
 	
 	// == Buttons ==
+	/** The Options button */
+	private Button mOptionsButton = null;
 	/** The resume button */
 	private Button mResumeButton = null;
 	/** The new game button */
@@ -52,6 +54,7 @@ class PauseSubMenu extends SubMenu {
 		// == Load up all the member variables ==
 		
 		// Grab the buttons
+		mOptionsButton = mParentMenu.getButton(v, R.id.buttonSettings);
 		mResumeButton = mParentMenu.getButton(v, R.id.buttonResume);
 		mNewGameButton = mParentMenu.getButton(v, R.id.buttonNewGame);
 		
@@ -61,8 +64,9 @@ class PauseSubMenu extends SubMenu {
 		// == Setup the member variables ==
 
 		// Update the text size on everything
+		mOptionsButton.setTextSize(MainActivity.msTextSize * 0.25f);
 		mResumeButton.setTextSize(MainActivity.msTextSize * 0.5f);
-		mNewGameButton.setTextSize(MainActivity.msTextSize * 0.5f);
+		mNewGameButton.setTextSize(MainActivity.msTextSize * 0.25f);
 		mPauseLabel.setTextSize(MainActivity.msTextSize);
 	}
 	
@@ -76,6 +80,9 @@ class PauseSubMenu extends SubMenu {
 				
 				// Resume the timer
 				mParentMenu.resume();
+			}  else if(v.equals(mOptionsButton)) {
+				// Reveal the options menu
+				mParentActivity.displayOptionsMenu();
 			} else if(v.equals(mNewGameButton)) {
 				// Hide this menu
 				this.hideMenu();

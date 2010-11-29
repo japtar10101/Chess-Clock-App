@@ -38,7 +38,7 @@ xmlns:myapp="http://schemas.android.com/apk/res/com.japtar.ChessClockApp">
 	<!-- Displaying Pause Button -->
     <Button android:id="@+id/buttonPause" android:text="@string/pauseButtonText"
     android:layout_width="wrap_content" android:layout_height="wrap_content"
-    android:typeface="monospace" android:textSize="40px" android:textStyle="normal"
+    android:typeface="monospace" android:textSize="40px" android:textStyle="bold"
     android:layout_centerHorizontal="true" android:layout_alignParentBottom="true" />
     
     <!-- Declare an external layout -->

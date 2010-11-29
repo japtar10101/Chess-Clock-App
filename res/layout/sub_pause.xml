@@ -20,18 +20,24 @@ android:layout_width="fill_parent" android:layout_height="fill_parent">
 	android:layout_width="fill_parent" android:layout_height="wrap_content"
 	android:layout_alignParentBottom="true" android:layout_alignParentLeft="true">
 	
-		<!-- Displaying Resume Button -->
-	    <Button android:id="@+id/buttonResume" android:text="@string/resumeButtonText"
-	    android:layout_width="fill_parent" android:layout_height="wrap_content"
-	    android:typeface="monospace" android:textStyle="bold" android:textSize="40px"
-	    android:layout_weight="1"/>
+        <!--  Displaying Settings Button -->
+        <Button android:id="@+id/buttonSettings" android:text="@string/optionsButtonText"
+        android:layout_width="fill_parent" android:layout_height="wrap_content"
+        android:typeface="monospace" android:textStyle="normal" android:textSize="20px"
+        android:layout_weight="1" />
 
+	    <!-- Displaying Resume Button -->
+	    <Button android:id="@+id/buttonResume" android:text="@string/resumeButtonText"
+	    android:layout_width="wrap_content" android:layout_height="wrap_content"
+	    android:typeface="monospace" android:textStyle="bold" android:textSize="40px"
+	    android:layout_weight="0" />
+    
 		<!-- Displaying New Game Button -->
 	    <Button android:id="@+id/buttonNewGame" android:text="@string/newGameButtonText"
 	    android:layout_width="fill_parent" android:layout_height="wrap_content"
-	    android:typeface="monospace" android:textStyle="normal" android:textSize="40px"
+	    android:typeface="monospace" android:textStyle="normal" android:textSize="20px"
 	    android:layout_weight="1" />
 	
 	</LinearLayout>
-		
+	
 </RelativeLayout>
