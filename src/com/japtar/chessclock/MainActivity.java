@@ -161,7 +161,6 @@ public class MainActivity extends Activity {
 		final TextView testTextWidth = new TextView(this);
 		testTextWidth.setHeight(Global.DISPLAY.heightPixels);
 		testTextWidth.setWidth(maxWidth);
-		testTextWidth.setText("00:00");
 		testTextWidth.setTextSize(msTextSize);
 		testTextWidth.setTypeface(Typeface.MONOSPACE, Typeface.BOLD);
 		this.setContentView(testTextWidth);
