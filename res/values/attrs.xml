@@ -7,4 +7,9 @@
 		<attr name="keywords" format="string" />
 		<attr name="refreshInterval" format="integer" />
 	</declare-styleable>
+	
+	<declare-styleable name="OutlinedTextView">
+        <attr name="outlineColor" format="color" />
+        <attr name="outlineWidth" format="float" />
+    </declare-styleable>
 </resources>
