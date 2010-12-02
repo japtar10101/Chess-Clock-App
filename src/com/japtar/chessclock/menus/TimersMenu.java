@@ -15,12 +15,14 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.japtar.chessclock.Global;
 import com.japtar.chessclock.MainActivity;
 import com.japtar.chessclock.R;
 import com.japtar.chessclock.enums.TimerCondition;
+import com.japtar.chessclock.gui.OutlinedTextView;
 
 /**
  * Menu for Timer
@@ -50,15 +52,19 @@ public class TimersMenu implements MenuInterface,
 	
 	// == Buttons ==
 	/** Left player's button */
-	private Button mLeftButton = null;
+	private ImageButton mLeftButton = null;
 	/** Right player's button */
-	private Button mRightButton = null;
+	private ImageButton mRightButton = null;
 	/** Pause button */
 	private Button mPauseButton = null;
 		
 	// == Labels ==
 	/** Label indicating delay */
 	private TextView mDelayLabel = null;
+	/** Left player's label */
+	private OutlinedTextView mLeftLabel = null;
+	/** Right player's label */
+	private OutlinedTextView mRightLabel = null;
 	
 	// == Animations ==
 	/** Shows the delay label */
@@ -194,8 +200,8 @@ public class TimersMenu implements MenuInterface,
 		mRightButton.setHapticFeedbackEnabled(Global.OPTIONS.enableVibrate);
 		
 		// Update the text size on everything
-		mLeftButton.setTextSize(MainActivity.msTextSize);
-		mRightButton.setTextSize(MainActivity.msTextSize);
+		mLeftLabel.setTextSize(MainActivity.msTextSize);
+		mRightLabel.setTextSize(MainActivity.msTextSize);
 		mPauseButton.setTextSize(MainActivity.msTextSize * 0.5f);
 		mDelayLabel.setTextSize(MainActivity.msTextSize * 0.7f);
 		
@@ -256,8 +262,8 @@ public class TimersMenu implements MenuInterface,
 	 */
 	void updateButtonAndLabelText() {
 		// Update button texts
-		mLeftButton.setText(Global.GAME_STATE.leftPlayerTime());
-		mRightButton.setText(Global.GAME_STATE.rightPlayerTime());
+		mLeftLabel.setText(Global.GAME_STATE.leftPlayerTime());
+		mRightLabel.setText(Global.GAME_STATE.rightPlayerTime());
 		
 		// Update the delay label's text or visibility
 		switch(Global.GAME_STATE.timerCondition) {
@@ -402,10 +408,14 @@ public class TimersMenu implements MenuInterface,
 	private void setupMemberVariables() {
 		// Grab the label
 		mDelayLabel = (TextView) mParentActivity.findViewById(R.id.labelDelay);
+		mLeftLabel = (OutlinedTextView)
+			mParentActivity.findViewById(R.id.labelLeftTime);
+		mRightLabel = (OutlinedTextView)
+			mParentActivity.findViewById(R.id.labelRightTime);
 		
 		// Grab the buttons
-		mLeftButton = this.getButton(R.id.buttonLeftTime);
-		mRightButton = this.getButton(R.id.buttonRightTime);
+		mLeftButton = this.getImageButton(R.id.buttonLeftTime);
+		mRightButton = this.getImageButton(R.id.buttonRightTime);
 		mPauseButton = this.getButton(R.id.buttonPause);
 				
 		// Get the ringtone
@@ -452,6 +462,20 @@ public class TimersMenu implements MenuInterface,
 		
 		// Update the text
 		mDelayLabel.setText(delayText);
+	}
+	
+	private ImageButton getImageButton(final int buttonId) {
+		// Return value
+		ImageButton toReturn = null;
+		
+		// Find a view based on ID
+		final View foundView = mParentActivity.findViewById(buttonId);
+		if(foundView instanceof ImageButton) {
+			toReturn = (ImageButton) foundView;
+			toReturn.setOnClickListener(this);
+			toReturn.setOnTouchListener(this);
+		}
+		return toReturn;
 	}
 	
 	private Button getButton(final int buttonId) {

@@ -10,6 +10,5 @@
 	
 	<declare-styleable name="OutlinedTextView">
         <attr name="outlineColor" format="color" />
-        <attr name="outlineWidth" format="float" />
     </declare-styleable>
 </resources>

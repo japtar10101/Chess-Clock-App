@@ -8,8 +8,8 @@ android:layout_width="fill_parent" android:layout_height="fill_parent">
     android:layout_width="wrap_content" android:layout_height="wrap_content"
     android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
     android:typeface="monospace" android:textStyle="bold" />
-	
-		<!-- Displaying Game Buttons -->
+    
+	<!-- Displaying Game Buttons -->
 	<LinearLayout 
 	android:layout_width="fill_parent" android:layout_height="wrap_content"
 	android:layout_alignParentBottom="true" android:layout_alignParentLeft="true">

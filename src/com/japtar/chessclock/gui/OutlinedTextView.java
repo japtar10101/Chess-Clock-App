@@ -19,12 +19,16 @@ import com.japtar.chessclock.R;
  */
 public class OutlinedTextView extends TextView {
 	/* ===========================================================
+	 * Constants
+	 * =========================================================== */
+	private static final float OUTLINE_PROPORTION = 0.1f;
+	
+	/* ===========================================================
 	 * Members
 	 * =========================================================== */
 	private final Paint mFillPaint = new Paint();
 	private final Paint mStrokePaint = new Paint();
 	private int mOutlineColor = Color.TRANSPARENT;
-	private float mOutlineWidth = 0;
 	
 	/* ===========================================================
 	 * Constructors
@@ -44,7 +48,8 @@ public class OutlinedTextView extends TextView {
 		this.setupAttributes(context, attrs);
 	}
 	
-	/* ===========================================================
+	/* ===========================
+	    chessclock:outlineColor="#ff0================================
 	 * Overrides
 	 * =========================================================== */
 	@Override
@@ -54,16 +59,19 @@ public class OutlinedTextView extends TextView {
         final float textSize = super.getTextSize();
         final float originX = (super.getLeft() + super.getRight()) / 2.0f;
         final float originY = (super.getTop() + super.getBottom()) / 2.0f;
-        
+        final Typeface typeface = super.getTypeface();
+
         // draw the stroke
         mStrokePaint.setColor(mOutlineColor);
         mStrokePaint.setTextSize(textSize);
-        mStrokePaint.setStrokeWidth(mOutlineWidth);
+        mStrokePaint.setStrokeWidth(textSize * OUTLINE_PROPORTION);
+        mStrokePaint.setTypeface(typeface);
 		canvas.drawText(text.toString(), originX, originY, mStrokePaint);
 		
         // draw the fill
         mFillPaint.setColor(super.getTextColors().getDefaultColor());
         mFillPaint.setTextSize(textSize);
+        mFillPaint.setTypeface(typeface);
 		canvas.drawText(text.toString(), originX, originY, mFillPaint);
     }
 	
@@ -76,12 +84,6 @@ public class OutlinedTextView extends TextView {
 	public int getOutlineColor() {
 		return mOutlineColor;
 	}
-	/**
-	 * @return {@link mOutlineWidth}
-	 */
-	public float getOutlineWidth() {
-		return mOutlineWidth;
-	}
 	
 	/* ===========================================================
 	 * Setters
@@ -91,15 +93,7 @@ public class OutlinedTextView extends TextView {
 	 */
 	public void setOutlineColor(int outlineColor) {
 		mOutlineColor = outlineColor;
-		this.invalidate();
-	}
-	/**
-	 * @param outlineWidth sets {@link mOutlineWidth}
-	 */
-	public void setOutlineWidth(float outlineWidth) {
-		mOutlineWidth = outlineWidth;
-		this.requestLayout();
-		this.invalidate();
+		super.invalidate();
 	}
 	
 	/* ===========================================================
@@ -112,16 +106,12 @@ public class OutlinedTextView extends TextView {
 		mStrokePaint.setStyle(Paint.Style.STROKE);
         mFillPaint.setTextAlign(Paint.Align.CENTER);
         mStrokePaint.setTextAlign(Paint.Align.CENTER);
-        mFillPaint.setTypeface(Typeface.DEFAULT_BOLD);
-        mStrokePaint.setTypeface(Typeface.DEFAULT_BOLD);
 	}
 	private final void setupAttributes(Context context, AttributeSet attrs) {
 		final TypedArray array = context.obtainStyledAttributes(attrs,
                 R.styleable.OutlinedTextView);
         mOutlineColor = array.getColor(
         		R.styleable.OutlinedTextView_outlineColor, 0x00000000);
-        mOutlineWidth = array.getFloat(
-        		R.styleable.OutlinedTextView_outlineWidth, 0);
         array.recycle(); 
 	}
 }
