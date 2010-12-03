@@ -11,6 +11,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewParent;
 import android.widget.TextView;
@@ -73,7 +74,7 @@ public class OutlinedTextView extends TextView {
         
         // draw everything
 		canvas.drawText(super.getText().toString(),
-				mTextBounds.left, mTextBounds.bottom,
+				mTextBounds.centerX(), mTextBounds.centerY(),
 				mStrokePaint);
 		super.onDraw(canvas);
     }
@@ -123,7 +124,7 @@ public class OutlinedTextView extends TextView {
 		ViewParent parent = super.getParent();
 		
 		// Grab the bounds of each 
-		while((parent != null) && (child != null)) {
+		while((parent != null) && (child != null) && (parent != child)) {
 			// Grab the coordinates into a temporary rectangle
 			parent.getChildVisibleRect(child, mTempBounds, ORIGIN);
 			
@@ -140,7 +141,10 @@ public class OutlinedTextView extends TextView {
 			}
 			
 			// Get the next parent in the hierarchy
-			parent = super.getParent();
+			parent = parent.getParent();
 		}
+		
+		// Force this text label to be centered
+		super.setGravity(Gravity.CENTER_HORIZONTAL);
 	}
 }
