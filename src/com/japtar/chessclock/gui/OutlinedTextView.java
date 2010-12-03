@@ -11,6 +11,8 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.ViewParent;
 import android.widget.TextView;
 
 import com.japtar.chessclock.R;
@@ -27,11 +29,9 @@ public class OutlinedTextView extends TextView {
 	/* ===========================================================
 	 * Members
 	 * =========================================================== */
-	private final Paint mFillPaint = new Paint();
 	private final Paint mStrokePaint = new Paint();
-	private final Rect mTextbounds = new Rect();
-	public float x;
-	public float y;
+	private final Rect mTextBounds = new Rect();
+	private final Rect mTempBounds = new Rect();
 	private int mOutlineColor = Color.TRANSPARENT;
 	
 	/* ===========================================================
@@ -58,28 +58,25 @@ public class OutlinedTextView extends TextView {
 	@Override
     protected void onDraw(Canvas canvas) {
 		// Get the text to print
-        final String text = super.getText().toString();
         final float textSize = super.getTextSize();
         final Typeface typeface = super.getTypeface();
         
         // setup stroke
         mStrokePaint.setColor(mOutlineColor);
-        mStrokePaint.setTextSize(textSize);
         mStrokePaint.setStrokeWidth(textSize * OUTLINE_PROPORTION);
-        mStrokePaint.setTypeface(typeface);
+        mStrokePaint.setFlags(super.getPaintFlags());
+        mStrokePaint.setTextSize(super.getTextSize());
+        mStrokePaint.setTypeface(super.getTypeface());
 		
-        // setup fill
-        mFillPaint.setColor(super.getTextColors().getDefaultColor());
-        mFillPaint.setTextSize(textSize);
-        mFillPaint.setTypeface(typeface);
-        
         // Figure out the drawing coordinates
-        mFillPaint.getTextBounds(text, 0, text.length(), mTextbounds);
-        final float originY = y - mTextbounds.height() * 0.5f;
+        this.updateBounds();
         
         // draw everything
-		canvas.drawText(text.toString(), x, originY, mStrokePaint);
-		canvas.drawText(text.toString(), x, originY, mFillPaint);
+		canvas.drawText(super.getText().toString(),
+				mTextBounds.exactCenterX(), mTextBounds.exactCenterY(),
+				mStrokePaint);
+//		canvas.drawText(text.toString(), originX, originY, mFillPaint);
+		super.onDraw(canvas);
     }
 	
 	/* ===========================================================
@@ -107,11 +104,8 @@ public class OutlinedTextView extends TextView {
 	 * Private/Protected Methods
 	 * =========================================================== */
 	private final void setupPaint() {
-		mFillPaint.setAntiAlias(true);
 		mStrokePaint.setAntiAlias(true);
-		mFillPaint.setStyle(Paint.Style.FILL);
 		mStrokePaint.setStyle(Paint.Style.STROKE);
-        mFillPaint.setTextAlign(Paint.Align.CENTER);
         mStrokePaint.setTextAlign(Paint.Align.CENTER);
 	}
 	private final void setupAttributes(Context context, AttributeSet attrs) {
@@ -120,5 +114,12 @@ public class OutlinedTextView extends TextView {
         mOutlineColor = array.getColor(
         		R.styleable.OutlinedTextView_outlineColor, 0x00000000);
         array.recycle(); 
+	}
+	private final void updateBounds() {
+		final View root = super.getRootView();
+		ViewParent tempParent = super.getParent();
+		while(tempParent != null) {
+			
+		}
 	}
 }
