@@ -8,8 +8,8 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewParent;
@@ -25,6 +25,7 @@ public class OutlinedTextView extends TextView {
 	 * Constants
 	 * =========================================================== */
 	private static final float OUTLINE_PROPORTION = 0.1f;
+	private static final Point ORIGIN = new Point();
 	
 	/* ===========================================================
 	 * Members
@@ -59,23 +60,21 @@ public class OutlinedTextView extends TextView {
     protected void onDraw(Canvas canvas) {
 		// Get the text to print
         final float textSize = super.getTextSize();
-        final Typeface typeface = super.getTypeface();
         
         // setup stroke
         mStrokePaint.setColor(mOutlineColor);
         mStrokePaint.setStrokeWidth(textSize * OUTLINE_PROPORTION);
+        mStrokePaint.setTextSize(textSize);
         mStrokePaint.setFlags(super.getPaintFlags());
-        mStrokePaint.setTextSize(super.getTextSize());
         mStrokePaint.setTypeface(super.getTypeface());
-		
+        
         // Figure out the drawing coordinates
         this.updateBounds();
         
         // draw everything
 		canvas.drawText(super.getText().toString(),
-				mTextBounds.exactCenterX(), mTextBounds.exactCenterY(),
+				mTextBounds.left, mTextBounds.bottom,
 				mStrokePaint);
-//		canvas.drawText(text.toString(), originX, originY, mFillPaint);
 		super.onDraw(canvas);
     }
 	
@@ -116,10 +115,32 @@ public class OutlinedTextView extends TextView {
         array.recycle(); 
 	}
 	private final void updateBounds() {
-		final View root = super.getRootView();
-		ViewParent tempParent = super.getParent();
-		while(tempParent != null) {
+		// Reset Text Bounds to default positions
+		mTextBounds.set(0, 0, 0, 0);
+		
+		// Grab the current child and parent
+		View child = this;
+		ViewParent parent = super.getParent();
+		
+		// Grab the bounds of each 
+		while((parent != null) && (child != null)) {
+			// Grab the coordinates into a temporary rectangle
+			parent.getChildVisibleRect(child, mTempBounds, ORIGIN);
 			
+			// Increment the boundary coordinates
+			mTextBounds.left += mTempBounds.left;
+			mTextBounds.top += mTempBounds.top;
+			mTextBounds.right += mTempBounds.right;
+			mTextBounds.bottom += mTempBounds.bottom;
+			
+			// Attempt to convert the parent into a View
+			child = null;
+			if(parent instanceof View) {
+				child = (View) parent;
+			}
+			
+			// Get the next parent in the hierarchy
+			parent = super.getParent();
 		}
 	}
 }
