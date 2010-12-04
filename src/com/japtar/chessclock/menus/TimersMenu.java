@@ -4,6 +4,7 @@
 package com.japtar.chessclock.menus;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -360,6 +361,18 @@ public class TimersMenu implements MenuInterface,
 	 * @param buttonPressed the button that was pressed
 	 */
 	void updatePlayersTurn(final boolean leftPlayersTurn) {
+		if(Global.GAME_STATE.timerCondition == TimerCondition.STARTING) {
+			// Update the color of the game buttons
+			Global.GAME_STATE.leftIsWhite = leftPlayersTurn;
+			if(leftPlayersTurn) {
+				mLeftButton.setImageResource(R.drawable.white_button);
+				mRightButton.setImageResource(R.drawable.black_button);
+			} else {
+				mLeftButton.setImageResource(R.drawable.black_button);
+				mRightButton.setImageResource(R.drawable.white_button);
+			}
+		}
+		
 		// If clicked by right/left player button,
 		// update the current player
 		Global.GAME_STATE.leftPlayersTurn = leftPlayersTurn;
@@ -440,6 +453,18 @@ public class TimersMenu implements MenuInterface,
 		mLeftButton.setEnabled(false);
 		mRightButton.setEnabled(false);
 		mPauseButton.setVisibility(View.INVISIBLE);
+		
+		// Figure out which color to set each player
+		if(Global.GAME_STATE.timerCondition == TimerCondition.STARTING) {
+			mLeftButton.setImageResource(Color.GRAY);
+			mRightButton.setImageResource(Color.GRAY);
+		} else if(Global.GAME_STATE.leftIsWhite) {
+			mLeftButton.setImageResource(R.drawable.white_button);
+			mRightButton.setImageResource(R.drawable.black_button);
+		} else {
+			mLeftButton.setImageResource(R.drawable.black_button);
+			mRightButton.setImageResource(R.drawable.white_button);
+		}
 	}
 	
 	/**

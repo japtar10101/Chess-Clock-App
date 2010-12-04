@@ -3,11 +3,12 @@
 android:layout_width="fill_parent" android:layout_height="fill_parent">
 
 	<!-- Displaying Paused Label -->
-    <TextView android:id="@+id/labelPause"
+    <TextView android:id="@+id/labelPause" android:background="#a0000000"
     android:text="@string/pauseLabelText" android:textSize="80px"
-    android:layout_width="wrap_content" android:layout_height="wrap_content"
+    android:layout_width="fill_parent" android:layout_height="wrap_content"
     android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
-    android:typeface="monospace" android:textStyle="bold" />
+    android:typeface="monospace" android:textStyle="bold"
+    android:gravity="center_horizontal" />
     
 	<!-- Displaying Game Buttons -->
 	<LinearLayout 

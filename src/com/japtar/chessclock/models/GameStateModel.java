@@ -21,6 +21,8 @@ public class GameStateModel implements SaveStateModel {
 	// == Stored key values ==
 	/** The saved key value for who's turn it is */
 	public static final String KEY_LEFT_PLAYERS_TURN = "leftPlayersTurn";
+	/** The saved key value for whether the left player is white or not */
+	public static final String KEY_LEFT_IS_WHITE = "leftIsWhite";
 	/** The saved key value for the timer condition */
 	public static final String KEY_TIMER_CONDITION = "timerCondition";
 	
@@ -42,6 +44,8 @@ public class GameStateModel implements SaveStateModel {
 	// == Conditionals ==
 	/** Flag indicating whose turn it is */
 	public boolean leftPlayersTurn = false;
+	/** Flag indicating whose turn it is */
+	public boolean leftIsWhite = false;
 	/** The current timer's condition */
 	public byte timerCondition = TimerCondition.STARTING;
 	
@@ -80,6 +84,7 @@ public class GameStateModel implements SaveStateModel {
 		
 		// Who's turn it is
 		saveEditor.putBoolean(KEY_LEFT_PLAYERS_TURN, leftPlayersTurn);
+		saveEditor.putBoolean(KEY_LEFT_IS_WHITE, leftIsWhite);
 		
 		// The value of timerCondition
 		saveEditor.putInt(KEY_TIMER_CONDITION, timerCondition);
@@ -115,6 +120,7 @@ public class GameStateModel implements SaveStateModel {
 		
 		// Who's turn it is...
 		leftPlayersTurn = savedState.getBoolean(KEY_LEFT_PLAYERS_TURN, true);
+		leftIsWhite = savedState.getBoolean(KEY_LEFT_IS_WHITE, true);
 		
 		// Lastly, the game's state
 		// We store the timer condition as an ordinal, so recall as such

@@ -12,11 +12,13 @@ xmlns:chessclock="http://schemas.android.com/apk/res/com.japtar.chessclock">
 	
 		<ImageButton android:id="@+id/buttonLeftTime"
 		android:layout_width="wrap_content" android:layout_height="fill_parent"
-		android:layout_weight="1" />
+		android:layout_weight="1" android:scaleType="fitXY"
+		android:src="#ff888888" />
 		
 		<ImageButton android:id="@+id/buttonRightTime"
 		android:layout_width="wrap_content" android:layout_height="fill_parent"
-		android:layout_weight="1" />
+		android:layout_weight="1" android:scaleType="fitXY"
+		android:src="#ff888888" />
 	
 	</LinearLayout>
 	
@@ -58,7 +60,7 @@ xmlns:chessclock="http://schemas.android.com/apk/res/com.japtar.chessclock">
     <!-- Declare an external layout -->
 	<RelativeLayout android:id="@+id/layoutOverlap"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:visibility="invisible" android:background="#60000000"
+	android:visibility="invisible" android:background="#80000000"
     android:layout_alignParentTop="true" android:layout_alignParentLeft="true" />
     
 </RelativeLayout>

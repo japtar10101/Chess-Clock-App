@@ -8,6 +8,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ public class OutlinedTextView extends TextView {
 	 * Members
 	 * =========================================================== */
 	private final Paint mStrokePaint = new Paint();
+	private final Rect mTextBounds = new Rect();
 	private int mOutlineColor = Color.TRANSPARENT;
 	
 	/* ===========================================================
@@ -64,11 +66,11 @@ public class OutlinedTextView extends TextView {
         mStrokePaint.setTypeface(super.getTypeface());
         
         // Figure out the drawing coordinates
-        //mStrokePaint.getTextBounds(text, 0, text.length(), mTextBounds);
+        super.getPaint().getTextBounds(text, 0, text.length(), mTextBounds);
         
         // draw everything
 		canvas.drawText(text,
-				super.getWidth() * 0.5f, super.getBottom() * 0.5f,
+				super.getWidth() * 0.5f, (super.getHeight() + mTextBounds.height()) * 0.5f,
 				mStrokePaint);
 		super.onDraw(canvas);
     }
