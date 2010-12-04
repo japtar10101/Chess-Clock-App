@@ -4,7 +4,6 @@
 package com.japtar.chessclock.menus;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -456,8 +455,8 @@ public class TimersMenu implements MenuInterface,
 		
 		// Figure out which color to set each player
 		if(Global.GAME_STATE.timerCondition == TimerCondition.STARTING) {
-			mLeftButton.setImageResource(Color.GRAY);
-			mRightButton.setImageResource(Color.GRAY);
+			mLeftButton.setImageResource(R.drawable.neutral_button);
+			mRightButton.setImageResource(R.drawable.neutral_button);
 		} else if(Global.GAME_STATE.leftIsWhite) {
 			mLeftButton.setImageResource(R.drawable.white_button);
 			mRightButton.setImageResource(R.drawable.black_button);
