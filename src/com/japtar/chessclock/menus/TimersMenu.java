@@ -379,7 +379,7 @@ public class TimersMenu implements MenuInterface,
 		if(Global.GAME_STATE.timerCondition == TimerCondition.STARTING) {
 			// Update the color of the game buttons
 			Global.GAME_STATE.leftIsWhite = !leftPlayersTurn;
-			if(leftPlayersTurn) {
+			if(Global.GAME_STATE.leftIsWhite) {
 				mLeftButton.setImageResource(R.drawable.left_white_button);
 				mRightButton.setImageResource(R.drawable.right_black_button);
 			} else {
