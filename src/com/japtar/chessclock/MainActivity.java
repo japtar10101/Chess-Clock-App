@@ -61,9 +61,6 @@ public class MainActivity extends Activity {
         
         // Create sound pool
         this.setupSoundEffects();
-        
-        // Start the main menu
-        mMainMenu.setupMenu();
     }
 
 	/**

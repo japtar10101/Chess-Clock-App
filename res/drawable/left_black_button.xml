@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="#ff888888"
+    <item android:drawable="@drawable/black_knight_active"
     android:state_enabled="true" />
-    <item android:color="#ffaaaaaa"
+    <item android:drawable="@drawable/black_knight_inactive"
     android:state_enabled="false" />
 </selector>

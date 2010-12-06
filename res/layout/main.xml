@@ -12,13 +12,11 @@ xmlns:chessclock="http://schemas.android.com/apk/res/com.japtar.chessclock">
 	
 		<ImageButton android:id="@+id/buttonLeftTime"
 		android:layout_width="wrap_content" android:layout_height="fill_parent"
-		android:layout_weight="1" android:scaleType="fitXY"
-		android:src="@drawable/neutral_button" />
+		android:layout_weight="1" />
 		
 		<ImageButton android:id="@+id/buttonRightTime"
 		android:layout_width="wrap_content" android:layout_height="fill_parent"
-		android:layout_weight="1" android:scaleType="fitXY"
-		android:src="@drawable/neutral_button" />
+		android:layout_weight="1" />
 	
 	</LinearLayout>
 	

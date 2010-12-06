@@ -220,9 +220,20 @@ public class TimersMenu implements MenuInterface,
 		switch(Global.GAME_STATE.timerCondition) {
 			case TimerCondition.TIMES_UP:
 			case TimerCondition.STARTING:
+				// Run the startup function
 				this.startup();
 				break;
 			default:
+				// Figure out which color to set each player
+				if(Global.GAME_STATE.leftIsWhite) {
+					mLeftButton.setImageResource(R.drawable.white_button);
+					mRightButton.setImageResource(R.drawable.black_button);
+				} else {
+					mLeftButton.setImageResource(R.drawable.black_button);
+					mRightButton.setImageResource(R.drawable.white_button);
+				}
+				
+				// Run the pause function
 				this.paused();
 				break;
 		}
@@ -278,6 +289,7 @@ public class TimersMenu implements MenuInterface,
 		final View foundView = v.findViewById(buttonId);
 		return this.convertToButton(foundView);
 	}
+	
 	/**
 	 * Indicate the game just started
 	 */
@@ -289,6 +301,10 @@ public class TimersMenu implements MenuInterface,
 
 		// Set the condition to time up
 		Global.GAME_STATE.timerCondition = TimerCondition.STARTING;
+		
+		// Make both buttons display a neutral piece
+		mLeftButton.setImageResource(R.drawable.neutral_button);
+		mRightButton.setImageResource(R.drawable.neutral_button);
 		
 		// Reset the time
 		Global.GAME_STATE.resetTime();
@@ -362,7 +378,7 @@ public class TimersMenu implements MenuInterface,
 	void updatePlayersTurn(final boolean leftPlayersTurn) {
 		if(Global.GAME_STATE.timerCondition == TimerCondition.STARTING) {
 			// Update the color of the game buttons
-			Global.GAME_STATE.leftIsWhite = leftPlayersTurn;
+			Global.GAME_STATE.leftIsWhite = !leftPlayersTurn;
 			if(leftPlayersTurn) {
 				mLeftButton.setImageResource(R.drawable.white_button);
 				mRightButton.setImageResource(R.drawable.black_button);
@@ -451,19 +467,7 @@ public class TimersMenu implements MenuInterface,
 		// Disable game buttons, hide pause
 		mLeftButton.setEnabled(false);
 		mRightButton.setEnabled(false);
-		mPauseButton.setVisibility(View.INVISIBLE);
-		
-		// Figure out which color to set each player
-		if(Global.GAME_STATE.timerCondition == TimerCondition.STARTING) {
-			mLeftButton.setImageResource(R.drawable.neutral_button);
-			mRightButton.setImageResource(R.drawable.neutral_button);
-		} else if(Global.GAME_STATE.leftIsWhite) {
-			mLeftButton.setImageResource(R.drawable.white_button);
-			mRightButton.setImageResource(R.drawable.black_button);
-		} else {
-			mLeftButton.setImageResource(R.drawable.black_button);
-			mRightButton.setImageResource(R.drawable.white_button);
-		}
+		mPauseButton.setVisibility(View.INVISIBLE);	
 	}
 	
 	/**
