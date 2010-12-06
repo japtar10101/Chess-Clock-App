@@ -226,11 +226,11 @@ public class TimersMenu implements MenuInterface,
 			default:
 				// Figure out which color to set each player
 				if(Global.GAME_STATE.leftIsWhite) {
-					mLeftButton.setImageResource(R.drawable.white_button);
-					mRightButton.setImageResource(R.drawable.black_button);
+					mLeftButton.setImageResource(R.drawable.left_white_button);
+					mRightButton.setImageResource(R.drawable.right_black_button);
 				} else {
-					mLeftButton.setImageResource(R.drawable.black_button);
-					mRightButton.setImageResource(R.drawable.white_button);
+					mLeftButton.setImageResource(R.drawable.left_black_button);
+					mRightButton.setImageResource(R.drawable.right_white_button);
 				}
 				
 				// Run the pause function
@@ -303,8 +303,8 @@ public class TimersMenu implements MenuInterface,
 		Global.GAME_STATE.timerCondition = TimerCondition.STARTING;
 		
 		// Make both buttons display a neutral piece
-		mLeftButton.setImageResource(R.drawable.neutral_button);
-		mRightButton.setImageResource(R.drawable.neutral_button);
+		mLeftButton.setImageResource(R.drawable.left_neutral_button);
+		mRightButton.setImageResource(R.drawable.right_neutral_button);
 		
 		// Reset the time
 		Global.GAME_STATE.resetTime();
@@ -380,11 +380,11 @@ public class TimersMenu implements MenuInterface,
 			// Update the color of the game buttons
 			Global.GAME_STATE.leftIsWhite = !leftPlayersTurn;
 			if(leftPlayersTurn) {
-				mLeftButton.setImageResource(R.drawable.white_button);
-				mRightButton.setImageResource(R.drawable.black_button);
+				mLeftButton.setImageResource(R.drawable.left_white_button);
+				mRightButton.setImageResource(R.drawable.right_black_button);
 			} else {
-				mLeftButton.setImageResource(R.drawable.black_button);
-				mRightButton.setImageResource(R.drawable.white_button);
+				mLeftButton.setImageResource(R.drawable.left_black_button);
+				mRightButton.setImageResource(R.drawable.right_white_button);
 			}
 		}
 		
