@@ -10,13 +10,15 @@ xmlns:chessclock="http://schemas.android.com/apk/res/com.japtar.chessclock">
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
 	android:layout_alignParentTop="true" android:layout_alignParentLeft="true">
 	
-		<ImageButton android:id="@+id/buttonLeftTime"
+		<com.japtar.chessclock.gui.ChessButton android:id="@+id/buttonLeftTime"
 		android:layout_width="wrap_content" android:layout_height="fill_parent"
-		android:layout_weight="1" android:scaleType="fitCenter" />
+		android:layout_weight="1" android:scaleType="fitCenter" 
+		chessclock:flipHorizontally="false" />
 		
-		<ImageButton android:id="@+id/buttonRightTime"
+		<com.japtar.chessclock.gui.ChessButton android:id="@+id/buttonRightTime"
 		android:layout_width="wrap_content" android:layout_height="fill_parent"
-		android:layout_weight="1" android:scaleType="fitCenter" />
+		android:layout_weight="1" android:scaleType="fitCenter"
+		chessclock:flipHorizontally="true" />
 	
 	</LinearLayout>
 	

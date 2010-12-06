@@ -29,7 +29,7 @@ public class OutlinedTextView extends TextView {
 	 * =========================================================== */
 	private final Paint mStrokePaint = new Paint();
 	private final Rect mTextBounds = new Rect();
-	private int mOutlineColor = Color.TRANSPARENT;
+	public int outlineColor = Color.TRANSPARENT;
 	
 	/* ===========================================================
 	 * Constructors
@@ -53,13 +53,13 @@ public class OutlinedTextView extends TextView {
 	 * Overrides
 	 * =========================================================== */
 	@Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(final Canvas canvas) {
 		// Get the text to print
         final float textSize = super.getTextSize();
         final String text = super.getText().toString();
         
         // setup stroke
-        mStrokePaint.setColor(mOutlineColor);
+        mStrokePaint.setColor(outlineColor);
         mStrokePaint.setStrokeWidth(textSize * OUTLINE_PROPORTION);
         mStrokePaint.setTextSize(textSize);
         mStrokePaint.setFlags(super.getPaintFlags());
@@ -86,7 +86,7 @@ public class OutlinedTextView extends TextView {
 	private final void setupAttributes(Context context, AttributeSet attrs) {
 		final TypedArray array = context.obtainStyledAttributes(attrs,
                 R.styleable.OutlinedTextView);
-        mOutlineColor = array.getColor(
+        outlineColor = array.getColor(
         		R.styleable.OutlinedTextView_outlineColor, 0x00000000);
         array.recycle(); 
 		

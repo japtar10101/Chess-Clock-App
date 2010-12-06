@@ -11,4 +11,8 @@
 	<declare-styleable name="OutlinedTextView">
         <attr name="outlineColor" format="color" />
     </declare-styleable>
+    
+    <declare-styleable name="ChessButton">
+        <attr name="flipHorizontally" format="boolean" />
+    </declare-styleable>
 </resources>

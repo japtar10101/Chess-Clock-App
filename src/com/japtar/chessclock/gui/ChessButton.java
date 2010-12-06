@@ -3,8 +3,11 @@
  */
 package com.japtar.chessclock.gui;
 
+import com.japtar.chessclock.R;
+
 import android.content.Context;
-import android.graphics.Paint;
+import android.content.res.TypedArray;
+import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -17,8 +20,8 @@ public class ChessButton extends ImageButton {
 	/* ===========================================================
 	 * Members
 	 * =========================================================== */
-	/** Used to draw text */
-	final Paint mStrokePaint = new Paint();
+	public boolean flipHorizontally;
+	private boolean mPastFlipValue = false;
 
 	/* ===========================================================
 	 * Constructors
@@ -26,48 +29,46 @@ public class ChessButton extends ImageButton {
 	/** @see Button#Button(Context) */
 	public ChessButton(final Context context) {
 		super(context);
+		flipHorizontally = mPastFlipValue;
 	}
 
 	/** @see Button#Button(Context, AttributeSet) */
 	public ChessButton(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
+		this.setupAttributes(context, attrs);
 	}
 	
 	/** @see Button#Button(Context, AttributeSet, int) */
 	public ChessButton(final Context context, final AttributeSet attrs,
 			final int defStyle) {
 		super(context, attrs, defStyle);
+		this.setupAttributes(context, attrs);
 	}
 	
 	/* ===========================================================
 	 * Overrides
 	 * =========================================================== */
-	/**
-	 * @see android.view.View#draw(android.graphics.Canvas)
-	 */
-	/*
 	@Override
-	public void draw(final Canvas canvas) {
-		// Draw the button as normal
-		super.draw(canvas);
-		
-		// Setup the stroke paint
-		final float textSize = this.getTextSize();
-		mStrokePaint.setARGB(255, 255, 255, 255);
-	    mStrokePaint.setTextSize(textSize);
-	    mStrokePaint.setStrokeWidth(2);
-	    //mStrokePaint.setTextAlign(Align.LEFT);
-	    mStrokePaint.setTextAlign(Align.CENTER);
-	    mStrokePaint.setTypeface(this.getTypeface());
-	    mStrokePaint.setStyle(Paint.Style.STROKE);
+    protected void onDraw(final Canvas canvas) {
+		// Check if we need to flip the button image
+		if(flipHorizontally) {
+			// If so, scale the canvas
+			canvas.scale(-1f, 1f,
+					super.getWidth() * 0.5f, super.getHeight() * 0.5f);
+		}
 
-	    // Draw the text!
-	    canvas.drawText(this.getText().toString(), 100, 100, mStrokePaint);
+	    // Draw the button!
+	    super.onDraw(canvas);
 	}
-	*/
 
 	/* ===========================================================
 	 * Private/Protected Methods
 	 * =========================================================== */
-
+	private final void setupAttributes(Context context, AttributeSet attrs) {
+		final TypedArray array = context.obtainStyledAttributes(attrs,
+                R.styleable.ChessButton);
+		flipHorizontally = array.getBoolean(
+        		R.styleable.ChessButton_flipHorizontally, mPastFlipValue);
+        array.recycle(); 
+	}
 }
