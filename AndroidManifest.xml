@@ -5,7 +5,7 @@
 <!-- For "features," even numbers are stable, odds are unstable -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 package="com.japtar.chessclock"
-android:versionName="1.4.0" android:versionCode="6">
+android:versionName="2.0.0" android:versionCode="7">
     <uses-sdk android:minSdkVersion="8" />
 
     <!--  Application's activities -->    
@@ -48,18 +48,10 @@ android:versionName="1.4.0" android:versionCode="6">
     </application>
     
     <!-- List of permissions -->
-    <!-- 
-    <permission android:name="android.permission.VIBRATE" />
-	<permission android:name="android.permission.WAKE_LOCK" />
-	<permission android:name="android.permission.INTERNET" />
-	 -->
-	
     <!-- One for Vibrator -->
 	<uses-permission android:name="android.permission.VIBRATE" />
-	
 	<!-- One for keeping the screen on -->
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
-	
 	<!-- One for accessing the internet (ads) -->
 	<uses-permission android:name="android.permission.INTERNET" />
 	

@@ -21,10 +21,14 @@ public class TimeModel {
 	public final static byte intToByte(final int integer) {
 		return (integer <= Byte.MAX_VALUE ? (byte) integer : Byte.MAX_VALUE);
 	}
+	public final static int totalSeconds(final TimeModel time) {
+		return (time.mMinutes * 60) + time.mSeconds;
+	}
 	
 	/* ===========================================================
 	 * Members
 	 * =========================================================== */
+	// TODO: change the minutes to ints, and seconds to shorts
 	/** Minutes */
 	private byte mMinutes;
 	/** Seconds */
@@ -166,12 +170,9 @@ public class TimeModel {
 		} else if(key == null) {
 			throw new InvalidParameterException("String is null");
 		}
-		
-		// Calculate the accumulative number of seconds 
-		final int valueToSave = (mMinutes * 60) + mSeconds;
 	
 		// Save the attributes to the bundle
-		saveEditor.putInt(key, valueToSave);
+		saveEditor.putInt(key, totalSeconds(this));
 	}
 	
 	/**

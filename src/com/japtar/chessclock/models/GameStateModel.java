@@ -19,6 +19,7 @@ public class GameStateModel implements SaveStateModel {
 	 * Constants
 	 * =========================================================== */
 	// == Stored key values ==
+	// == Conditionals ==
 	/** The saved key value for who's turn it is */
 	public static final String KEY_LEFT_PLAYERS_TURN = "leftPlayersTurn";
 	/** The saved key value for whether the left player is white or not */
@@ -26,14 +27,23 @@ public class GameStateModel implements SaveStateModel {
 	/** The saved key value for the timer condition */
 	public static final String KEY_TIMER_CONDITION = "timerCondition";
 	
+	// == Player's time ==
 	/** The saved key value for left player's time */
 	public static final String KEY_LEFT_PLAYER = "leftPlayersTime";
-	
-	/** The saved key value for left player's time */
+	/** The saved key value for right player's time */
 	public static final String KEY_RIGHT_PLAYER = "rightPlayersTime";
 	
+	// == Player's delay time ==
 	/** The saved key value for delay time */
-	public static final String KEY_DELAY_TIME = "gameDelayTime";
+	public static final String KEY_LEFT_DELAY_TIME = "gameDelayTime";
+	/** The saved key value for delay time */
+	public static final String KEY_RIGHT_DELAY_TIME = "rightPlayerDelayTime";
+	
+	// == Number of Player's moves ==
+	/** The saved key value for number of moves */
+	public static final String KEY_LEFT_NUM_MOVES = "leftNumMoves";
+	/** The saved key value for number of moves */
+	public static final String KEY_RIGHT_NUM_MOVES = "rightNumMoves";
 	
 	/* ===========================================================
 	 * Members
@@ -49,13 +59,23 @@ public class GameStateModel implements SaveStateModel {
 	/** The current timer's condition */
 	public byte timerCondition = TimerCondition.STARTING;
 	
-	// == Times ==
+	// == Player's time ==
 	/** Left player's time */
 	private final TimeModel mLeftPlayersTime = new TimeModel();
 	/** Right player's time */
 	private final TimeModel mRightPlayersTime = new TimeModel();
+	
+	// == Player's delay time ==
 	/** Time of delay */
-	private final TimeModel mDelayTime = new TimeModel();
+	private final TimeModel mLeftPlayerDelayTime = new TimeModel();
+	/** Time of delay */
+	private final TimeModel mRightPlayerDelayTime = new TimeModel();
+	
+	// == Player's moves ==
+	/** Number of moves the left player made */
+	public int numLeftPlayerMoves = 0;
+	/** Number of moves the right player made */
+	public int numRightPlayerMoves = 0;
 	
 	/* ===========================================================
 	 * Override Methods
@@ -80,7 +100,8 @@ public class GameStateModel implements SaveStateModel {
 		// First, save all the time variables
 		mLeftPlayersTime.saveTime(saveEditor, KEY_LEFT_PLAYER);
 		mRightPlayersTime.saveTime(saveEditor, KEY_RIGHT_PLAYER);
-		mDelayTime.saveTime(saveEditor, KEY_DELAY_TIME);
+		mLeftPlayerDelayTime.saveTime(saveEditor, KEY_LEFT_DELAY_TIME);
+		mRightPlayerDelayTime.saveTime(saveEditor, KEY_RIGHT_DELAY_TIME);
 		
 		// Who's turn it is
 		saveEditor.putBoolean(KEY_LEFT_PLAYERS_TURN, leftPlayersTurn);
@@ -88,6 +109,10 @@ public class GameStateModel implements SaveStateModel {
 		
 		// The value of timerCondition
 		saveEditor.putInt(KEY_TIMER_CONDITION, timerCondition);
+		
+		// Number of moves for each player
+		saveEditor.putInt(KEY_LEFT_NUM_MOVES, numLeftPlayerMoves);
+		saveEditor.putInt(KEY_RIGHT_NUM_MOVES, numRightPlayerMoves);
 		
 		// Write it in!
 		saveEditor.commit();
@@ -115,21 +140,27 @@ public class GameStateModel implements SaveStateModel {
 				OptionsModel.DEFAULT_TIME_LIMIT);
 		mRightPlayersTime.recallTime(savedState, KEY_RIGHT_PLAYER,
 				OptionsModel.DEFAULT_TIME_LIMIT);
-		mDelayTime.recallTime(savedState, KEY_DELAY_TIME,
+		mLeftPlayerDelayTime.recallTime(savedState, KEY_LEFT_DELAY_TIME,
 				OptionsModel.DEFAULT_DELAY_TIME);
+		
+		// For backward compatibility, if this value is not recalled,
+		// set it the same delay time as the left player
+		mRightPlayerDelayTime.recallTime(savedState, KEY_RIGHT_DELAY_TIME,
+				TimeModel.totalSeconds(mLeftPlayerDelayTime));
 		
 		// Who's turn it is...
 		leftPlayersTurn = savedState.getBoolean(KEY_LEFT_PLAYERS_TURN, true);
 		leftIsWhite = savedState.getBoolean(KEY_LEFT_IS_WHITE, true);
 		
+		// Number of moves for each player
+		numLeftPlayerMoves = savedState.getInt(KEY_LEFT_NUM_MOVES, 0);
+		numRightPlayerMoves = savedState.getInt(KEY_RIGHT_NUM_MOVES, 0);
+		
 		// Lastly, the game's state
-		// We store the timer condition as an ordinal, so recall as such
-		final byte ordinal = TimeModel.intToByte(
+		timerCondition = TimeModel.intToByte(
 				savedState.getInt(KEY_TIMER_CONDITION, 0));
-		if(ordinal >= TimerCondition.NUM_CONDITIONS) {
+		if(timerCondition >= TimerCondition.NUM_CONDITIONS) {
 			timerCondition = TimerCondition.STARTING;
-		} else {
-			timerCondition = ordinal;
 		}
 	}
 	
@@ -154,7 +185,7 @@ public class GameStateModel implements SaveStateModel {
 		for(int second = 0; second < numSeconds; ++second) {
 			
 			// First attempt to decrement the delay time
-			if(!mDelayTime.decrementASecond()) {
+			if(!mLeftPlayerDelayTime.decrementASecond()) {
 				
 				// If failed, try decrementing the player's time
 				if(!updateTime.decrementASecond()) {
@@ -173,8 +204,8 @@ public class GameStateModel implements SaveStateModel {
 	 */
 	public void resetTime() {
 		// Revert all the time to Option's settings
-		mLeftPlayersTime.setTime(Global.OPTIONS.savedTimeLimit);
-		mRightPlayersTime.setTime(Global.OPTIONS.savedTimeLimit);
+		mLeftPlayersTime.setTime(Global.OPTIONS.savedWhiteTimeLimit);
+		mRightPlayersTime.setTime(Global.OPTIONS.savedWhiteTimeLimit);
 		this.resetDelay();
 	}
 	
@@ -182,7 +213,7 @@ public class GameStateModel implements SaveStateModel {
 	 * Resets the internal delay time to option's settings
 	 */
 	public void resetDelay() {
-		mDelayTime.setTime(Global.OPTIONS.savedDelayTime);
+		mLeftPlayerDelayTime.setTime(Global.OPTIONS.savedWhiteDelayTime);
 	}
 	
 	/**
@@ -205,15 +236,15 @@ public class GameStateModel implements SaveStateModel {
 	 */
 	public String delayTime() {
 		// Check if the delay time is zero
-		if(mDelayTime.isTimeZero()) {
+		if(mLeftPlayerDelayTime.isTimeZero()) {
 			
 			// If so, return null
 			return null;
 		}
 		
 		// Calculate the total seconds to delay
-		final Integer seconds = mDelayTime.getMinutes() * 60 +
-			mDelayTime.getSeconds();
+		final Integer seconds = mLeftPlayerDelayTime.getMinutes() * 60 +
+			mLeftPlayerDelayTime.getSeconds();
 		
 		// Prepend the string, if available
 		if(mDelayPrependString != null) {

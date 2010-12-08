@@ -19,6 +19,9 @@ import com.japtar.chessclock.models.OptionsModel;
  * @author japtar10101
  */
 public class OptionsMenu extends PreferenceActivity {
+	/** The key value for all time-related stuff */
+	public static final String KEY_TIME_GROUP_NO_HANDICAP = "timeGroup";
+	
 	/* ===========================================================
 	 * Overrides
 	 * =========================================================== */
@@ -89,11 +92,12 @@ public class OptionsMenu extends PreferenceActivity {
 		}
 		
     	// Enable/disable the time limit
-		Preference editPref = this.findPreference(
-				OptionsModel.KEY_TIME_LIMIT);
+    	Preference editPref = this.findPreference(KEY_TIME_GROUP_NO_HANDICAP);
 		editPref.setEnabled(enabled);
     	
 		// Update the time limit summary
+    	editPref = this.findPreference(
+				OptionsModel.KEY_WHITE_TIME_LIMIT);
 		if(enabled) {
 			editPref.setSummary(R.string.gameDurationSummaryPref);
 		} else {
@@ -102,10 +106,7 @@ public class OptionsMenu extends PreferenceActivity {
 		
 		// Update the delay time summary
 		editPref = this.findPreference(
-				OptionsModel.KEY_DELAY_TIME);
-		editPref.setEnabled(enabled);
-		
-		// Enable/disable the delay time
+				OptionsModel.KEY_WHITE_DELAY_TIME);
 		if(enabled) {
 			editPref.setSummary(R.string.delayDurationSummaryPref);
 		} else {

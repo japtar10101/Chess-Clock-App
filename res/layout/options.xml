@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<PreferenceCategory android:title="@string/timePrefGroup">
+	<PreferenceCategory android:key="timeGroup"
+	android:title="@string/timePrefGroup">
 	
 		<com.japtar.chessclock.gui.TimerPreference android:key="timeLimit"
 		android:title="@string/gameDurationPref"
@@ -12,6 +13,49 @@
 		android:title="@string/delayDurationPref"
 		android:summary="@string/delayDurationSummaryPref"
 		android:defaultValue="2" />
+        
+        <com.japtar.chessclock.gui.TimerPreference android:key="timeLimitBlack"
+        android:title="TODO"
+        android:summary="TODO"
+        android:defaultValue="300" android:visible="false" />
+        
+        <com.japtar.chessclock.gui.TimerPreference android:key="delayTimeBlack"
+        android:title="TODO"
+        android:summary="TODO"
+        android:defaultValue="2" android:visible="false" />
+        
+        <PreferenceScreen android:title="TODO" android:summary="TODO">
+
+            <CheckBoxPreference android:key="enableHandicap"
+	        android:title="TODO"
+	        android:defaultValue="true"
+	        android:summary="TODO" />
+	        
+	        <!-- a FAT TODO! 
+            <ListPreference android:key="delayMode"
+            android:title="@string/title_list_preference"
+            android:summary="@string/summary_list_preference"
+            android:entries="@array/entries_list_preference"
+            android:entryValues="@array/entryvalues_list_preference"
+            android:dialogTitle="@string/dialog_title_list_preference" />
+            -->
+                   
+	        <CheckBoxPreference android:key="enableNegative"
+            android:title="TODO"
+            android:defaultValue="true"
+            android:summary="TODO" />
+            
+            <CheckBoxPreference android:key="enablePenalty"
+            android:title="TODO"
+            android:defaultValue="true"
+            android:summary="TODO" />
+            
+            <com.japtar.chessclock.gui.TimerPreference android:key="penaltyTime"
+	        android:title="TODO"
+	        android:summary="TODO"
+	        android:defaultValue="2" />
+	        
+        </PreferenceScreen>
         
 	</PreferenceCategory>
 	
