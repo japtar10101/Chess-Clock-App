@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string-array name="gameModeNames">
+        <item>Basic Delay\n(timer stops before a players turn for a fixed amount of time)</item>
+        <item>Fischer\n(time is incremented before a players turn for a fixed amount of time)</item>
+        <item>Fischer After\n(time is incremented after a players turn for a fixed amount of time)</item>
+        <item>Bronstein\n(time is incremented after a players turn up to a certain amount of time)</item>
+        <item>Hour Glass\n(time lost by one player is gained by the other)</item>
+    </string-array>
+    
+    <integer-array name="gameModeValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </integer-array>
+    
+</resources>

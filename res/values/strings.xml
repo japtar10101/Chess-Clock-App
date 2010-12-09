@@ -15,12 +15,24 @@
     <string name="newGameButtonText">New Game</string>
 	<string name="optionsButtonText">Options</string>
 	
-    <!-- Options strings -->
+    <!-- Options strings, time -->
     <string name="timePrefGroup">Time Configuration</string>
     <string name="gameDurationPref">Game Duration</string>
     <string name="gameDurationSummaryPref">Configure the game\'s duration</string>
-    <string name="delayDurationPref">Delay Duration</string>
-    <string name="delayDurationSummaryPref">Configure the time delayed before a player\'s turn</string>
+    <string name="basicDelayPref">Delay Duration</string>
+    <string name="basicDelaySummaryPref">Configure the time delayed before a player\'s turn</string>
+    <string name="fischerPref">Incremented Delay</string>
+    <string name="fischerSummaryPref">Configure the amount of delay incremented to a player\'s remaining time at the beginning of his or her turn</string>
+    <string name="fischerAfterSummaryPref">Configure the amount of delay incremented to a player\'s remaining time at the end of his or her turn</string>
+    <string name="bronsteinPref">Maximum Incremented Delay</string>
+    <string name="bronsteinSummaryPref">Configure the maximum amount of delay incremented to a player\'s remaining time at the end of his or her turn</string>
+    
+    <!-- Options strings, rules -->
+    <string name="advancedPrefGroup">Advanced Options</string>
+    <string name="gameModePref">Game Rules</string>
+    <string name="gameModeSummaryPref">Configure the timer\'s behavior to Basic Delay, Fischer, Bronstein, etc.</string>
+    
+    <!-- Options strings, feedback -->
     <string name="feedbackPrefGroup">Feedback</string>
     <string name="alarmPref">Time Expired Alert</string>
     <string name="alarmSummaryPref">Configure the alarm indicating a player expires</string>
@@ -30,5 +42,6 @@
     <string name="clickSummaryPref">Play a \"click\" sound when pressing a game button</string>
     
     <!-- Conditional-related strings -->
-    <string name="disabledSummaryPref">Cannot be configured during a game</string>
+    <string name="disabledSummaryPref">Can only be configured at the beginning of a game</string>
+    <string name="disabledDelaySummaryPref">Current game rules contains no delay.</string>
 </resources>

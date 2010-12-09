@@ -26,7 +26,7 @@ public interface DelayMode {
 	 * moves faster than the given delay duration, the remaining time
 	 * is retained and added next turn. */
 	public static final byte BRONSTEIN = 3;
-	/** Indicates when the time is up */
+	/** One player loses time, while the other gains */
 	public static final byte HOUR_GLASS = 4;
 	/** Number of Modes */
 	public static final byte NUM_MODES = 5;

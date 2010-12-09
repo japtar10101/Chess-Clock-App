@@ -10,10 +10,11 @@
 		android:defaultValue="300" />
 		
 		<com.japtar.chessclock.gui.TimerPreference android:key="delayTime"
-		android:title="@string/delayDurationPref"
-		android:summary="@string/delayDurationSummaryPref"
+		android:title="@string/basicDelayPref"
+		android:summary="@string/basicDelaySummaryPref"
 		android:defaultValue="2" />
         
+        <!-- a FAT TODO! 
         <com.japtar.chessclock.gui.TimerPreference android:key="timeLimitBlack"
         android:title="TODO"
         android:summary="TODO"
@@ -23,23 +24,23 @@
         android:title="TODO"
         android:summary="TODO"
         android:defaultValue="2" android:visible="false" />
+        -->
+    
+        <PreferenceScreen android:title="@string/advancedPrefGroup">
         
-        <PreferenceScreen android:title="TODO" android:summary="TODO">
+	        <ListPreference android:key="delayMode"
+	        android:title="@string/gameModePref"
+	        android:summary="@string/gameModeSummaryPref"
+	        android:entries="@array/gameModeNames"
+	        android:entryValues="@array/gameModeValues"
+	        android:dialogTitle="@string/gameModePref" />
 
+            <!-- a FAT TODO! 
             <CheckBoxPreference android:key="enableHandicap"
 	        android:title="TODO"
 	        android:defaultValue="true"
 	        android:summary="TODO" />
 	        
-	        <!-- a FAT TODO! 
-            <ListPreference android:key="delayMode"
-            android:title="@string/title_list_preference"
-            android:summary="@string/summary_list_preference"
-            android:entries="@array/entries_list_preference"
-            android:entryValues="@array/entryvalues_list_preference"
-            android:dialogTitle="@string/dialog_title_list_preference" />
-            -->
-                   
 	        <CheckBoxPreference android:key="enableNegative"
             android:title="TODO"
             android:defaultValue="true"
@@ -54,9 +55,10 @@
 	        android:title="TODO"
 	        android:summary="TODO"
 	        android:defaultValue="2" />
-	        
-        </PreferenceScreen>
-        
+	        -->
+            
+	    </PreferenceScreen>
+	    
 	</PreferenceCategory>
 	
 	<PreferenceCategory android:title="@string/feedbackPrefGroup">

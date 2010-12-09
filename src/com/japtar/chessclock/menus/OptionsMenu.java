@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 
 import com.japtar.chessclock.R;
 import com.japtar.chessclock.Global;
+import com.japtar.chessclock.enums.DelayMode;
 import com.japtar.chessclock.enums.TimerCondition;
 import com.japtar.chessclock.models.OptionsModel;
 
@@ -20,7 +21,7 @@ import com.japtar.chessclock.models.OptionsModel;
  */
 public class OptionsMenu extends PreferenceActivity {
 	/** The key value for all time-related stuff */
-	public static final String KEY_TIME_GROUP_NO_HANDICAP = "timeGroup";
+	public static final String KEY_TIME_GROUP = "timeGroup";
 	
 	/* ===========================================================
 	 * Overrides
@@ -92,7 +93,7 @@ public class OptionsMenu extends PreferenceActivity {
 		}
 		
     	// Enable/disable the time limit
-    	Preference editPref = this.findPreference(KEY_TIME_GROUP_NO_HANDICAP);
+    	Preference editPref = this.findPreference(KEY_TIME_GROUP);
 		editPref.setEnabled(enabled);
     	
 		// Update the time limit summary
@@ -108,7 +109,33 @@ public class OptionsMenu extends PreferenceActivity {
 		editPref = this.findPreference(
 				OptionsModel.KEY_WHITE_DELAY_TIME);
 		if(enabled) {
-			editPref.setSummary(R.string.delayDurationSummaryPref);
+			switch(Global.OPTIONS.delayMode) {
+				case DelayMode.BASIC:
+					editPref.setEnabled(true);
+					editPref.setTitle(R.string.basicDelayPref);
+					editPref.setSummary(R.string.basicDelaySummaryPref);
+					break;
+				case DelayMode.FISCHER:
+					editPref.setEnabled(true);
+					editPref.setTitle(R.string.fischerPref);
+					editPref.setSummary(R.string.fischerSummaryPref);
+					break;
+				case DelayMode.FISCHER_AFTER:
+					editPref.setEnabled(true);
+					editPref.setTitle(R.string.fischerPref);
+					editPref.setSummary(R.string.fischerAfterSummaryPref);
+					break;
+				case DelayMode.BRONSTEIN:
+					editPref.setEnabled(true);
+					editPref.setTitle(R.string.bronsteinPref);
+					editPref.setSummary(R.string.bronsteinSummaryPref);
+					break;
+				default:
+					editPref.setEnabled(false);
+					editPref.setTitle(R.string.basicDelayPref);
+					editPref.setSummary(R.string.disabledDelaySummaryPref);
+					break;
+			}
 		} else {
 			editPref.setSummary(R.string.disabledSummaryPref);
 		}

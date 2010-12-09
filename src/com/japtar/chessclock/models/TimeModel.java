@@ -22,17 +22,14 @@ public class TimeModel {
 		return (integer <= Byte.MAX_VALUE ? (byte) integer : Byte.MAX_VALUE);
 	}
 	public final static int totalSeconds(final TimeModel time) {
-		return (time.mMinutes * 60) + time.mSeconds;
+		return time.mSeconds;
 	}
 	
 	/* ===========================================================
 	 * Members
 	 * =========================================================== */
-	// TODO: change the minutes to ints, and seconds to shorts
-	/** Minutes */
-	private byte mMinutes;
 	/** Seconds */
-	private byte mSeconds;
+	private int mSeconds;
 	
 	/* ===========================================================
 	 * Constructors
@@ -40,27 +37,18 @@ public class TimeModel {
 	/**
 	 * Constructor
 	 */
-	public TimeModel(final byte minutes, final byte seconds) throws
+	public TimeModel(final int minutes, final int seconds) throws
 			InvalidParameterException {
 		this.setSeconds(seconds);
-		mMinutes = minutes;
+		this.setMinutes(minutes);
 	}
 	
 	/**
 	 * Constructor for saved values.
 	 */
 	public TimeModel(final int storedValue) throws InvalidParameterException {
-		// Make sure this value is valid
-		if(storedValue < 0) {
-			throw new InternalError(
-					"The stored value must be a non-negative value");
-		}
-		
 		// Convert the stored value into seconds
-		this.setSeconds(TimeModel.intToByte(storedValue % 60));
-		
-		// Convert the stored value into seconds
-		mMinutes = TimeModel.intToByte(storedValue / 60);
+		mSeconds = storedValue;
 	}
 	
 	/**
@@ -68,7 +56,6 @@ public class TimeModel {
 	 */
 	public TimeModel() {
 		mSeconds = 0;
-		mMinutes = 0;
 	}
 
 	/* ===========================================================
@@ -79,15 +66,25 @@ public class TimeModel {
 	 */
 	@Override
 	public String toString() {
-		// Generate a string, starting with the minutes
-		String toReturn = Byte.toString(mMinutes) + ':';
+		// Generate a string
+		String toReturn = "";
+		
+		// If negative, add in a minus sign
+		if(mSeconds < 0) {
+			toReturn += '-';
+		}
+		
+		// Add in the minutes and colon
+		toReturn += Integer.toString(this.getMinutes());
+		toReturn += ':';
 		
 		// Append the seconds
-		if(mSeconds < 10) {
+		final int seconds = this.getSeconds();
+		if(seconds < 10) {
 			// If seconds is less than 10, append a 0
 			toReturn += '0';
 		}
-		toReturn += Byte.toString(mSeconds);
+		toReturn += Integer.toString(seconds);
 		
 		return toReturn;
 	}
@@ -102,23 +99,29 @@ public class TimeModel {
 	 * @throws InvalidParameterException if <b>minutes</b> is negative
 	 * @throws InvalidParameterException if <b>seconds</b> is negative,
 	 * or greater than 59
-	 * @see #setMinutes(byte)
-	 * @see #setSeconds(byte)
 	 */
-	public void setTime(final byte minutes, final byte seconds) throws
+	public void setTime(final int minutes, final int seconds) throws
 			InvalidParameterException {
-		this.setSeconds(seconds);
-		mMinutes = minutes;
+		// Make sure the parameter are correct
+		if(minutes < 0) {
+			throw new InvalidParameterException("Minutes must be positive value");
+		} else if(seconds < 0) {
+			throw new InvalidParameterException("Seconds must be positive value");
+		} else if(seconds > 59) {
+			throw new InvalidParameterException("Seconds must be less than 60");
+		}
+		
+		// Set the time
+		mSeconds = seconds + minutes * 60;
 	}
 	
 	/**
 	 * Sets the time.
-	 * @param time time to match
+	 * @param model time to match
 	 */
-	public void setTime(final TimeModel time) {
-		if(time != null) {
-			this.setSeconds(time.getSeconds());
-			mMinutes = time.getMinutes();
+	public void setTime(final TimeModel model) {
+		if(model != null) {
+			mSeconds = totalSeconds(model);
 		}
 	}
 	
@@ -150,10 +153,7 @@ public class TimeModel {
 		}
 		
 		// Convert the stored value into seconds
-		this.setSeconds(TimeModel.intToByte(savedValue % 60));
-		
-		// Convert the stored value into seconds
-		mMinutes = TimeModel.intToByte(savedValue / 60);
+		mSeconds += savedValue;
 	}
 	
 	/**
@@ -177,11 +177,23 @@ public class TimeModel {
 	
 	/**
 	 * @return True if both the minutes and seconds are 0
-	 * @see #getMinutes()
-	 * @see #getSeconds() 
 	 */
 	public boolean isTimeZero() {
-		return mMinutes + mSeconds == 0;
+		return mSeconds == 0;
+	}
+	
+	/**
+	 * @return True if the time is negative
+	 */
+	public boolean isTimeNegative() {
+		return mSeconds < 0;
+	}
+	
+	/**
+	 * Increment the time
+	 */
+	public void incrementTime(final TimeModel model) {
+		mSeconds += totalSeconds(model);
 	}
 	
 	/**
@@ -190,23 +202,11 @@ public class TimeModel {
 	 * @see #isTimeZero()
 	 */
 	public boolean decrementASecond() {
+		// Check if we're at zero, first
 		boolean toReturn = !isTimeZero();
 		
-		// Check if we're not at 0
-		if(toReturn) {
-			// check if the seconds is 0 or not
-			if(mSeconds > 0) {
-				// If not, decrement the seconds 
-				--mSeconds;
-			} else {
-				// If so, decrement the minutes
-				--mMinutes;
-				
-				// reset seconds to 59
-				mSeconds = 59;
-			}
-		}
-		
+		// Decrement the seconds 
+		--mSeconds;
 		return toReturn;
 	}
 
@@ -214,16 +214,38 @@ public class TimeModel {
 	 * Getters
 	 * =========================================================== */
 	/**
-	 * @return {@link mMinutes}
+	 * @return Minutes. Always positive.
 	 */
-	public byte getMinutes() {
-		return mMinutes;
+	public int getMinutes() {
+		// Get the total seconds
+		int toReturn = mSeconds;
+		
+		// If negative, make it positive
+		if(toReturn < 0) {
+			toReturn *= -1;
+		}
+		
+		// Divide by 60
+		toReturn /= 60;
+		
+		return toReturn;
 	}
 	/**
-	 * @return {@link mSeconds}
+	 * @return Seconds. Always positive.
 	 */
-	public byte getSeconds() {
-		return mSeconds;
+	public int getSeconds() {
+		// Get the total seconds
+		int toReturn = mSeconds;
+		
+		// If negative, make it positive
+		if(toReturn < 0) {
+			toReturn *= -1;
+		}
+		
+		// Modulo by 60
+		toReturn %= 60;
+		
+		return toReturn;
 	}
 
 	/* ===========================================================
@@ -231,13 +253,19 @@ public class TimeModel {
 	 * =========================================================== */
 	/**
 	 * @param minutes sets {@link mMinutes}
-	 * @throws InvalidParameterException if <b>minutes</b> is negative,
-	 * or greater than 23 (as arbitrary as it sounds, due to current
-	 * GUI limitations, it's set to the hours limitations on a TimePicker).
+	 * @throws InvalidParameterException if <b>minutes</b> is negative
 	 */
-	public void setMinutes(final byte minutes) {
-		// update the minutes
-		this.mMinutes = minutes;
+	public void setMinutes(final int minutes) {
+		// Make sure the parameter is correct
+		if(minutes < 0) {
+			throw new InvalidParameterException("Minutes must be positive value");
+		}
+		
+		// Set the time to positive seconds
+		mSeconds = this.getSeconds();
+		
+		// Add the minutes
+		mSeconds += minutes * 60;
 	}
 	
 	/**
@@ -245,13 +273,21 @@ public class TimeModel {
 	 * @throws InvalidParameterException if <b>seconds</b> is negative,
 	 * or greater than 59
 	 */
-	public void setSeconds(final byte seconds) throws InvalidParameterException {
-		if(seconds >= 60) {
-			// greater than 59
+	public void setSeconds(final int seconds) throws InvalidParameterException {
+		// Make sure the parameter is correct
+		if(seconds < 0) {
+			throw new InvalidParameterException("Seconds must be positive value");
+		} else if(seconds > 59) {
 			throw new InvalidParameterException("Seconds must be less than 60");
-		} else {
-			// update the seconds
-			this.mSeconds = seconds;
 		}
+		
+		// First, get the minutes
+		int minutes = this.getMinutes();
+		
+		// Set the time to positive seconds
+		mSeconds = seconds;
+		
+		// Add the minutes
+		mSeconds += minutes * 60;
 	}
 }
