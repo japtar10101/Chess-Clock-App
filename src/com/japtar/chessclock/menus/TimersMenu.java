@@ -286,6 +286,12 @@ public class TimersMenu implements MenuInterface,
 		}
 	}
 	
+	/**
+	 * TODO: add a description
+	 * @param v
+	 * @param buttonId
+	 * @return
+	 */
 	Button getButton(final View v, final int buttonId) {
 		// Find a view based on ID
 		final View foundView = v.findViewById(buttonId);
@@ -390,10 +396,6 @@ public class TimersMenu implements MenuInterface,
 			}
 		}
 		
-		// If clicked by right/left player button,
-		// update the current player
-		Global.GAME_STATE.leftPlayersTurn = leftPlayersTurn;
-		
 		// Reset the delay time
 		Global.GAME_STATE.switchTurns(leftPlayersTurn);
 		
@@ -462,6 +464,9 @@ public class TimersMenu implements MenuInterface,
 				R.anim.hide_delay_label);
 	}
 	
+	/**
+	 * TODO: add a description
+	 */
 	private void changeConditionSetup() {
 		// Update the buttons/labels text
 		this.updateButtonAndLabelText();
@@ -494,6 +499,11 @@ public class TimersMenu implements MenuInterface,
 		mDelayLabel.setText(delayText);
 	}
 	
+	/**
+	 * TODO: add a description
+	 * @param buttonId
+	 * @return
+	 */
 	private ImageButton getImageButton(final int buttonId) {
 		// Return value
 		ImageButton toReturn = null;
@@ -508,12 +518,22 @@ public class TimersMenu implements MenuInterface,
 		return toReturn;
 	}
 	
+	/**
+	 * TODO: add a description
+	 * @param buttonId
+	 * @return
+	 */
 	private Button getButton(final int buttonId) {
 		// Find a view based on ID
 		final View foundView = mParentActivity.findViewById(buttonId);
 		return this.convertToButton(foundView);
 	}
 
+	/**
+	 * TODO: add a description
+	 * @param v
+	 * @return
+	 */
 	private Button convertToButton(final View v) {
 		// Return value
 		Button toReturn = null;

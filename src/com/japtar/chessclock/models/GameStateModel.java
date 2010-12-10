@@ -196,10 +196,48 @@ public class GameStateModel implements SaveStateModel {
 	
 	/**
 	 * TODO: add a description
-	 * @param isLeftPlayersTurn
+	 * @param leftPlayerIsNext
 	 */
-	public void switchTurns(final boolean isLeftPlayersTurn) {
-		leftPlayersTurn = isLeftPlayersTurn;
+	public void switchTurns(final boolean leftPlayerIsNext) {
+		// If clicked by right/left player button,
+		// update the current player
+		leftPlayersTurn = leftPlayerIsNext;
+		
+		// Determine which player's time to increment
+		TimeModel increment = null;
+		switch(Global.OPTIONS.delayMode) {
+			case DelayMode.FISCHER:
+				
+				// Set incrementTime to the next player's time
+				if(leftPlayerIsNext) {
+					increment = mLeftPlayersTime;
+				} else {
+					increment = mRightPlayersTime;
+				}
+				break;
+			case DelayMode.FISCHER_AFTER:
+			case DelayMode.BRONSTEIN:
+				
+				// Make sure the game is actually running first
+				// (this prevents the first player from gaining time)
+				if(timerCondition == TimerCondition.RUNNING) {
+					
+					// Set incrementTime to the last player's time
+					if(leftPlayerIsNext) {
+						increment = mRightPlayersTime;
+					} else {
+						increment = mLeftPlayersTime;
+					}
+				}
+				break;
+		}
+		
+		// Increment the time
+		if(increment != null) {
+			increment.incrementTime(mLeftPlayerDelayTime);
+		}
+		
+		// Revert the delay
 		this.resetDelay();
 	}
 	

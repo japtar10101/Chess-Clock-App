@@ -33,7 +33,8 @@
 	        android:summary="@string/gameModeSummaryPref"
 	        android:entries="@array/gameModeNames"
 	        android:entryValues="@array/gameModeValues"
-	        android:dialogTitle="@string/gameModePref" />
+	        android:dialogTitle="@string/gameModePref"
+	        android:defaultValue="0" />
 
             <!-- a FAT TODO! 
             <CheckBoxPreference android:key="enableHandicap"
