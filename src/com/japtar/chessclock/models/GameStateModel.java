@@ -8,6 +8,7 @@ import java.security.InvalidParameterException;
 import android.content.SharedPreferences;
 
 import com.japtar.chessclock.Global;
+import com.japtar.chessclock.enums.DelayMode;
 import com.japtar.chessclock.enums.TimerCondition;
 
 /**
@@ -175,28 +176,31 @@ public class GameStateModel implements SaveStateModel {
 	public boolean decrementTime(final int numSeconds) {
 		boolean toReturn = false;
 		
-		// Figure out which time to decrement
-		TimeModel updateTime = mRightPlayersTime;
-		if(leftPlayersTurn) {
-			updateTime = mLeftPlayersTime;
-		}
-		
-		// Decrement time from delay or player
-		for(int second = 0; second < numSeconds; ++second) {
-			
-			// First attempt to decrement the delay time
-			if(!mLeftPlayerDelayTime.decrementASecond()) {
-				
-				// If failed, try decrementing the player's time
-				if(!updateTime.decrementASecond()) {
-					
-					// If that failed, times up!
-					toReturn = true;
-					break;
-				}
-			}
+		// Change the delay behavior based on mode
+		switch(Global.OPTIONS.delayMode) {
+			case DelayMode.BASIC:
+				toReturn = decrementBasicDelay(numSeconds);
+				break;
+			case DelayMode.HOUR_GLASS:
+				toReturn = decrementHourGlass(numSeconds);
+				break;
+			case DelayMode.BRONSTEIN:
+				toReturn = decrementBronstein(numSeconds);
+				break;
+			default:
+				toReturn = decrementFischer(numSeconds);
+				break;
 		}
 		return toReturn;
+	}
+	
+	/**
+	 * TODO: add a description
+	 * @param isLeftPlayersTurn
+	 */
+	public void switchTurns(final boolean isLeftPlayersTurn) {
+		leftPlayersTurn = isLeftPlayersTurn;
+		this.resetDelay();
 	}
 	
 	/**
@@ -213,7 +217,11 @@ public class GameStateModel implements SaveStateModel {
 	 * Resets the internal delay time to option's settings
 	 */
 	public void resetDelay() {
-		mLeftPlayerDelayTime.setTime(Global.OPTIONS.savedWhiteDelayTime);
+		if(Global.OPTIONS.delayMode == DelayMode.BRONSTEIN) {
+			mLeftPlayerDelayTime.setTime(0, 0);
+		} else {
+			mLeftPlayerDelayTime.setTime(Global.OPTIONS.savedWhiteDelayTime);
+		}
 	}
 	
 	/**
@@ -274,5 +282,141 @@ public class GameStateModel implements SaveStateModel {
 	 */
 	public void setDelayPrependString(final String prepend) {
 		mDelayPrependString = prepend;
+	}
+	
+	/* ===========================================================
+	 * Private/Protected Methods
+	 * =========================================================== */
+	
+	/**
+	 * TODO: add a description
+	 * @param numSeconds
+	 * @return
+	 */
+	private boolean decrementBronstein(final int numSeconds) {
+		boolean toReturn = false;
+		// Figure out which time to decrement
+		TimeModel updateDelay = mLeftPlayerDelayTime,
+				maximumDelay = Global.OPTIONS.savedWhiteDelayTime,
+				updateTime = mRightPlayersTime;
+		if(leftPlayersTurn) {
+			updateTime = mLeftPlayersTime;
+		}
+		
+		// Decrement time from player
+		for(int second = 0; second < numSeconds; ++second) {
+			
+			// Decrementing the player's time
+			if(updateTime.decrementASecond()) {
+				
+				// If that succeeded, and the player's delay time is less than
+				// the maximum limit, increment the delay time
+				if(updateDelay.compareTo(maximumDelay) < 0) {
+					updateDelay.incrementASecond();
+				}
+			} else {
+				
+				// If that failed, times up!
+				toReturn = true;
+				break;
+			}
+		}
+		return toReturn;
+	}
+	
+	/**
+	 * TODO: add a description
+	 * @param numSeconds
+	 * @return
+	 */
+	private boolean decrementFischer(final int numSeconds) {
+		boolean toReturn = false;
+		// Figure out which time to decrement
+		TimeModel updateTime = mRightPlayersTime;
+		if(leftPlayersTurn) {
+			updateTime = mLeftPlayersTime;
+		}
+		
+		// Decrement time from player
+		for(int second = 0; second < numSeconds; ++second) {
+			
+			// Try decrementing the player's time
+			if(!updateTime.decrementASecond()) {
+				
+				// If that failed, times up!
+				toReturn = true;
+				break;
+			}
+		}
+		return toReturn;
+	}
+	
+	/**
+	 * TODO: add a description
+	 * @param numSeconds
+	 * @return
+	 */
+	private boolean decrementHourGlass(final int numSeconds) {
+		boolean toReturn = false;
+		// Figure out which time to decrement, and which to increment
+		final TimeModel downTime, upTime;
+		if(leftPlayersTurn) {
+			downTime = mLeftPlayersTime;
+			upTime = mRightPlayersTime;
+		} else {
+			downTime = mRightPlayersTime;
+			upTime = mLeftPlayersTime;
+		}
+		
+		// Decrement time from delay or player
+		for(int second = 0; second < numSeconds; ++second) {
+			
+			// First, attempt to decrement time from delay
+			if(!mLeftPlayerDelayTime.decrementASecond()) {
+				
+				// Increment the opposing player's time
+				upTime.incrementASecond();
+				
+				// Try decrementing the player's time
+				if(!downTime.decrementASecond()) {
+					
+					// If that failed, times up!
+					toReturn = true;
+					break;
+				}
+			}
+		}
+		return toReturn;
+	}
+	
+	/**
+	 * TODO: add a description
+	 * @param numSeconds
+	 * @return
+	 */
+	private boolean decrementBasicDelay(final int numSeconds) {
+		boolean toReturn = false;
+		// Figure out which time to decrement
+		TimeModel updateTime = mRightPlayersTime;
+		if(leftPlayersTurn) {
+			updateTime = mLeftPlayersTime;
+		}
+		
+		// Decrement time from delay or player
+		for(int second = 0; second < numSeconds; ++second) {
+			
+			// First, attempt to decrement time from delay
+			if(!mLeftPlayerDelayTime.decrementASecond()) {
+				
+				// If failed, try decrementing the player's time
+				if(!updateTime.decrementASecond()) {
+					
+					// If that failed, times up!
+					toReturn = true;
+					break;
+				}
+			}
+		}
+		return toReturn;
 	}
 }

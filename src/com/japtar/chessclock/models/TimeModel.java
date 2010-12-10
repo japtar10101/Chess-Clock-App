@@ -11,7 +11,7 @@ import android.content.SharedPreferences;
  * Helper class representing time.
  * @author japtar10101
  */
-public class TimeModel {
+public class TimeModel implements Comparable<TimeModel> {
 	/* ===========================================================
 	 * Static functions
 	 * =========================================================== */
@@ -61,6 +61,15 @@ public class TimeModel {
 	/* ===========================================================
 	 * Override
 	 * =========================================================== */
+	/**
+	 * Compares which time model is greater, and by how many seconds.
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(final TimeModel another) {
+		return mSeconds - totalSeconds(another);
+	}
+	
 	/**
 	 * @see java.lang.Object#toString()
 	 */
@@ -197,7 +206,7 @@ public class TimeModel {
 	}
 	
 	/**
-	 * Decreases the time by a seconds
+	 * Decreases the time by a second
 	 * @return False if both minutes and seconds are 0
 	 * @see #isTimeZero()
 	 */
@@ -207,6 +216,21 @@ public class TimeModel {
 		
 		// Decrement the seconds 
 		--mSeconds;
+		return toReturn;
+	}
+	
+	/**
+	 * Increases the time by a second, if not negative
+	 * @return False if time is negative
+	 * @see #isTimeZero()
+	 */
+	public boolean incrementASecond() {
+		// Check if we're negative, first
+		boolean toReturn = !isTimeNegative();
+		if(toReturn) {
+			// Increment the seconds 
+			++mSeconds;
+		}
 		return toReturn;
 	}
 
