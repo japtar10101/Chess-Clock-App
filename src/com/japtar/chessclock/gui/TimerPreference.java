@@ -26,7 +26,7 @@ public class TimerPreference extends DialogPreference implements
 	/** This preference's time */
 	private final TimeModel mTime = new TimeModel();
 	/** The default value */
-	private int mDefaultValue = 0;;
+	private int mDefaultValue = 0;
 	
 	/* ===========================================================
 	 * Constructors
@@ -55,8 +55,7 @@ public class TimerPreference extends DialogPreference implements
 	 */
 	@Override
 	public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-		mTime.setTime(TimeModel.intToByte(hourOfDay),
-				TimeModel.intToByte(minute));
+		mTime.setTime(hourOfDay, minute);
 	}
 	
 	/**
@@ -82,8 +81,8 @@ public class TimerPreference extends DialogPreference implements
     	this.recallValues();
 		
 		// Update view
-		timer.setCurrentHour((int) mTime.getMinutes());
-		timer.setCurrentMinute((int) mTime.getSeconds());
+		timer.setCurrentHour(mTime.getMinutes());
+		timer.setCurrentMinute(mTime.getSeconds());
 		
 		// Return view
 		timer.setOnTimeChangedListener(this);

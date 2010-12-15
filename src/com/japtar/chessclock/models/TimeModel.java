@@ -162,7 +162,7 @@ public class TimeModel implements Comparable<TimeModel> {
 		}
 		
 		// Convert the stored value into seconds
-		mSeconds += savedValue;
+		mSeconds = savedValue;
 	}
 	
 	/**
