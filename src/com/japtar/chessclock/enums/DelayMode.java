@@ -30,4 +30,15 @@ public interface DelayMode {
 	public static final byte HOUR_GLASS = 4;
 	/** Number of Modes */
 	public static final byte NUM_MODES = 5;
+	
+	/** String version of {@link #BASIC} */
+	public static final String STRING_BASIC = "basicDelay";
+	/** String version of {@link #FISCHER} */
+	public static final String STRING_FISCHER = "fischer";
+	/** String version of {@link #FISCHER_AFTER} */
+	public static final String STRING_FISCHER_AFTER = "fischerAfter";
+	/** String version of {@link #BRONSTEIN} */
+	public static final String STRING_BRONSTEIN = "bronstein";
+	/** String version of {@link #HOUR_GLASS} */
+	public static final String STRING_HOUR_GLASS = "hourGlass";
 }

@@ -281,8 +281,9 @@ public class GameStateModel implements SaveStateModel {
 	 * Otherwise, returns the current delay time, in text.
 	 */
 	public String delayTime() {
-		// Check if the delay time is zero
-		if(mLeftPlayerDelayTime.isTimeZero()) {
+		// Check if the delay time is zero, or the right mode is on
+		if((Global.OPTIONS.delayMode != DelayMode.BASIC) ||
+				(mLeftPlayerDelayTime.isTimeZero())) {
 			
 			// If so, return null
 			return null;

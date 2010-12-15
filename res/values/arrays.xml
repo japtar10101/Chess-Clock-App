@@ -2,19 +2,27 @@
 <resources>
     
     <string-array name="gameModeNames">
-        <item>Basic Delay\n(timer stops before a players turn for a fixed amount of time)</item>
-        <item>Fischer\n(time is incremented before a players turn for a fixed amount of time)</item>
-        <item>Fischer After\n(time is incremented after a players turn for a fixed amount of time)</item>
-        <item>Bronstein\n(time is incremented after a players turn up to a certain amount of time)</item>
-        <item>Hour Glass\n(time lost by one player is gained by the other)</item>
+        <item>Basic Delay</item>
+        <item>Fischer</item>
+        <item>Fischer After</item>
+        <item>Bronstein</item>
+        <item>Hour Glass</item>
     </string-array>
     
-    <integer-array name="gameModeValues">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-    </integer-array>
+    <string-array name="gameModeDescription">
+        <item>(timer stops before a players turn for a fixed amount of time)</item>
+        <item>(time is incremented before a players turn for a fixed amount of time)</item>
+        <item>(time is incremented after a players turn for a fixed amount of time)</item>
+        <item>(time is incremented after a players turn up to a certain amount of time)</item>
+        <item>(time lost by one player is gained by the other)</item>
+    </string-array>
+    
+    <string-array name="gameModeValues">
+        <item>basicDelay</item>
+        <item>fischer</item>
+        <item>fischerAfter</item>
+        <item>bronstein</item>
+        <item>hourGlass</item>
+    </string-array>
     
 </resources>

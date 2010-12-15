@@ -61,10 +61,14 @@ public class TimersMenu implements MenuInterface,
 	// == Labels ==
 	/** Label indicating delay */
 	private TextView mDelayLabel = null;
-	/** Left player's label */
+	/** Left player's label indicating remaining time */
 	private OutlinedTextView mLeftLabel = null;
-	/** Right player's label */
+	/** Right player's label indicating remaining time */
 	private OutlinedTextView mRightLabel = null;
+	/** Left player's label indicating time increase */
+	private OutlinedTextView mLeftIncreaseLabel = null;
+	/** Right player's label indicating time increase */
+	private OutlinedTextView mRightIncreaseLabel = null;
 	
 	// == Animations ==
 	/** Shows the delay label */
@@ -206,6 +210,8 @@ public class TimersMenu implements MenuInterface,
 		mRightLabel.setTextSize(MainActivity.msTextSize);
 		mPauseButton.setTextSize(MainActivity.msTextSize * 0.5f);
 		mDelayLabel.setTextSize(MainActivity.msTextSize * 0.7f);
+		mLeftIncreaseLabel.setTextSize(MainActivity.msTextSize * 0.5f);
+		mRightIncreaseLabel.setTextSize(MainActivity.msTextSize * 0.5f);
 		
 		// Update the sub menu
 		mStartMenu.setupMenu();
@@ -279,10 +285,24 @@ public class TimersMenu implements MenuInterface,
 		mRightLabel.setText(Global.GAME_STATE.rightPlayerTime());
 		
 		// Update the delay label's text or visibility
-		switch(Global.GAME_STATE.timerCondition) {
-			case TimerCondition.RUNNING:
-			case TimerCondition.PAUSE:
-				this.updateDelayLabel();
+		if((Global.GAME_STATE.timerCondition == TimerCondition.RUNNING) ||
+				(Global.GAME_STATE.timerCondition == TimerCondition.PAUSE)) {
+			// Update the delay label's text or visibility
+			String delayText = Global.GAME_STATE.delayTime();
+			if(delayText == null) {
+				// If no text is provided, play the hide animation
+				if(mDelayLabel.getVisibility() == View.VISIBLE) {
+					mDelayLabel.startAnimation(mHideAnimation);
+				}
+				// Update the delay text
+				delayText = Global.GAME_STATE.defaultDelayLabelString();
+			} else if(mDelayLabel.getVisibility() == View.INVISIBLE) {
+				// If text IS provided, play the show-label animation
+				mDelayLabel.startAnimation(mShowAnimation);
+			}
+			
+			// Update the text
+			mDelayLabel.setText(delayText);
 		}
 	}
 	
@@ -400,7 +420,7 @@ public class TimersMenu implements MenuInterface,
 		Global.GAME_STATE.switchTurns(leftPlayersTurn);
 		
 		// Update the Delay label
-		this.updateDelayLabel();
+		this.updateButtonAndLabelText();
 		
 		// Play the click sound
 		if(Global.OPTIONS.enableClick) {
@@ -444,6 +464,10 @@ public class TimersMenu implements MenuInterface,
 			mParentActivity.findViewById(R.id.labelLeftTime);
 		mRightLabel = (OutlinedTextView)
 			mParentActivity.findViewById(R.id.labelRightTime);
+		mLeftIncreaseLabel = (OutlinedTextView)
+			mParentActivity.findViewById(R.id.labelLeftIncreaseTime);
+		mRightIncreaseLabel = (OutlinedTextView)
+			mParentActivity.findViewById(R.id.labelRightIncreaseTime);
 		
 		// Grab the buttons
 		mLeftButton = this.getImageButton(R.id.buttonLeftTime);
@@ -475,28 +499,6 @@ public class TimersMenu implements MenuInterface,
 		mLeftButton.setEnabled(false);
 		mRightButton.setEnabled(false);
 		mPauseButton.setVisibility(View.INVISIBLE);	
-	}
-	
-	/**
-	 * Updates the text on {@link mDelayLabel}
-	 */
-	private void updateDelayLabel() {
-		// Update the delay label's text or visibility
-		String delayText = Global.GAME_STATE.delayTime();
-		if(delayText == null) {
-			// If no text is provided, play the hide animation
-			if(mDelayLabel.getVisibility() == View.VISIBLE) {
-				mDelayLabel.startAnimation(mHideAnimation);
-			}
-			// Update the delay text
-			delayText = Global.GAME_STATE.defaultDelayLabelString();
-		} else if(mDelayLabel.getVisibility() == View.INVISIBLE) {
-			// If text IS provided, play the show-label animation
-			mDelayLabel.startAnimation(mShowAnimation);
-		}
-		
-		// Update the text
-		mDelayLabel.setText(delayText);
 	}
 	
 	/**

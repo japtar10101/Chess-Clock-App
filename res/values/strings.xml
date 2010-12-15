@@ -29,6 +29,7 @@
     
     <!-- Options strings, rules -->
     <string name="advancedPrefGroup">Advanced Options</string>
+    <string name="advancedPrefSummary">Configure rules, handicap, etc.</string>
     <string name="gameModePref">Game Rules</string>
     <string name="gameModeSummaryPref">Configure the timer\'s behavior to Basic Delay, Fischer, Bronstein, etc.</string>
     

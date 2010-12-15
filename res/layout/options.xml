@@ -26,7 +26,8 @@
         android:defaultValue="2" android:visible="false" />
         -->
     
-        <PreferenceScreen android:title="@string/advancedPrefGroup">
+        <PreferenceScreen android:title="@string/advancedPrefGroup"
+        android:summary="@string/advancedPrefSummary">
         
 	        <ListPreference android:key="delayMode"
 	        android:title="@string/gameModePref"
@@ -34,7 +35,7 @@
 	        android:entries="@array/gameModeNames"
 	        android:entryValues="@array/gameModeValues"
 	        android:dialogTitle="@string/gameModePref"
-	        android:defaultValue="0" />
+	        android:defaultValue="basicDelay" />
 
             <!-- a FAT TODO! 
             <CheckBoxPreference android:key="enableHandicap"
