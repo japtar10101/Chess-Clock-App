@@ -23,13 +23,16 @@ import com.japtar.chessclock.MainActivity;
 import com.japtar.chessclock.R;
 import com.japtar.chessclock.enums.TimerCondition;
 import com.japtar.chessclock.gui.OutlinedTextView;
+import com.japtar.chessclock.models.GameStateModel;
+import com.japtar.chessclock.models.TimeModel;
 
 /**
  * Menu for Timer
  * @author japtar10101
  */
 public class TimersMenu implements MenuInterface,
-		View.OnClickListener, View.OnTouchListener {
+		View.OnClickListener, View.OnTouchListener,
+		GameStateModel.OnTimeIncreasedListener {
 	/* ===========================================================
 	 * Members
 	 * =========================================================== */
@@ -75,8 +78,13 @@ public class TimersMenu implements MenuInterface,
 	private Animation mShowAnimation = null;
 	/** Hides the delay label */
 	private Animation mHideAnimation = null;
+	/** Hides the delay label */
+	private Animation mLeftIncreaseAnimation = null;
+	private Animation mRightIncreaseAnimation = null;
 	private final AnimationListener mShowDelayLabel;
 	private final AnimationListener mHideDelayLabel;
+	private final AnimationListener mIncreaseLeftLabel;
+	private final AnimationListener mIncreaseRightLabel;
 	
 	// == Drawables ==
 	
@@ -125,6 +133,38 @@ public class TimersMenu implements MenuInterface,
 			}
 			@Override
 			public void onAnimationStart(Animation animation) { }
+			@Override
+			public void onAnimationRepeat(Animation animation) { }
+		};
+		mIncreaseLeftLabel = new AnimationListener() {
+			@Override
+			public void onAnimationStart(Animation animation) {
+				if(mLeftIncreaseLabel != null) {
+					mLeftIncreaseLabel.setVisibility(View.VISIBLE);
+				}
+			}
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				if(mLeftIncreaseLabel != null) {
+					mLeftIncreaseLabel.setVisibility(View.INVISIBLE);
+				}
+			}
+			@Override
+			public void onAnimationRepeat(Animation animation) { }
+		};
+		mIncreaseRightLabel = new AnimationListener() {
+			@Override
+			public void onAnimationStart(Animation animation) {
+				if(mRightIncreaseLabel != null) {
+					mRightIncreaseLabel.setVisibility(View.VISIBLE);
+				}
+			}
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				if(mRightIncreaseLabel != null) {
+					mRightIncreaseLabel.setVisibility(View.INVISIBLE);
+				}
+			}
 			@Override
 			public void onAnimationRepeat(Animation animation) { }
 		};
@@ -221,8 +261,11 @@ public class TimersMenu implements MenuInterface,
 		// Update the animations
 		mShowAnimation.setAnimationListener(mShowDelayLabel);
 		mHideAnimation.setAnimationListener(mHideDelayLabel);
+		mLeftIncreaseAnimation.setAnimationListener(mIncreaseLeftLabel);
+		mRightIncreaseAnimation.setAnimationListener(mIncreaseRightLabel);
 		
 		// == Determine the game state to jump to ==
+		Global.GAME_STATE.setTimeIncrementListener(this);
 		
 		// Determine the condition to begin this game at
 		switch(Global.GAME_STATE.timerCondition) {
@@ -246,7 +289,28 @@ public class TimersMenu implements MenuInterface,
 				break;
 		}
 	}
-
+	
+	/**
+	 * TODO: add a description
+	 * @see com.japtar.chessclock.models.GameStateModel.OnTimeIncreasedListener#onTimeIncreased(boolean, com.japtar.chessclock.models.TimeModel)
+	 */
+	public void onTimeIncreased(final boolean leftPlayersTime, final TimeModel increase) {
+		// Determine which label to animate
+		final TextView animateLabel;
+		final Animation animation;
+		if(leftPlayersTime) {
+			animation = mLeftIncreaseAnimation;
+			animateLabel = mLeftIncreaseLabel;
+		} else {
+			animation = mRightIncreaseAnimation;
+			animateLabel = mRightIncreaseLabel;
+		}
+		
+		// Update this label's text, and start its animation
+		animateLabel.setText('+' + increase.toString());
+		animateLabel.startAnimation(animation);
+	}
+	
 	/* ===========================================================
 	 * Public Methods
 	 * =========================================================== */
@@ -486,6 +550,10 @@ public class TimersMenu implements MenuInterface,
 				R.anim.show_delay_label);
 		mHideAnimation = AnimationUtils.loadAnimation(mParentActivity,
 				R.anim.hide_delay_label);
+		mLeftIncreaseAnimation = AnimationUtils.loadAnimation(mParentActivity,
+				R.anim.increment_label);
+		mRightIncreaseAnimation = AnimationUtils.loadAnimation(mParentActivity,
+				R.anim.increment_label);
 	}
 	
 	/**

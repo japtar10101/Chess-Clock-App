@@ -17,6 +17,17 @@ import com.japtar.chessclock.enums.TimerCondition;
  */
 public class GameStateModel implements SaveStateModel {
 	/* ===========================================================
+	 * Listeners
+	 * =========================================================== */
+	/**
+	 * Listener for when a player's time increases based on game rules
+	 * @author japtar10101
+	 */
+	public interface OnTimeIncreasedListener {
+		public void onTimeIncreased(boolean leftPlayersTime, TimeModel increase);
+	}
+	
+	/* ===========================================================
 	 * Constants
 	 * =========================================================== */
 	// == Stored key values ==
@@ -77,6 +88,9 @@ public class GameStateModel implements SaveStateModel {
 	public int numLeftPlayerMoves = 0;
 	/** Number of moves the right player made */
 	public int numRightPlayerMoves = 0;
+	
+	// == Listener ==
+	private OnTimeIncreasedListener mListener = null;
 	
 	/* ===========================================================
 	 * Override Methods
@@ -169,6 +183,14 @@ public class GameStateModel implements SaveStateModel {
 	 * Public Methods
 	 * =========================================================== */
 	/**
+	 * TODO: add a description
+	 * @param listener
+	 */
+	public void setTimeIncrementListener(final OnTimeIncreasedListener listener) {
+		mListener = listener;
+	}
+	
+	/**
 	 * Decrements time.
 	 * @param numSeconds number of seconds to decrement
 	 * @return true if either player's time is up.
@@ -205,14 +227,15 @@ public class GameStateModel implements SaveStateModel {
 		
 		// Determine which player's time to increment
 		TimeModel increment = null;
+		boolean increaseLeftPlayersTime = false;
 		switch(Global.OPTIONS.delayMode) {
 			case DelayMode.FISCHER:
 				
 				// Set incrementTime to the next player's time
-				if(leftPlayerIsNext) {
+				increaseLeftPlayersTime = leftPlayersTurn;
+				increment = mRightPlayersTime;
+				if(increaseLeftPlayersTime) {
 					increment = mLeftPlayersTime;
-				} else {
-					increment = mRightPlayersTime;
 				}
 				break;
 			case DelayMode.FISCHER_AFTER:
@@ -223,9 +246,9 @@ public class GameStateModel implements SaveStateModel {
 				if(timerCondition == TimerCondition.RUNNING) {
 					
 					// Set incrementTime to the last player's time
-					if(leftPlayerIsNext) {
-						increment = mRightPlayersTime;
-					} else {
+					increaseLeftPlayersTime = !leftPlayersTurn;
+					increment = mRightPlayersTime;
+					if(increaseLeftPlayersTime) {
 						increment = mLeftPlayersTime;
 					}
 				}
@@ -235,6 +258,12 @@ public class GameStateModel implements SaveStateModel {
 		// Increment the time
 		if(increment != null) {
 			increment.incrementTime(mLeftPlayerDelayTime);
+			
+			// Call the listener event
+			if(mListener != null) {
+				mListener.onTimeIncreased(
+						increaseLeftPlayersTime, mLeftPlayerDelayTime);
+			}
 		}
 		
 		// Revert the delay
