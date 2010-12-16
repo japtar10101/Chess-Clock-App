@@ -13,6 +13,13 @@ android:shareInterpolator="false" >
 	    android:fromAlpha="0.0"
 	    android:toAlpha="1.0" />
 		
+		<rotate android:duration="500"
+        android:fromDegrees="-45"
+		android:toDegrees="0"
+		android:toYScale="0.0"
+        android:pivotX="0%"
+		android:pivotY="0%" />
+		
 	</set>
 	
 	<set android:interpolator="@android:anim/accelerate_interpolator"
@@ -21,13 +28,20 @@ android:shareInterpolator="false" >
 		<translate android:duration="500"
 	    android:fromYDelta="0%"
 	    android:toYDelta="100%"
-		android:startOffset="1500" />
+		android:startOffset="2000" />
 		
 	    <alpha android:duration="500"
 	    android:fromAlpha="1.0"
 	    android:toAlpha="0.0"
-		android:startOffset="1500" />
+		android:startOffset="2000" />
 		
+        <rotate android:duration="500"
+        android:fromDegrees="0"
+        android:toDegrees="45"
+        android:toYScale="0.0"
+        android:pivotX="100%"
+        android:pivotY="0%"
+		android:startOffset="2000" />
 	</set>
 	
 </set>
