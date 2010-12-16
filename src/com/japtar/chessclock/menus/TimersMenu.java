@@ -295,20 +295,23 @@ public class TimersMenu implements MenuInterface,
 	 * @see com.japtar.chessclock.models.GameStateModel.OnTimeIncreasedListener#onTimeIncreased(boolean, com.japtar.chessclock.models.TimeModel)
 	 */
 	public void onTimeIncreased(final boolean leftPlayersTime, final TimeModel increase) {
-		// Determine which label to animate
-		final TextView animateLabel;
-		final Animation animation;
-		if(leftPlayersTime) {
-			animation = mLeftIncreaseAnimation;
-			animateLabel = mLeftIncreaseLabel;
-		} else {
-			animation = mRightIncreaseAnimation;
-			animateLabel = mRightIncreaseLabel;
+		// Show the label only if there's some time to increment
+		if(!increase.isTimeZero()) {
+			// Determine which label to animate
+			final TextView animateLabel;
+			final Animation animation;
+			if(leftPlayersTime) {
+				animation = mLeftIncreaseAnimation;
+				animateLabel = mLeftIncreaseLabel;
+			} else {
+				animation = mRightIncreaseAnimation;
+				animateLabel = mRightIncreaseLabel;
+			}
+			
+			// Update this label's text, and start its animation
+			animateLabel.setText('+' + increase.toString());
+			animateLabel.startAnimation(animation);
 		}
-		
-		// Update this label's text, and start its animation
-		animateLabel.setText('+' + increase.toString());
-		animateLabel.startAnimation(animation);
 	}
 	
 	/* ===========================================================

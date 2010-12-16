@@ -438,20 +438,16 @@ public class GameStateModel implements SaveStateModel {
 		
 		// Decrement time from delay or player
 		for(int second = 0; second < numSeconds; ++second) {
+				
+			// Increment the opposing player's time
+			upTime.incrementASecond();
 			
-			// First, attempt to decrement time from delay
-			if(!mLeftPlayerDelayTime.decrementASecond()) {
+			// Try decrementing the player's time
+			if(!downTime.decrementASecond()) {
 				
-				// Increment the opposing player's time
-				upTime.incrementASecond();
-				
-				// Try decrementing the player's time
-				if(!downTime.decrementASecond()) {
-					
-					// If that failed, times up!
-					toReturn = true;
-					break;
-				}
+				// If that failed, times up!
+				toReturn = true;
+				break;
 			}
 		}
 		return toReturn;
