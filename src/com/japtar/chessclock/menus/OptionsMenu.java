@@ -118,14 +118,10 @@ public class OptionsMenu extends PreferenceActivity {
 					editPref.setSummary(R.string.basicDelaySummaryPref);
 					break;
 				case DelayMode.FISCHER:
-					editPref.setEnabled(true);
-					editPref.setTitle(R.string.fischerPref);
-					editPref.setSummary(R.string.fischerSummaryPref);
-					break;
 				case DelayMode.FISCHER_AFTER:
 					editPref.setEnabled(true);
 					editPref.setTitle(R.string.fischerPref);
-					editPref.setSummary(R.string.fischerAfterSummaryPref);
+					editPref.setSummary(R.string.fischerSummaryPref);
 					break;
 				case DelayMode.BRONSTEIN:
 					editPref.setEnabled(true);

@@ -21,15 +21,14 @@
     <string name="gameDurationSummaryPref">Configure the game\'s duration</string>
     <string name="basicDelayPref">Delay Duration</string>
     <string name="basicDelaySummaryPref">Configure the time delayed before a player\'s turn</string>
-    <string name="fischerPref">Incremented Delay</string>
-    <string name="fischerSummaryPref">Configure the amount of delay incremented to a player\'s remaining time at the beginning of his or her turn</string>
-    <string name="fischerAfterSummaryPref">Configure the amount of delay incremented to a player\'s remaining time at the end of his or her turn</string>
-    <string name="bronsteinPref">Maximum Incremented Delay</string>
-    <string name="bronsteinSummaryPref">Configure the maximum amount of delay incremented to a player\'s remaining time at the end of his or her turn</string>
+    <string name="fischerPref">Incremented Time</string>
+    <string name="fischerSummaryPref">Configure the time incremented to a player\'s remaining duration</string>
+    <string name="bronsteinPref">Max Time Increment</string>
+    <string name="bronsteinSummaryPref">Configure the maximum time incremented to a player\'s remaining duration</string>
     
     <!-- Options strings, rules -->
     <string name="advancedPrefGroup">Advanced Options</string>
-    <string name="advancedPrefSummary">Configure rules, handicap, etc.</string>
+    <string name="advancedPrefSummary">Configure the timer\'s behavior</string>
     <string name="gameModePref">Game Rules</string>
     <string name="gameModeSummaryPref">Configure the timer\'s behavior to Basic Delay, Fischer, Bronstein, etc.</string>
     
