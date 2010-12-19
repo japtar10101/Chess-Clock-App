@@ -28,7 +28,8 @@
     
         <PreferenceScreen android:key="advancedOptions"
         android:title="@string/advancedPrefGroup"
-        android:summary="@string/advancedPrefSummary">
+        android:summary="@string/advancedPrefSummary"
+        android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
         
 	        <ListPreference android:key="delayMode"
 	        android:title="@string/gameModePref"

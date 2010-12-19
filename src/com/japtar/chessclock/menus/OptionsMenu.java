@@ -19,11 +19,14 @@ import com.japtar.chessclock.models.OptionsModel;
  * Sets up the menu for options
  * @author japtar10101
  */
-public class OptionsMenu extends PreferenceActivity {
+public class OptionsMenu extends PreferenceActivity implements
+		Preference.OnPreferenceChangeListener {
 	/** The key value for all time-related stuff */
 	public static final String KEY_TIME_GROUP = "timeGroup";
 	/** Key to get advanced options button */
 	public static final String KEY_ADVANCED_OPTIONS = "advancedOptions";
+	/** Key to get delay mode list */
+	public static final String KEY_DELAY_MODE = "delayMode";
 	
 	/* ===========================================================
 	 * Overrides
@@ -41,6 +44,10 @@ public class OptionsMenu extends PreferenceActivity {
 		
 		// Disable and update text, if necessary
 		this.updatePreferenceEnabled();
+		
+		// Set the list preference's listener to this
+		this.findPreference(KEY_DELAY_MODE).
+				setOnPreferenceChangeListener(this);
 	}
     
     /**
@@ -65,6 +72,48 @@ public class OptionsMenu extends PreferenceActivity {
         // Disable and update text, if necessary
 		this.updatePreferenceEnabled();
     }
+    
+	/**
+	 * Update the delay mode description
+	 * @see android.preference.Preference.OnPreferenceChangeListener#onPreferenceChange(android.preference.Preference, java.lang.Object)
+	 */
+	@Override
+	public boolean onPreferenceChange(final Preference preference,
+			final Object newValue) {
+		// Check if the newValue is a String
+		if(newValue instanceof String) {
+			
+			// Convert to string
+			final String delayMode = (String) newValue;
+			
+			// Get the delay Preference
+			final Preference editPref = this.findPreference(
+					OptionsModel.KEY_WHITE_DELAY_TIME);
+			
+			// Update the delay preference text
+			if(delayMode.equals(DelayMode.STRING_BASIC)) {
+				editPref.setEnabled(true);
+				editPref.setTitle(R.string.basicDelayPref);
+				editPref.setSummary(R.string.basicDelaySummaryPref);
+			} else if((delayMode.equals(DelayMode.STRING_FISCHER)) ||
+					(delayMode.equals(DelayMode.STRING_FISCHER_AFTER)))  {
+				editPref.setEnabled(true);
+				editPref.setTitle(R.string.fischerPref);
+				editPref.setSummary(R.string.fischerSummaryPref);
+			} else if(delayMode.equals(DelayMode.STRING_BRONSTEIN)) {
+				editPref.setEnabled(true);
+				editPref.setTitle(R.string.bronsteinPref);
+				editPref.setSummary(R.string.bronsteinSummaryPref);				
+			} else {
+				editPref.setEnabled(false);
+				editPref.setTitle(R.string.basicDelayPref);
+				editPref.setSummary(R.string.disabledDelaySummaryPref);
+			}
+		}
+		
+		// Allow changes
+		return true;
+	}
     
     /* ===========================================================
 	 * Private/Protected Methods
