@@ -26,7 +26,8 @@
         android:defaultValue="2" android:visible="false" />
         -->
     
-        <PreferenceScreen android:title="@string/advancedPrefGroup"
+        <PreferenceScreen android:key="advancedOptions"
+        android:title="@string/advancedPrefGroup"
         android:summary="@string/advancedPrefSummary">
         
 	        <ListPreference android:key="delayMode"

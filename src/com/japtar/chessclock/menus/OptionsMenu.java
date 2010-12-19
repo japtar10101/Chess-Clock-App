@@ -22,6 +22,8 @@ import com.japtar.chessclock.models.OptionsModel;
 public class OptionsMenu extends PreferenceActivity {
 	/** The key value for all time-related stuff */
 	public static final String KEY_TIME_GROUP = "timeGroup";
+	/** Key to get advanced options button */
+	public static final String KEY_ADVANCED_OPTIONS = "advancedOptions";
 	
 	/* ===========================================================
 	 * Overrides
@@ -136,6 +138,14 @@ public class OptionsMenu extends PreferenceActivity {
 					editPref.setSummary(R.string.disabledDelaySummaryPref);
 					break;
 			}
+		} else {
+			editPref.setSummary(R.string.disabledSummaryPref);
+		}
+		
+		// Update advanced options' summary
+    	editPref = this.findPreference(KEY_ADVANCED_OPTIONS);
+		if(enabled) {
+			editPref.setSummary(R.string.advancedPrefSummary);
 		} else {
 			editPref.setSummary(R.string.disabledSummaryPref);
 		}

@@ -30,6 +30,8 @@ public class TimeModel implements Comparable<TimeModel> {
 	 * =========================================================== */
 	/** Seconds */
 	private int mSeconds;
+	/** If true, negative values will be allowed */
+	private boolean mAllowNegatives = false;
 	
 	/* ===========================================================
 	 * Constructors
@@ -212,10 +214,12 @@ public class TimeModel implements Comparable<TimeModel> {
 	 */
 	public boolean decrementASecond() {
 		// Check if we're at zero, first
-		boolean toReturn = !isTimeZero();
+		boolean toReturn = !this.isTimeZero();
+		if(mAllowNegatives || toReturn) {
+			// Decrement the seconds 
+			--mSeconds;
+		}
 		
-		// Decrement the seconds 
-		--mSeconds;
 		return toReturn;
 	}
 	

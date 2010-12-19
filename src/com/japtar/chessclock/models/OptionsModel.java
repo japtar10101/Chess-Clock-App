@@ -173,17 +173,16 @@ public class OptionsModel implements SaveStateModel {
 		
 		// Recall the game mode
 		savedString = savedState.getString(KEY_DELAY_MODE, DelayMode.STRING_BASIC);
-		delayMode = DelayMode.BASIC;
-		if(savedString != null) {
-			if(savedString.equals(DelayMode.STRING_BRONSTEIN)) {
-				delayMode = DelayMode.BRONSTEIN;
-			} else if(savedString.equals(DelayMode.STRING_FISCHER)) {
-				delayMode = DelayMode.FISCHER;
-			} else if(savedString.equals(DelayMode.STRING_FISCHER_AFTER)) {
-				delayMode = DelayMode.FISCHER_AFTER;
-			} else if(savedString.equals(DelayMode.STRING_HOUR_GLASS)) {
-				delayMode = DelayMode.HOUR_GLASS;
-			}
+		if(savedString.equals(DelayMode.STRING_BRONSTEIN)) {
+			delayMode = DelayMode.BRONSTEIN;
+		} else if(savedString.equals(DelayMode.STRING_FISCHER)) {
+			delayMode = DelayMode.FISCHER;
+		} else if(savedString.equals(DelayMode.STRING_FISCHER_AFTER)) {
+			delayMode = DelayMode.FISCHER_AFTER;
+		} else if(savedString.equals(DelayMode.STRING_HOUR_GLASS)) {
+			delayMode = DelayMode.HOUR_GLASS;
+		} else {
+			delayMode = DelayMode.BASIC;
 		}
 	}
 
