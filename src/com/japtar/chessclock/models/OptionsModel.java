@@ -222,7 +222,24 @@ public class OptionsModel implements SaveStateModel {
 //		saveEditor.putBoolean(KEY_NEGATIVE, enableNegatives);
 //		saveEditor.putBoolean(KEY_PENALTY_ENABLED, enablePenality);
 //		penalityTime.saveTime(saveEditor, KEY_PENALTY_TIME);
-		saveEditor.putInt(KEY_DELAY_MODE, delayMode);
+		switch(delayMode) {
+			case DelayMode.FISCHER:
+				saveEditor.putString(KEY_DELAY_MODE, DelayMode.STRING_FISCHER);
+				break;
+			case DelayMode.FISCHER_AFTER:
+				saveEditor.putString(KEY_DELAY_MODE, DelayMode.STRING_FISCHER_AFTER);
+				break;
+			case DelayMode.BRONSTEIN:
+				saveEditor.putString(KEY_DELAY_MODE, DelayMode.STRING_BRONSTEIN);
+				break;
+			case DelayMode.HOUR_GLASS:
+				saveEditor.putString(KEY_DELAY_MODE, DelayMode.STRING_HOUR_GLASS);
+				break;
+			case DelayMode.BASIC:
+			default:
+				saveEditor.putString(KEY_DELAY_MODE, DelayMode.STRING_BASIC);
+				break;
+		}
 		
 		// Write it in!
 		saveEditor.commit();
