@@ -486,6 +486,9 @@ public class TimersMenu implements MenuInterface,
 		// Reset the delay time
 		Global.GAME_STATE.switchTurns(leftPlayersTurn);
 		
+		// Set the timer to running
+		Global.GAME_STATE.timerCondition = TimerCondition.RUNNING;
+		
 		// Update the Delay label
 		this.updateButtonAndLabelText();
 		
