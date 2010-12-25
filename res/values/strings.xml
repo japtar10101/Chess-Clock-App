@@ -15,10 +15,10 @@
     <string name="newGameButtonText">New Game</string>
 	<string name="optionsButtonText">Options</string>
 	
-    <!-- Options strings, time -->
+    <!-- Options strings, time (no handicap) -->
     <string name="timePrefGroup">Time Configuration</string>
     <string name="gameDurationPref">Game Duration</string>
-    <string name="gameDurationSummaryPref">Configure the game\'s duration</string>
+    <string name="gameDurationSummaryPref">Configure each players\' duration</string>
     <string name="basicDelayPref">Delay Duration</string>
     <string name="basicDelaySummaryPref">Configure the time delayed before a player\'s turn</string>
     <string name="fischerPref">Incremented Time</string>
@@ -26,9 +26,31 @@
     <string name="bronsteinPref">Max Time Increment</string>
     <string name="bronsteinSummaryPref">Configure the maximum time incremented to a player\'s remaining duration</string>
     
+    <!-- Options strings, time (with handicap, white player) -->
+    <string name="gameDurationPrefWhite">White Player\'s Game Duration</string>
+    <string name="gameDurationSummaryPrefWhite">Configure white player\'s duration</string>
+    <string name="basicDelayPrefWhite">White Player\'s Delay Duration</string>
+    <string name="basicDelaySummaryPrefWhite">Configure the time delayed before white player\'s turn</string>
+    <string name="fischerPrefWhite">White Player\'s Incremented Time</string>
+    <string name="fischerSummaryPrefWhite">Configure the time incremented to white player\'s remaining duration</string>
+    <string name="bronsteinPrefWhite">White Player\'s Max Time Increment</string>
+    <string name="bronsteinSummaryPrefWhite">Configure the maximum time incremented to white player\'s remaining duration</string>
+    
+    <!-- Options strings, time (with handicap, black player) -->
+    <string name="gameDurationPrefBlack">Black Player\'s Game Duration</string>
+    <string name="gameDurationSummaryPrefBlack">Configure the black player\'s duration</string>
+    <string name="basicDelayPrefBlack">Black Player\'s Delay Duration</string>
+    <string name="basicDelaySummaryPrefBlack">Configure the time delayed before black player\'s turn</string>
+    <string name="fischerPrefBlack">Black Player\'s Incremented Time</string>
+    <string name="fischerSummaryPrefBlack">Configure the time incremented to black player\'s remaining duration</string>
+    <string name="bronsteinPrefBlack">Black Player\'s Max Time Increment</string>
+    <string name="bronsteinSummaryPrefBlack">Configure the maximum time incremented to black player\'s remaining duration</string>
+    
     <!-- Options strings, rules -->
     <string name="advancedPrefGroup">Advanced Options</string>
     <string name="advancedPrefSummary">Configure the timer\'s behavior</string>
+    <string name="handicapPref">Enable Handicap</string>
+    <string name="handicapSummaryPref">Allow each player to have different game and delay durations</string>
     <string name="gameModePref">Game Rules</string>
     <string name="gameModeSummaryPref">Configure the timer\'s behavior to Basic Delay, Fischer, Bronstein, etc.</string>
     

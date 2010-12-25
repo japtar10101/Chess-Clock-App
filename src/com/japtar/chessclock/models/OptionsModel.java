@@ -25,10 +25,10 @@ public class OptionsModel implements SaveStateModel {
 	public static final String KEY_WHITE_DELAY_TIME = "delayTime";
 
 	// == Black Player's time ==
-//	/** The saved key value for time limit */
-//	public static final String KEY_BLACK_TIME_LIMIT = "timeLimitBlack";
-//	/** The saved key value for delay time */
-//	public static final String KEY_BLACK_DELAY_TIME = "delayTimeBlack";
+	/** The saved key value for time limit */
+	public static final String KEY_BLACK_TIME_LIMIT = "timeLimitBlack";
+	/** The saved key value for delay time */
+	public static final String KEY_BLACK_DELAY_TIME = "delayTimeBlack";
 	
 	// == Feedback ==
 	/** The saved key value for alarm */
@@ -39,8 +39,8 @@ public class OptionsModel implements SaveStateModel {
 	public static final String KEY_VIBRATE = "vibrate";
 	
 	// == Advanced Options ==
-//	/** The saved key value for enabling handicap */
-//	public static final String KEY_HANDICAP = "enableHandicap";
+	/** The saved key value for enabling handicap */
+	public static final String KEY_HANDICAP = "enableHandicap";
 	/** The saved key value for the list of delay modes */
 	public static final String KEY_DELAY_MODE = "delayMode";
 //	/** The saved key value for allowing the timer to continue after
@@ -65,8 +65,8 @@ public class OptionsModel implements SaveStateModel {
 	public static final boolean DEFAULT_ENABLE_VIBRATE = true;
 	
 	// == Advanced Options ==
-//	/** The default value for {@link #enableHandicap} */
-//	public static final boolean DEFAULT_ENABLE_HANDICAP = false;
+	/** The default value for {@link #enableHandicap} */
+	public static final boolean DEFAULT_ENABLE_HANDICAP = false;
 //	/** The default value for {@link #enableHandicap} */
 //	public static final boolean DEFAULT_ENABLE_NEGATIVES = false;
 //	/** The default value for {@link #enablePenality} */
@@ -84,10 +84,10 @@ public class OptionsModel implements SaveStateModel {
 	public final TimeModel savedWhiteDelayTime = new TimeModel(DEFAULT_DELAY_TIME);
 	
 	// == Black player's time ==
-//	/** The black player's time limit */
-//	public final TimeModel savedBlackTimeLimit = new TimeModel(DEFAULT_TIME_LIMIT);
-//	/** The black player's delay time */
-//	public final TimeModel savedBlackDelayTime = new TimeModel(DEFAULT_DELAY_TIME);
+	/** The black player's time limit */
+	public final TimeModel savedBlackTimeLimit = new TimeModel(DEFAULT_TIME_LIMIT);
+	/** The black player's delay time */
+	public final TimeModel savedBlackDelayTime = new TimeModel(DEFAULT_DELAY_TIME);
 	
 	// == Alarm ==
 	/** The stored alarm */
@@ -100,9 +100,9 @@ public class OptionsModel implements SaveStateModel {
 	public boolean enableVibrate = DEFAULT_ENABLE_VIBRATE;
 	
 	// == Advanced Options ==
-//	/** If true, the white and black player's options will be used respectively.
-//	 * Otherwise, only the white player's options will be used for both players. */
-//	public boolean enableHandicap = DEFAULT_ENABLE_HANDICAP;
+	/** If true, the white and black player's options will be used respectively.
+	 * Otherwise, only the white player's options will be used for both players. */
+	public boolean enableHandicap = DEFAULT_ENABLE_HANDICAP;
 	/** The delay mode for this game */
 	public byte delayMode = DelayMode.BASIC;
 //	/** If true, when a player expires, the displayed values will continue to
@@ -139,10 +139,10 @@ public class OptionsModel implements SaveStateModel {
 				DEFAULT_DELAY_TIME);
 		
 		// Recall the black player attributes to the bundle
-//		savedBlackTimeLimit.recallTime(savedState, KEY_BLACK_TIME_LIMIT,
-//				DEFAULT_TIME_LIMIT);
-//		savedBlackDelayTime.recallTime(savedState, KEY_BLACK_DELAY_TIME,
-//				DEFAULT_DELAY_TIME);
+		savedBlackTimeLimit.recallTime(savedState, KEY_BLACK_TIME_LIMIT,
+				DEFAULT_TIME_LIMIT);
+		savedBlackDelayTime.recallTime(savedState, KEY_BLACK_DELAY_TIME,
+				DEFAULT_DELAY_TIME);
 		
 		// Recall the alarm
 		String savedString = savedState.getString(KEY_ALARM, null);
@@ -162,8 +162,8 @@ public class OptionsModel implements SaveStateModel {
 				DEFAULT_ENABLE_VIBRATE);
 		
 		// Recall advanced options
-//		enableHandicap = savedState.getBoolean(KEY_HANDICAP,
-//				DEFAULT_ENABLE_HANDICAP);
+		enableHandicap = savedState.getBoolean(KEY_HANDICAP,
+				DEFAULT_ENABLE_HANDICAP);
 //		enableNegatives = savedState.getBoolean(KEY_NEGATIVE,
 //				DEFAULT_ENABLE_NEGATIVES);
 //		enablePenality = savedState.getBoolean(KEY_PENALTY_ENABLED,
@@ -207,8 +207,8 @@ public class OptionsModel implements SaveStateModel {
 		savedWhiteDelayTime.saveTime(saveEditor, KEY_WHITE_DELAY_TIME);
 		
 		// Save the black player attributes to the bundle
-//		savedBlackTimeLimit.saveTime(saveEditor, KEY_BLACK_TIME_LIMIT);
-//		savedBlackDelayTime.saveTime(saveEditor, KEY_BLACK_DELAY_TIME);
+		savedBlackTimeLimit.saveTime(saveEditor, KEY_BLACK_TIME_LIMIT);
+		savedBlackDelayTime.saveTime(saveEditor, KEY_BLACK_DELAY_TIME);
 		
 		// Save the alarm
 		saveEditor.putString(KEY_ALARM, alarmUri.toString());
@@ -218,7 +218,7 @@ public class OptionsModel implements SaveStateModel {
 		saveEditor.putBoolean(KEY_VIBRATE, enableVibrate);
 		
 		// Save advanced options
-//		saveEditor.putBoolean(KEY_HANDICAP, enableHandicap);
+		saveEditor.putBoolean(KEY_HANDICAP, enableHandicap);
 //		saveEditor.putBoolean(KEY_NEGATIVE, enableNegatives);
 //		saveEditor.putBoolean(KEY_PENALTY_ENABLED, enablePenality);
 //		penalityTime.saveTime(saveEditor, KEY_PENALTY_TIME);

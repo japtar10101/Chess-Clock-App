@@ -14,22 +14,25 @@
 		android:summary="@string/basicDelaySummaryPref"
 		android:defaultValue="2" />
         
-        <!-- a FAT TODO! 
         <com.japtar.chessclock.gui.TimerPreference android:key="timeLimitBlack"
-        android:title="TODO"
-        android:summary="TODO"
-        android:defaultValue="300" android:visible="false" />
+        android:title="@string/gameDurationPrefBlack"
+        android:summary="@string/gameDurationSummaryPrefBlack"
+        android:defaultValue="300" />
         
         <com.japtar.chessclock.gui.TimerPreference android:key="delayTimeBlack"
-        android:title="TODO"
-        android:summary="TODO"
-        android:defaultValue="2" android:visible="false" />
-        -->
+        android:title="@string/basicDelayPrefBlack"
+        android:summary="@string/basicDelaySummaryPrefBlack"
+        android:defaultValue="2" />
     
         <PreferenceScreen android:key="advancedOptions"
         android:title="@string/advancedPrefGroup"
         android:summary="@string/advancedPrefSummary">
         
+            <CheckBoxPreference android:key="enableHandicap"
+	        android:title="@string/handicapPref"
+	        android:defaultValue="true"
+	        android:summary="@string/handicapSummaryPref" />
+	        
 	        <ListPreference android:key="delayMode"
 	        android:title="@string/gameModePref"
 	        android:summary="@string/gameModeSummaryPref"
@@ -39,11 +42,6 @@
 	        android:defaultValue="basicDelay" />
 
             <!-- a FAT TODO! 
-            <CheckBoxPreference android:key="enableHandicap"
-	        android:title="TODO"
-	        android:defaultValue="true"
-	        android:summary="TODO" />
-	        
 	        <CheckBoxPreference android:key="enableNegative"
             android:title="TODO"
             android:defaultValue="true"
