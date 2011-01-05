@@ -30,7 +30,7 @@
         
             <CheckBoxPreference android:key="enableHandicap"
 	        android:title="@string/handicapPref"
-	        android:defaultValue="true"
+	        android:defaultValue="false"
 	        android:summary="@string/handicapSummaryPref" />
 	        
 	        <ListPreference android:key="delayMode"

@@ -27,23 +27,23 @@
     <string name="bronsteinSummaryPref">Configure the maximum time incremented to a player\'s remaining duration</string>
     
     <!-- Options strings, time (with handicap, white player) -->
-    <string name="gameDurationPrefWhite">White Player\'s Game Duration</string>
+    <string name="gameDurationPrefWhite">White Player\'s Duration</string>
     <string name="gameDurationSummaryPrefWhite">Configure white player\'s duration</string>
-    <string name="basicDelayPrefWhite">White Player\'s Delay Duration</string>
+    <string name="basicDelayPrefWhite">White Player\'s Delay</string>
     <string name="basicDelaySummaryPrefWhite">Configure the time delayed before white player\'s turn</string>
-    <string name="fischerPrefWhite">White Player\'s Incremented Time</string>
+    <string name="fischerPrefWhite">White Player\'s Increment</string>
     <string name="fischerSummaryPrefWhite">Configure the time incremented to white player\'s remaining duration</string>
-    <string name="bronsteinPrefWhite">White Player\'s Max Time Increment</string>
+    <string name="bronsteinPrefWhite">White Player\'s Max Increment</string>
     <string name="bronsteinSummaryPrefWhite">Configure the maximum time incremented to white player\'s remaining duration</string>
     
     <!-- Options strings, time (with handicap, black player) -->
-    <string name="gameDurationPrefBlack">Black Player\'s Game Duration</string>
+    <string name="gameDurationPrefBlack">Black Player\'s Duration</string>
     <string name="gameDurationSummaryPrefBlack">Configure the black player\'s duration</string>
-    <string name="basicDelayPrefBlack">Black Player\'s Delay Duration</string>
+    <string name="basicDelayPrefBlack">Black Player\'s Delay</string>
     <string name="basicDelaySummaryPrefBlack">Configure the time delayed before black player\'s turn</string>
-    <string name="fischerPrefBlack">Black Player\'s Incremented Time</string>
+    <string name="fischerPrefBlack">Black Player\'s Increment</string>
     <string name="fischerSummaryPrefBlack">Configure the time incremented to black player\'s remaining duration</string>
-    <string name="bronsteinPrefBlack">Black Player\'s Max Time Increment</string>
+    <string name="bronsteinPrefBlack">Black Player\'s Max Increment</string>
     <string name="bronsteinSummaryPrefBlack">Configure the maximum time incremented to black player\'s remaining duration</string>
     
     <!-- Options strings, rules -->
