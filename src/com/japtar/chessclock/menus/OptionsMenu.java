@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceGroup;
 import android.preference.PreferenceManager;
 
 import com.japtar.chessclock.Global;
@@ -25,20 +26,11 @@ public class OptionsMenu extends PreferenceActivity implements
 	 * Constants
 	 * =========================================================== */
 	/** The key value for all time-related stuff */
-	public static final String KEY_TIME_GROUP = "timeGroup";
-	/** Key to get advanced options button */
-	public static final String KEY_ADVANCED_OPTIONS = "advancedOptions";
-	/** Key to get delay mode list */
-	public static final String KEY_DELAY_MODE = "delayMode";
-	
-	/* ===========================================================
-	 * Overrides
-	 * =========================================================== */
-	
-	/** TODO */
-	private Preference mBlackTime = null;
-	/** TODO */
-	private Preference mBlackDelay = null;
+	public static final String KEY_TIME_GROUP_NO_HANDICAP = "timeNoHandicapGroup";
+	/** The key value for all time-related stuff */
+	public static final String KEY_TIME_GROUP_WITH_HANDICAP = "timeWithHandicapGroup";
+	/** The key value for all time-related stuff */
+	public static final String KEY_ADVANCED_GROUP = "advancedOptions";
 	
 	/* ===========================================================
 	 * Overrides
@@ -54,17 +46,13 @@ public class OptionsMenu extends PreferenceActivity implements
 	    // First, setup the UI
 		this.addPreferencesFromResource(R.layout.options);
 		
-		// Setup the member variables
-		mBlackTime = this.findPreference(
-				OptionsModel.KEY_BLACK_TIME_LIMIT);
-		mBlackDelay = this.findPreference(
-				OptionsModel.KEY_BLACK_DELAY_TIME);
-		
 		// Disable and update text, if necessary
-		this.updatePreferenceEnabled();
+		this.updateAllPreferences();
 		
 		// Set the list preference's listener to this
-		this.findPreference(KEY_DELAY_MODE).
+		this.findPreference(OptionsModel.KEY_DELAY_MODE).
+				setOnPreferenceChangeListener(this);
+		this.findPreference(OptionsModel.KEY_HANDICAP).
 				setOnPreferenceChangeListener(this);
 	}
     
@@ -76,7 +64,23 @@ public class OptionsMenu extends PreferenceActivity implements
     public void onPause() {
     	// Do whatever is in the super class first
         super.onPause();
+        
+        // Recall all the settings
         this.recallSettings();
+        
+        // Check if the handicap is enabled
+        if(!Global.OPTIONS.enableHandicap) {
+            // If the handicap is not enabled, set the black player's time
+            // the same as the white player
+        	Global.OPTIONS.savedBlackTimeLimit.setTime(
+        			Global.OPTIONS.savedWhiteTimeLimit);
+        	Global.OPTIONS.savedBlackDelayTime.setTime(
+        			Global.OPTIONS.savedWhiteDelayTime);
+        	
+        	// Save this settings
+        	Global.OPTIONS.saveSettings(
+    			PreferenceManager.getDefaultSharedPreferences(this));
+        }
     }
     
     /**
@@ -88,7 +92,7 @@ public class OptionsMenu extends PreferenceActivity implements
     	// Do whatever is in the super class first
         super.onResume();
         // Disable and update text, if necessary
-		this.updatePreferenceEnabled();
+		this.updateAllPreferences();
     }
     
 	/**
@@ -98,18 +102,22 @@ public class OptionsMenu extends PreferenceActivity implements
 	@Override
 	public boolean onPreferenceChange(final Preference preference,
 			final Object newValue) {
-		// Check if the newValue is a String
-		if(OptionsModel.KEY_DELAY_MODE.equals(preference.getKey())) {
-			
+		// Figure out which preference changed
+		final String key = preference.getKey();
+		if(key.equals(OptionsModel.KEY_DELAY_MODE)) {
+			// == Game mode changed ==
+			this.recallSettings();
 			// Convert to string
-			final String delayMode = (String) newValue;
-			
+			this.updateAllPreferences(
+					(String) newValue,
+					Global.OPTIONS.enableHandicap);
+		} else if(key.equals(OptionsModel.KEY_HANDICAP)) {
+			// == Handicap changed ==
+			this.recallSettings();
 			// Update the delay preference text	
-			if(Global.OPTIONS.enableHandicap) {
-				this.updateDelayTextWithHandicap(delayMode);
-			} else {
-				this.updateDelayTextNoHandicap(delayMode);
-			}
+			this.updateAllPreferences(
+					DelayMode.BYTE_TO_STRING[Global.OPTIONS.delayMode],
+					(Boolean) newValue);
 		}
 		
 		// Allow changes
@@ -131,254 +139,153 @@ public class OptionsMenu extends PreferenceActivity implements
     	Global.OPTIONS.recallSettings(settings);
     }
     
+    private void updateAllPreferences() {
+    	this.updateAllPreferences(
+    			DelayMode.BYTE_TO_STRING[Global.OPTIONS.delayMode],
+    			Global.OPTIONS.enableHandicap);
+    }
+    
     /**
      * TODO: document
      */
-    private void updatePreferenceEnabled() {
-    	// Figure out whether to enable or disable the preferences
-    	final boolean enabled;
-    	switch(Global.GAME_STATE.timerCondition) {
-			case TimerCondition.RUNNING:
-			case TimerCondition.PAUSE:
-				enabled = false;
-				break;
-			default:
-				enabled = true;
-				break;
-		}
-		
-    	// Enable/disable the time limit
-    	Preference editPref = this.findPreference(KEY_TIME_GROUP);
-		editPref.setEnabled(enabled);
+    private void updateAllPreferences(final String delayMode,
+    		final boolean isHandicapEnabled) {
+    	/*
+    	 * Step 1: Update the text on all delay labels
+    	 * Step 2: Disable the necessary preferences.
+    	 * Step 3: update the text on each preference why it's disabled.
+    	 */
     	
-		// Update the time limit summary
-    	editPref = this.findPreference(
-				OptionsModel.KEY_WHITE_TIME_LIMIT);
-		if(enabled) {
-			editPref.setSummary(R.string.gameDurationSummaryPref);
-		} else {
-			editPref.setSummary(R.string.disabledSummaryPref);
-		}
-		
-		// Update the delay time summary
-		if(Global.OPTIONS.enableHandicap) {
-			this.updateDelayTextWithHandicap(enabled);
-		} else {
-			this.updateDelayTextNoHandicap(enabled);
-		}
-		
-		// Update advanced options' summary
-    	editPref = this.findPreference(KEY_ADVANCED_OPTIONS);
-		if(enabled) {
-			editPref.setSummary(R.string.advancedPrefSummary);
-		} else {
-			editPref.setSummary(R.string.disabledSummaryPref);
-		}
+    	// First, update all the delay preference text based on delay mode
+    	this.updateDelayPreference(delayMode);
+    	
+    	// Disable the necessary elements
+    	if(Global.GAME_STATE.timerCondition == TimerCondition.RUNNING ||
+    			Global.GAME_STATE.timerCondition == TimerCondition.PAUSE) {
+    		// Disable all time-related categories
+    		this.disablePreferenceGroup(KEY_TIME_GROUP_NO_HANDICAP,
+    				R.string.disabledSummaryPref);
+    		this.disablePreferenceGroup(KEY_TIME_GROUP_WITH_HANDICAP,
+    				R.string.disabledSummaryPref);
+    		this.disablePreferenceGroup(KEY_ADVANCED_GROUP,
+    				R.string.disabledSummaryPref);
+    	} else if(isHandicapEnabled) {
+    		// Disable the no-handicap category
+    		this.disablePreferenceGroup(KEY_TIME_GROUP_NO_HANDICAP,
+    				R.string.disabledNoHandicapSummaryPref);
+    	} else {
+    		// Disable the with-handicap category
+    		this.disablePreferenceGroup(KEY_TIME_GROUP_WITH_HANDICAP,
+    				R.string.disabledHandicapSummaryPref);
+    	}
     }
     
-	/**
-	 * TODO: document
-	 * @param delayMode
-	 */
-	private void updateDelayTextNoHandicap(final String delayMode) {
-		// Get the black player's options
-		Preference editPref = this.findPreference(
-				OptionsModel.KEY_BLACK_TIME_LIMIT);
-		
-		// Don't show the black player's time options
-		if(editPref != null) {
-			this.getPreferenceScreen().removePreference(mBlackTime);
-			this.getPreferenceScreen().removePreference(mBlackDelay);
-		}
-		
-		// Get the delay Preference
-		editPref = this.findPreference(
-				OptionsModel.KEY_WHITE_DELAY_TIME);
-		
-		// Update the delay preference text
-		if(delayMode.equals(DelayMode.STRING_BASIC)) {
-			editPref.setEnabled(true);
-			editPref.setTitle(R.string.basicDelayPref);
-			editPref.setSummary(R.string.basicDelaySummaryPref);
+    /**
+     * TODO: document
+     */
+    private void updateDelayPreference(final String delayMode) {
+    	// First, get the delay preferences
+    	final Preference[] delayPrefs = new Preference[3];
+    	final int[] delayPrefStrings = new int[delayPrefs.length * 2];
+    	final Preference[] durationPrefs = new Preference[3];
+    	final int[] durationPrefStrings = new int[durationPrefs.length];
+    	boolean enablePref = true;
+    	
+    	// One preference from the "no-handicap" category
+    	PreferenceGroup groupPref = (PreferenceGroup)
+    			this.findPreference(KEY_TIME_GROUP_NO_HANDICAP);
+    	int delayIndex = 0, durationIndex = 0;
+    	delayPrefs[delayIndex++] = groupPref.findPreference(
+    			OptionsModel.KEY_WHITE_DELAY_TIME);
+    	durationPrefs[durationIndex++] = groupPref.findPreference(
+    			OptionsModel.KEY_WHITE_TIME_LIMIT);
+    	
+    	// two preference from the "with-handicap" category
+    	groupPref = (PreferenceGroup)
+    			this.findPreference(KEY_TIME_GROUP_WITH_HANDICAP);
+    	delayPrefs[delayIndex++] = groupPref.findPreference(
+    			OptionsModel.KEY_WHITE_DELAY_TIME);
+    	delayPrefs[delayIndex++] = groupPref.findPreference(
+    			OptionsModel.KEY_BLACK_DELAY_TIME);
+    	durationPrefs[durationIndex++] = groupPref.findPreference(
+    			OptionsModel.KEY_WHITE_TIME_LIMIT);
+    	durationPrefs[durationIndex++] = groupPref.findPreference(
+    			OptionsModel.KEY_BLACK_TIME_LIMIT);
+    	
+    	// Grab the string ID for each index
+		delayIndex = 0;
+    	if(delayMode.equals(DelayMode.STRING_BASIC)) {
+    		delayPrefStrings[delayIndex++] = R.string.basicDelayPref;
+    		delayPrefStrings[delayIndex++] = R.string.basicDelaySummaryPref;
+    		delayPrefStrings[delayIndex++] = R.string.basicDelayPrefWhite;
+    		delayPrefStrings[delayIndex++] = R.string.basicDelaySummaryPrefWhite;
+    		delayPrefStrings[delayIndex++] = R.string.basicDelayPrefBlack;
+    		delayPrefStrings[delayIndex++] = R.string.basicDelaySummaryPrefBlack;
 		} else if((delayMode.equals(DelayMode.STRING_FISCHER)) ||
 				(delayMode.equals(DelayMode.STRING_FISCHER_AFTER)))  {
-			editPref.setEnabled(true);
-			editPref.setTitle(R.string.fischerPref);
-			editPref.setSummary(R.string.fischerSummaryPref);
+    		delayPrefStrings[delayIndex++] = R.string.fischerPref;
+    		delayPrefStrings[delayIndex++] = R.string.fischerSummaryPref;
+    		delayPrefStrings[delayIndex++] = R.string.fischerPrefWhite;
+    		delayPrefStrings[delayIndex++] = R.string.fischerSummaryPrefWhite;
+    		delayPrefStrings[delayIndex++] = R.string.fischerPrefBlack;
+    		delayPrefStrings[delayIndex++] = R.string.fischerSummaryPrefBlack;
 		} else if(delayMode.equals(DelayMode.STRING_BRONSTEIN)) {
-			editPref.setEnabled(true);
-			editPref.setTitle(R.string.bronsteinPref);
-			editPref.setSummary(R.string.bronsteinSummaryPref);				
+    		delayPrefStrings[delayIndex++] = R.string.bronsteinPref;
+    		delayPrefStrings[delayIndex++] = R.string.bronsteinSummaryPref;
+    		delayPrefStrings[delayIndex++] = R.string.bronsteinPrefWhite;
+    		delayPrefStrings[delayIndex++] = R.string.bronsteinSummaryPrefWhite;
+    		delayPrefStrings[delayIndex++] = R.string.bronsteinPrefBlack;
+    		delayPrefStrings[delayIndex++] = R.string.bronsteinSummaryPrefBlack;
 		} else {
-			editPref.setEnabled(false);
-			editPref.setTitle(R.string.basicDelayPref);
-			editPref.setSummary(R.string.disabledDelaySummaryPref);
+    		enablePref = false;
+    		delayPrefStrings[delayIndex++] = R.string.basicDelayPref;
+    		delayPrefStrings[delayIndex++] = R.string.disabledDelaySummaryPref;
+    		delayPrefStrings[delayIndex++] = R.string.basicDelayPrefWhite;
+    		delayPrefStrings[delayIndex++] = R.string.disabledDelaySummaryPref;
+    		delayPrefStrings[delayIndex++] = R.string.basicDelayPrefBlack;
+    		delayPrefStrings[delayIndex++] = R.string.disabledDelaySummaryPref;
 		}
-	}
-	
-	/**
-	 * TODO: document
-	 * @param delayMode
-	 */
-	private void updateDelayTextWithHandicap(final String delayMode) {
-		// Get the delay Preference
-		final Preference whiteDelayPref = this.findPreference(
-				OptionsModel.KEY_WHITE_DELAY_TIME);
-		Preference blackDelayPref = this.findPreference(
-				OptionsModel.KEY_BLACK_DELAY_TIME);
-		
-		// If the black player's options aren't visible, make it visible
-		if(blackDelayPref == null) {
-			this.getPreferenceScreen().addPreference(mBlackTime);
-			this.getPreferenceScreen().addPreference(mBlackDelay);
-			blackDelayPref = mBlackDelay;
-		}
-		
-		// Update the delay preference text
-		if(delayMode.equals(DelayMode.STRING_BASIC)) {
-			whiteDelayPref.setEnabled(true);
-			whiteDelayPref.setTitle(R.string.basicDelayPrefWhite);
-			whiteDelayPref.setSummary(R.string.basicDelaySummaryPrefWhite);
-			blackDelayPref.setEnabled(true);
-			blackDelayPref.setTitle(R.string.basicDelayPrefBlack);
-			blackDelayPref.setSummary(R.string.basicDelaySummaryPrefBlack);
-		} else if((delayMode.equals(DelayMode.STRING_FISCHER)) ||
-				(delayMode.equals(DelayMode.STRING_FISCHER_AFTER)))  {
-			whiteDelayPref.setEnabled(true);
-			whiteDelayPref.setTitle(R.string.fischerPrefWhite);
-			whiteDelayPref.setSummary(R.string.fischerSummaryPrefWhite);
-			blackDelayPref.setEnabled(true);
-			blackDelayPref.setTitle(R.string.fischerPrefBlack);
-			blackDelayPref.setSummary(R.string.fischerSummaryPrefBlack);
-		} else if(delayMode.equals(DelayMode.STRING_BRONSTEIN)) {
-			whiteDelayPref.setEnabled(true);
-			whiteDelayPref.setTitle(R.string.bronsteinPrefWhite);
-			whiteDelayPref.setSummary(R.string.bronsteinSummaryPrefWhite);				
-			blackDelayPref.setEnabled(true);
-			blackDelayPref.setTitle(R.string.bronsteinPrefBlack);
-			blackDelayPref.setSummary(R.string.bronsteinSummaryPrefBlack);
-		} else {
-			whiteDelayPref.setEnabled(false);
-			whiteDelayPref.setTitle(R.string.basicDelayPrefWhite);
-			whiteDelayPref.setSummary(R.string.disabledDelaySummaryPref);
-			blackDelayPref.setEnabled(false);
-			blackDelayPref.setTitle(R.string.basicDelayPrefBlack);
-			blackDelayPref.setSummary(R.string.disabledDelaySummaryPref);
-		}
-	}
-	
-	/**
-	 * TODO: document
-	 * @param enabled
-	 */
-	private void updateDelayTextNoHandicap(final boolean enabled) {
-		// Get the black player's options
-		Preference editPref = this.findPreference(
-				OptionsModel.KEY_BLACK_TIME_LIMIT);
-		
-		// Don't show the black player's time options
-		if(editPref != null) {
-			this.getPreferenceScreen().removePreference(mBlackTime);
-			this.getPreferenceScreen().removePreference(mBlackDelay);
-		}
-		
-		// Update white player's delay text, based on game mode
-		editPref = this.findPreference(
-				OptionsModel.KEY_WHITE_DELAY_TIME);
-		switch(Global.OPTIONS.delayMode) {
-			case DelayMode.FISCHER:
-			case DelayMode.FISCHER_AFTER:
-				editPref.setTitle(R.string.fischerPref);
-				editPref.setSummary(R.string.fischerSummaryPref);
-				break;
-			case DelayMode.BRONSTEIN:
-				editPref.setTitle(R.string.bronsteinPref);
-				editPref.setSummary(R.string.bronsteinSummaryPref);
-				break;
-			default:
-				editPref.setTitle(R.string.basicDelayPref);
-				editPref.setSummary(R.string.basicDelaySummaryPref);
-				break;
-		}
-		
-		// If disabled, indicate the reason 
-		switch(Global.OPTIONS.delayMode) {
-			case DelayMode.BASIC:
-			case DelayMode.FISCHER:
-			case DelayMode.FISCHER_AFTER:
-			case DelayMode.BRONSTEIN:
-				editPref.setEnabled(enabled);
-				if(!enabled) {
-					editPref.setSummary(R.string.disabledSummaryPref);
-				}
-				break;
-			default:
-				editPref.setEnabled(false);
-				editPref.setSummary(R.string.disabledDelaySummaryPref);
-				break;
-		}
-	}
-	
-	/**
-	 * TODO: document
-	 * @param enabled
-	 */
-	private void updateDelayTextWithHandicap(final boolean enabled) {
-		// Get the delay Preference
-		final Preference whiteDelayPref = this.findPreference(
-				OptionsModel.KEY_WHITE_DELAY_TIME);
-		Preference blackDelayPref = this.findPreference(
-				OptionsModel.KEY_BLACK_DELAY_TIME);
-		
-		// If the black player's options aren't visible, make it visible
-		if(blackDelayPref == null) {
-			this.getPreferenceScreen().addPreference(mBlackTime);
-			this.getPreferenceScreen().addPreference(mBlackDelay);
-			blackDelayPref = mBlackDelay;
-		}
-				
-		// Update white player's delay text, based on game mode
-		switch(Global.OPTIONS.delayMode) {
-			case DelayMode.FISCHER:
-			case DelayMode.FISCHER_AFTER:
-				whiteDelayPref.setTitle(R.string.fischerPrefWhite);
-				whiteDelayPref.setSummary(R.string.fischerSummaryPrefWhite);
-				blackDelayPref.setTitle(R.string.fischerPrefBlack);
-				blackDelayPref.setSummary(R.string.fischerSummaryPrefBlack);
-				break;
-			case DelayMode.BRONSTEIN:
-				whiteDelayPref.setTitle(R.string.bronsteinPrefWhite);
-				whiteDelayPref.setSummary(R.string.bronsteinSummaryPrefWhite);
-				blackDelayPref.setTitle(R.string.bronsteinPrefBlack);
-				blackDelayPref.setSummary(R.string.bronsteinSummaryPrefBlack);
-				break;
-			default:
-				whiteDelayPref.setTitle(R.string.basicDelayPrefWhite);
-				whiteDelayPref.setSummary(R.string.basicDelaySummaryPrefWhite);
-				blackDelayPref.setTitle(R.string.basicDelayPrefBlack);
-				blackDelayPref.setSummary(R.string.basicDelaySummaryPrefBlack);
-				break;
-		}
-		
-		// If disabled, indicate the reason 
-		switch(Global.OPTIONS.delayMode) {
-			case DelayMode.BASIC:
-			case DelayMode.FISCHER:
-			case DelayMode.FISCHER_AFTER:
-			case DelayMode.BRONSTEIN:
-				whiteDelayPref.setEnabled(enabled);
-				blackDelayPref.setEnabled(enabled);
-				if(!enabled) {
-					whiteDelayPref.setSummary(R.string.disabledSummaryPref);
-					blackDelayPref.setSummary(R.string.disabledSummaryPref);
-				}
-				break;
-			default:
-				whiteDelayPref.setEnabled(false);
-				blackDelayPref.setEnabled(false);
-				whiteDelayPref.setSummary(R.string.disabledDelaySummaryPref);
-				blackDelayPref.setSummary(R.string.disabledDelaySummaryPref);
-				break;
-		}
-	}	
+    	
+    	// Get the string IDs for duration preferences
+    	durationIndex = 0;
+    	durationPrefStrings[durationIndex++] = R.string.gameDurationSummaryPref;
+    	durationPrefStrings[durationIndex++] = R.string.gameDurationSummaryPrefWhite;
+    	durationPrefStrings[durationIndex++] = R.string.gameDurationSummaryPrefBlack;
+    	
+    	// Update all of these preferences
+    	for(delayIndex = 0; delayIndex < delayPrefs.length; ++delayIndex) {
+    		durationIndex = delayIndex * 2;
+    		delayPrefs[delayIndex].setEnabled(enablePref);
+    		delayPrefs[delayIndex].setTitle(
+    				delayPrefStrings[durationIndex]);
+    		delayPrefs[delayIndex].setSummary(
+    				delayPrefStrings[durationIndex + 1]);
+    	}
+    	for(durationIndex = 0; durationIndex < durationPrefs.length; ++durationIndex) {
+    		durationPrefs[durationIndex].setEnabled(true);
+    		durationPrefs[durationIndex].setSummary(
+    				durationPrefStrings[durationIndex]);
+    	}    	
+    }
+    
+    /**
+     * TODO: document
+     */
+    private void disablePreferenceGroup(final String groupKey,
+    		final int summaryStringID) {
+    	// Grab the preference group, and its size
+    	final PreferenceGroup groupPref = (PreferenceGroup)
+				this.findPreference(groupKey);
+    	final int numPrefs = groupPref.getPreferenceCount();
+    	
+    	// Iterate through each child preference, and update their text
+    	Preference editPref;
+    	for(int index = 0; index < numPrefs; ++index) {
+    		editPref = groupPref.getPreference(index);
+    		editPref.setSummary(summaryStringID);
+    	}
+    	
+    	// Disable the entire group
+    	groupPref.setEnabled(false);
+    }
 }

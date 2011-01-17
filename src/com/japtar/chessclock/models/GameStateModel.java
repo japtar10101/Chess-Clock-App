@@ -226,7 +226,7 @@ public class GameStateModel implements SaveStateModel {
 		leftPlayersTurn = leftPlayerIsNext;
 		
 		// Determine which player's time to increment
-		TimeModel increment = null;
+		TimeModel increment = null, delayTime = null;
 		boolean increaseLeftPlayersTime = false;
 		switch(Global.OPTIONS.delayMode) {
 			case DelayMode.FISCHER:
@@ -234,8 +234,10 @@ public class GameStateModel implements SaveStateModel {
 				// Set incrementTime to the next player's time
 				increaseLeftPlayersTime = leftPlayersTurn;
 				increment = mRightPlayersTime;
+				delayTime = mRightPlayerDelayTime;
 				if(increaseLeftPlayersTime) {
 					increment = mLeftPlayersTime;
+					delayTime = mLeftPlayerDelayTime;
 				}
 				break;
 			case DelayMode.FISCHER_AFTER:
@@ -248,21 +250,23 @@ public class GameStateModel implements SaveStateModel {
 					// Set incrementTime to the last player's time
 					increaseLeftPlayersTime = !leftPlayersTurn;
 					increment = mRightPlayersTime;
+					delayTime = mRightPlayerDelayTime;
 					if(increaseLeftPlayersTime) {
 						increment = mLeftPlayersTime;
+						delayTime = mLeftPlayerDelayTime;
 					}
 				}
 				break;
 		}
 		
 		// Increment the time
-		if(increment != null) {
-			increment.incrementTime(mLeftPlayerDelayTime);
+		if((increment != null) && (delayTime != null)) {
+			increment.incrementTime(delayTime);
 			
 			// Call the listener event
 			if(mListener != null) {
 				mListener.onTimeIncreased(
-						increaseLeftPlayersTime, mLeftPlayerDelayTime);
+						increaseLeftPlayersTime, delayTime);
 			}
 		}
 		
@@ -274,9 +278,17 @@ public class GameStateModel implements SaveStateModel {
 	 * Resets the internal game time to option's settings
 	 */
 	public void resetTime() {
+		// Determine which time corresponds to which player
+		TimeModel leftTime = Global.OPTIONS.savedBlackTimeLimit;
+		TimeModel rightTime = Global.OPTIONS.savedWhiteTimeLimit;
+		if(leftIsWhite) {
+			leftTime = Global.OPTIONS.savedWhiteTimeLimit;
+			rightTime = Global.OPTIONS.savedBlackTimeLimit;
+		}
+		
 		// Revert all the time to Option's settings
-		mLeftPlayersTime.setTime(Global.OPTIONS.savedWhiteTimeLimit);
-		mRightPlayersTime.setTime(Global.OPTIONS.savedWhiteTimeLimit);
+		mLeftPlayersTime.setTime(leftTime);
+		mRightPlayersTime.setTime(rightTime);
 		this.resetDelay();
 	}
 	
@@ -285,9 +297,23 @@ public class GameStateModel implements SaveStateModel {
 	 */
 	public void resetDelay() {
 		if(Global.OPTIONS.delayMode == DelayMode.BRONSTEIN) {
+			// Set both delay to 0
 			mLeftPlayerDelayTime.setTime(0, 0);
+			mRightPlayerDelayTime.setTime(0, 0);
 		} else {
-			mLeftPlayerDelayTime.setTime(Global.OPTIONS.savedWhiteDelayTime);
+			// Determine which time corresponds to which player
+			final TimeModel leftTime, rightTime;
+			if(leftIsWhite) {
+				leftTime = Global.OPTIONS.savedWhiteDelayTime;
+				rightTime = Global.OPTIONS.savedBlackDelayTime;
+			} else {
+				leftTime = Global.OPTIONS.savedBlackDelayTime;
+				rightTime = Global.OPTIONS.savedWhiteDelayTime;
+			}
+			
+			// Set the delay time
+			mLeftPlayerDelayTime.setTime(leftTime);
+			mRightPlayerDelayTime.setTime(rightTime);
 		}
 	}
 	
@@ -310,17 +336,25 @@ public class GameStateModel implements SaveStateModel {
 	 * Otherwise, returns the current delay time, in text.
 	 */
 	public String delayTime() {
-		// Check if the delay time is zero, or the right mode is on
-		if((Global.OPTIONS.delayMode != DelayMode.BASIC) ||
-				(mLeftPlayerDelayTime.isTimeZero())) {
-			
-			// If so, return null
+		// Check if the right mode is on.  If not, return null.
+		if(Global.OPTIONS.delayMode != DelayMode.BASIC) {
+			return null;
+		}
+		
+		// Get the delay time for the current player
+		TimeModel delayTime = mRightPlayerDelayTime;
+		if(leftPlayersTurn) {
+			delayTime = mLeftPlayerDelayTime;
+		}
+		
+		// If this time is 0, return null
+		if(delayTime.isTimeZero()) {
 			return null;
 		}
 		
 		// Calculate the total seconds to delay
-		final Integer seconds = mLeftPlayerDelayTime.getMinutes() * 60 +
-			mLeftPlayerDelayTime.getSeconds();
+		final Integer seconds = delayTime.getMinutes() * 60 +
+				delayTime.getSeconds();
 		
 		// Prepend the string, if available
 		if(mDelayPrependString != null) {
@@ -364,11 +398,33 @@ public class GameStateModel implements SaveStateModel {
 	private boolean decrementBronstein(final int numSeconds) {
 		boolean toReturn = false;
 		// Figure out which time to decrement
-		TimeModel updateDelay = mLeftPlayerDelayTime,
-				maximumDelay = Global.OPTIONS.savedWhiteDelayTime,
-				updateTime = mRightPlayersTime;
+		final TimeModel updateDelay, maximumDelay, updateTime;
 		if(leftPlayersTurn) {
+			// It's left players turn.  Grab left player's specs.
 			updateTime = mLeftPlayersTime;
+			updateDelay = mLeftPlayerDelayTime;
+			
+			// Check if the left player is white
+			if(leftIsWhite) {
+				// If so, grab its max delay value
+				maximumDelay = Global.OPTIONS.savedWhiteDelayTime;
+			} else {
+				// If so, grab its max delay value
+				maximumDelay = Global.OPTIONS.savedBlackDelayTime;
+			}
+		} else {
+			// It's right players turn.  Grab left player's specs.
+			updateTime = mRightPlayersTime;
+			updateDelay = mRightPlayerDelayTime;
+			
+			// Check if the left player is black
+			if(!leftIsWhite) {
+				// If so, grab the right player's max delay value
+				maximumDelay = Global.OPTIONS.savedWhiteDelayTime;
+			} else {
+				// If so, grab the right player's max delay value
+				maximumDelay = Global.OPTIONS.savedBlackDelayTime;
+			}
 		}
 		
 		// Decrement time from player
@@ -462,15 +518,17 @@ public class GameStateModel implements SaveStateModel {
 		boolean toReturn = false;
 		// Figure out which time to decrement
 		TimeModel updateTime = mRightPlayersTime;
+		TimeModel delayTime = mRightPlayerDelayTime;
 		if(leftPlayersTurn) {
 			updateTime = mLeftPlayersTime;
+			delayTime = mLeftPlayerDelayTime;
 		}
 		
 		// Decrement time from delay or player
 		for(int second = 0; second < numSeconds; ++second) {
 			
 			// First, attempt to decrement time from delay
-			if(!mLeftPlayerDelayTime.decrementASecond()) {
+			if(!delayTime.decrementASecond()) {
 				
 				// If failed, try decrementing the player's time
 				if(!updateTime.decrementASecond()) {

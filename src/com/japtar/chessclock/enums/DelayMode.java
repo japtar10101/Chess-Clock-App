@@ -41,4 +41,13 @@ public interface DelayMode {
 	public static final String STRING_BRONSTEIN = "bronstein";
 	/** String version of {@link #HOUR_GLASS} */
 	public static final String STRING_HOUR_GLASS = "hourGlass";
+	
+	/** Hash set to convert bytes to strings */
+	public static final String[] BYTE_TO_STRING = new String[] {
+		STRING_BASIC,
+		STRING_FISCHER,
+		STRING_FISCHER_AFTER,
+		STRING_BRONSTEIN,
+		STRING_HOUR_GLASS
+	};
 }

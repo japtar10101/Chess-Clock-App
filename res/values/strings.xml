@@ -16,7 +16,7 @@
 	<string name="optionsButtonText">Options</string>
 	
     <!-- Options strings, time (no handicap) -->
-    <string name="timePrefGroup">Time Configuration</string>
+    <string name="timePrefGroupNoHandicap">Time (No Handicap)</string>
     <string name="gameDurationPref">Game Duration</string>
     <string name="gameDurationSummaryPref">Configure each players\' duration</string>
     <string name="basicDelayPref">Delay Duration</string>
@@ -27,6 +27,7 @@
     <string name="bronsteinSummaryPref">Configure the maximum time incremented to a player\'s remaining duration</string>
     
     <!-- Options strings, time (with handicap, white player) -->
+    <string name="timePrefGroupWithHandicap">Time (With Handicap)</string>
     <string name="gameDurationPrefWhite">White Player\'s Duration</string>
     <string name="gameDurationSummaryPrefWhite">Configure white player\'s duration</string>
     <string name="basicDelayPrefWhite">White Player\'s Delay</string>
@@ -47,8 +48,7 @@
     <string name="bronsteinSummaryPrefBlack">Configure the maximum time incremented to black player\'s remaining duration</string>
     
     <!-- Options strings, rules -->
-    <string name="advancedPrefGroup">Advanced Options</string>
-    <string name="advancedPrefSummary">Configure the timer\'s behavior</string>
+    <string name="advancedOptionsGroup">Advanced Options</string>
     <string name="handicapPref">Enable Handicap</string>
     <string name="handicapSummaryPref">Allow each player to have different game and delay durations</string>
     <string name="gameModePref">Game Rules</string>
@@ -65,5 +65,7 @@
     
     <!-- Conditional-related strings -->
     <string name="disabledSummaryPref">Can only be configured at the beginning of a game</string>
-    <string name="disabledDelaySummaryPref">Current game rules contains no delay.</string>
+    <string name="disabledDelaySummaryPref">Current game mode contains no delay.</string>
+    <string name="disabledHandicapSummaryPref">Configurable when handicap is enabled.</string>
+    <string name="disabledNoHandicapSummaryPref">Configurable when handicap is disabled.</string>
 </resources>

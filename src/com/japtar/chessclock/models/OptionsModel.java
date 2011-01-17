@@ -43,13 +43,6 @@ public class OptionsModel implements SaveStateModel {
 	public static final String KEY_HANDICAP = "enableHandicap";
 	/** The saved key value for the list of delay modes */
 	public static final String KEY_DELAY_MODE = "delayMode";
-//	/** The saved key value for allowing the timer to continue after
-//	 * a player expires */
-//	public static final String KEY_NEGATIVE = "enableNegative";
-//	/** The saved key value for enabling penalties */
-//	public static final String KEY_PENALTY_ENABLED = "enablePenalty";
-//	/** The saved key value for the list of delay modes */
-//	public static final String KEY_PENALTY_TIME = "penaltyTime";
 	
 	// == Default values ==
 	// == Player's time ==
@@ -67,12 +60,6 @@ public class OptionsModel implements SaveStateModel {
 	// == Advanced Options ==
 	/** The default value for {@link #enableHandicap} */
 	public static final boolean DEFAULT_ENABLE_HANDICAP = false;
-//	/** The default value for {@link #enableHandicap} */
-//	public static final boolean DEFAULT_ENABLE_NEGATIVES = false;
-//	/** The default value for {@link #enablePenality} */
-//	public static final boolean DEFAULT_ENABLE_PENALTY = false;
-//	/** The default penalty */
-//	public static final int DEFAULT_PENALTY_TIME = 60;
 	
 	/* ===========================================================
 	 * Members
@@ -105,16 +92,6 @@ public class OptionsModel implements SaveStateModel {
 	public boolean enableHandicap = DEFAULT_ENABLE_HANDICAP;
 	/** The delay mode for this game */
 	public byte delayMode = DelayMode.BASIC;
-//	/** If true, when a player expires, the displayed values will continue to
-//	 * decrement, displaying negative values. Otherwise, the timer stops at
-//	 * the moment a player expires. */
-//	public boolean enableNegatives = DEFAULT_ENABLE_NEGATIVES;
-//	/** If true, when the other player clicks the game button while <i>not</i>
-//	 * in his or her turn, a penality is applied, and the opposing player gains
-//	 * some amount of time. */
-//	public boolean enablePenality = DEFAULT_ENABLE_PENALTY;
-//	/** The black player's delay time */
-//	public final TimeModel penalityTime = new TimeModel(DEFAULT_PENALTY_TIME);
 	
 	/* ===========================================================
 	 * Override Methods
@@ -164,12 +141,6 @@ public class OptionsModel implements SaveStateModel {
 		// Recall advanced options
 		enableHandicap = savedState.getBoolean(KEY_HANDICAP,
 				DEFAULT_ENABLE_HANDICAP);
-//		enableNegatives = savedState.getBoolean(KEY_NEGATIVE,
-//				DEFAULT_ENABLE_NEGATIVES);
-//		enablePenality = savedState.getBoolean(KEY_PENALTY_ENABLED,
-//				DEFAULT_ENABLE_PENALTY);
-//		penalityTime.recallTime(savedState, KEY_PENALTY_TIME,
-//				DEFAULT_PENALTY_TIME);
 		
 		// Recall the game mode
 		savedString = savedState.getString(KEY_DELAY_MODE, DelayMode.STRING_BASIC);
@@ -219,9 +190,6 @@ public class OptionsModel implements SaveStateModel {
 		
 		// Save advanced options
 		saveEditor.putBoolean(KEY_HANDICAP, enableHandicap);
-//		saveEditor.putBoolean(KEY_NEGATIVE, enableNegatives);
-//		saveEditor.putBoolean(KEY_PENALTY_ENABLED, enablePenality);
-//		penalityTime.saveTime(saveEditor, KEY_PENALTY_TIME);
 		switch(delayMode) {
 			case DelayMode.FISCHER:
 				saveEditor.putString(KEY_DELAY_MODE, DelayMode.STRING_FISCHER);
