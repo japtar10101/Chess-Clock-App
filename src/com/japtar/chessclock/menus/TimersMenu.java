@@ -401,9 +401,6 @@ public class TimersMenu implements MenuInterface,
 		mLeftButton.setImageResource(R.drawable.neutral_button);
 		mRightButton.setImageResource(R.drawable.neutral_button);
 		
-		// Reset the time
-		Global.GAME_STATE.resetTime();
-		
 		// Show the start menu
 		mStartMenu.showMenu();
 		
@@ -471,16 +468,25 @@ public class TimersMenu implements MenuInterface,
 	 * @param buttonPressed the button that was pressed
 	 */
 	void updatePlayersTurn(final boolean leftPlayersTurn) {
+		// Check if this button press starts the game
 		if(Global.GAME_STATE.timerCondition == TimerCondition.STARTING) {
-			// Update the color of the game buttons
+			// Set which play is white
 			Global.GAME_STATE.leftIsWhite = !leftPlayersTurn;
+			
+			// Reset the time
+			Global.GAME_STATE.resetTime();
+			
+			// Update the color of the game buttons
+			final int leftButtonID, rightButtonID;
 			if(Global.GAME_STATE.leftIsWhite) {
-				mLeftButton.setImageResource(R.drawable.white_button);
-				mRightButton.setImageResource(R.drawable.black_button);
+				leftButtonID = R.drawable.white_button;
+				rightButtonID = R.drawable.black_button;
 			} else {
-				mLeftButton.setImageResource(R.drawable.black_button);
-				mRightButton.setImageResource(R.drawable.white_button);
+				leftButtonID = R.drawable.black_button;
+				rightButtonID = R.drawable.white_button;
 			}
+			mLeftButton.setImageResource(leftButtonID);
+			mRightButton.setImageResource(rightButtonID);
 		}
 		
 		// Reset the delay time

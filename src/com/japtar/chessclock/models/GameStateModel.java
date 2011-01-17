@@ -268,10 +268,12 @@ public class GameStateModel implements SaveStateModel {
 				mListener.onTimeIncreased(
 						increaseLeftPlayersTime, delayTime);
 			}
+			
+			// Revert the delay
+			if(Global.OPTIONS.delayMode == DelayMode.BRONSTEIN) {
+				this.resetDelay();
+			}
 		}
-		
-		// Revert the delay
-		this.resetDelay();
 	}
 	
 	/**
@@ -279,11 +281,13 @@ public class GameStateModel implements SaveStateModel {
 	 */
 	public void resetTime() {
 		// Determine which time corresponds to which player
-		TimeModel leftTime = Global.OPTIONS.savedBlackTimeLimit;
-		TimeModel rightTime = Global.OPTIONS.savedWhiteTimeLimit;
+		final TimeModel leftTime, rightTime;
 		if(leftIsWhite) {
 			leftTime = Global.OPTIONS.savedWhiteTimeLimit;
 			rightTime = Global.OPTIONS.savedBlackTimeLimit;
+		} else {
+			leftTime = Global.OPTIONS.savedBlackTimeLimit;
+			rightTime = Global.OPTIONS.savedWhiteTimeLimit;
 		}
 		
 		// Revert all the time to Option's settings
