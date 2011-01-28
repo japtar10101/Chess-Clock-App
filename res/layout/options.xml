@@ -12,7 +12,7 @@
 		<com.japtar.chessclock.gui.TimeDelayPreference android:key="delayTime"
 		android:title="@string/basicDelayPref"
 		android:summary="@string/basicDelaySummaryPref"
-		android:defaultValue="0" />
+		android:defaultValue="2" />
 	
 	</PreferenceCategory>
 	
@@ -35,7 +35,7 @@
         <com.japtar.chessclock.gui.TimeDelayPreference android:key="delayTimeBlack"
         android:title="@string/basicDelayPrefBlack"
         android:summary="@string/basicDelaySummaryPrefBlack"
-        android:defaultValue="0" />
+        android:defaultValue="2" />
         
     </PreferenceCategory>
         
