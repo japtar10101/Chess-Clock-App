@@ -261,10 +261,10 @@ public class TimersMenu implements MenuInterface,
 		// Update the text size on everything
 		mLeftLabel.setTextSize(MainActivity.msTextSize);
 		mRightLabel.setTextSize(MainActivity.msTextSize);
-		mPauseButton.setTextSize(MainActivity.msTextSize * 0.5f);
+		mPauseButton.setTextSize(MainActivity.msTextSize * 0.7f);
 		mDelayLabel.setTextSize(MainActivity.msTextSize * 0.7f);
-		mLeftIncreaseLabel.setTextSize(MainActivity.msTextSize * 0.5f);
-		mRightIncreaseLabel.setTextSize(MainActivity.msTextSize * 0.5f);
+		mLeftIncreaseLabel.setTextSize(MainActivity.msTextSize * 0.7f);
+		mRightIncreaseLabel.setTextSize(MainActivity.msTextSize * 0.7f);
 		
 		// Update the sub menu
 		mStartMenu.setupMenu();

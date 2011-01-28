@@ -64,7 +64,7 @@ public class TimesUpSubMenu extends SubMenu {
 
 		// Update the text size on everything
 		mTimesUpLabel.setTextSize(MainActivity.msTextSize);
-		mNewGameButton.setTextSize(MainActivity.msTextSize * 0.5f);
+		mNewGameButton.setTextSize(MainActivity.msTextSize * 0.7f);
 	}
 
 	@Override

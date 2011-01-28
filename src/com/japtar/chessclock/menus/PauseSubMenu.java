@@ -73,9 +73,9 @@ class PauseSubMenu extends SubMenu {
 		// == Setup the member variables ==
 
 		// Update the text size on everything
-		mOptionsButton.setTextSize(MainActivity.msTextSize * 0.25f);
-		mResumeButton.setTextSize(MainActivity.msTextSize * 0.5f);
-		mNewGameButton.setTextSize(MainActivity.msTextSize * 0.25f);
+		mOptionsButton.setTextSize(MainActivity.msTextSize * 0.3f);
+		mResumeButton.setTextSize(MainActivity.msTextSize * 0.7f);
+		mNewGameButton.setTextSize(MainActivity.msTextSize * 0.3f);
 		mPauseLabel.setTextSize(MainActivity.msTextSize);
 	}
 	

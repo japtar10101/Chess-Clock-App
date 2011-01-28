@@ -63,9 +63,9 @@ public class StartSubMenu extends SubMenu {
 		// == Setup the member variables ==
 
 		// Update the text size on everything
-		mRightButton.setTextSize(MainActivity.msTextSize * 0.6f);
-		mLeftButton.setTextSize(MainActivity.msTextSize * 0.6f);
-		mSettingsButton.setTextSize(MainActivity.msTextSize * 0.5f);
+		mRightButton.setTextSize(MainActivity.msTextSize * 0.7f);
+		mLeftButton.setTextSize(MainActivity.msTextSize * 0.7f);
+		mSettingsButton.setTextSize(MainActivity.msTextSize * 0.7f);
 		
 		// Update the margins
 		LayoutParams params = (LayoutParams) mRightButton.getLayoutParams();
