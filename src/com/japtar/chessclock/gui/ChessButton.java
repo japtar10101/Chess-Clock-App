@@ -1,5 +1,14 @@
 /**
+ * <p>
+ * Package of GUI widgets
+ * </p>
  * 
+ * <hr/>
+ * 
+ * <p>
+ * Chess Clock App 
+ * Copyright 2011 Taro Omiya
+ * </p>
  */
 package com.japtar.chessclock.gui;
 
@@ -13,7 +22,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 /**
- * Specialized buttons for this application
+ * Specialized buttons for this application.
+ * Can display a flipped image and text
  * @author japtar10101
  */
 public class ChessButton extends ImageButton {

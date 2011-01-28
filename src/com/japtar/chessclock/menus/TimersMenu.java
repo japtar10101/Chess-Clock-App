@@ -1,5 +1,14 @@
 /**
+ * <p>
  * Package of menus
+ * </p>
+ * 
+ * <hr/>
+ * 
+ * <p>
+ * Chess Clock App 
+ * Copyright 2011 Taro Omiya
+ * </p>
  */
 package com.japtar.chessclock.menus;
 
@@ -244,6 +253,10 @@ public class TimersMenu implements MenuInterface,
 		// Update the haptic feedback
 		mLeftButton.setHapticFeedbackEnabled(Global.OPTIONS.enableVibrate);
 		mRightButton.setHapticFeedbackEnabled(Global.OPTIONS.enableVibrate);
+		
+		// Update the outlined text position
+		mLeftLabel.setWidth(mLeftButton.getWidth());
+		mRightLabel.setWidth(mRightButton.getWidth());
 		
 		// Update the text size on everything
 		mLeftLabel.setTextSize(MainActivity.msTextSize);

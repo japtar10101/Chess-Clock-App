@@ -1,8 +1,20 @@
 /**
+ * <p>
+ * Package of GUI widgets
+ * </p>
  * 
+ * <hr/>
+ * 
+ * <p>
+ * Chess Clock App 
+ * Copyright 2011 Taro Omiya
+ * </p>
  */
 package com.japtar.chessclock.gui;
 
+import kankan.wheel.widget.WheelView;
+import kankan.wheel.widget.adapters.NumericWheelAdapter;
+import com.japtar.chessclock.R;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
@@ -10,7 +22,7 @@ import android.preference.DialogPreference;
 import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.TimePicker;
+import android.view.ViewGroup;
 
 import com.japtar.chessclock.models.TimeModel;
 
@@ -18,13 +30,18 @@ import com.japtar.chessclock.models.TimeModel;
  * GUI element that opens a timer dialog
  * @author japtar10101
  */
-public class TimerPreference extends DialogPreference implements
-		TimePicker.OnTimeChangedListener {
+public class TimerPreference extends DialogPreference {
 	/* ===========================================================
 	 * Members
 	 * =========================================================== */
 	/** This preference's time */
 	private final TimeModel mTime = new TimeModel();
+	/** The GUI for this dialog preference */
+	private final ViewGroup mTimeWheel;
+	/** The GUI indicating the minutes */
+	private final WheelView mMinutes;
+	/** The GUI indicating the seconds */
+	private final WheelView mSeconds;
 	/** The default value */
 	private int mDefaultValue = 0;
 	
@@ -36,6 +53,13 @@ public class TimerPreference extends DialogPreference implements
 	 */
 	public TimerPreference(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
+		
+		// Setup the wheel UI
+		mTimeWheel = (ViewGroup) ViewGroup.inflate(
+				context, R.xml.timer_preference, null);
+		mMinutes = (WheelView) mTimeWheel.findViewById(R.id.minutes);
+		mSeconds = (WheelView) mTimeWheel.findViewById(R.id.seconds);
+		setupTimeWheel(context);
 	}
 	
 	/**
@@ -44,19 +68,18 @@ public class TimerPreference extends DialogPreference implements
 	public TimerPreference(final Context context, final AttributeSet attrs,
 			final int defStyle) {
 		super(context, attrs, defStyle);
+		
+		// Setup the wheel UI
+		mTimeWheel = (ViewGroup) ViewGroup.inflate(
+				context, R.xml.timer_preference, null);
+		mMinutes = (WheelView) mTimeWheel.findViewById(R.id.minutes);
+		mSeconds = (WheelView) mTimeWheel.findViewById(R.id.seconds);
+		setupTimeWheel(context);
 	}
 	
 	/* ===========================================================
 	 * Overrides
 	 * =========================================================== */
-	/**
-	 * Updates internal time variables
-	 * @see android.widget.TimePicker.OnTimeChangedListener#onTimeChanged(android.widget.TimePicker, int, int)
-	 */
-	@Override
-	public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-		mTime.setTime(hourOfDay, minute);
-	}
 	
 	/**
 	 * Updates {@link mModel}, if user clicked "OK"
@@ -66,6 +89,10 @@ public class TimerPreference extends DialogPreference implements
 	public void onDialogClosed(boolean positiveResult) {
 		// If we clicked OK...
 		if(positiveResult) {
+			// Grab the values
+			mTime.setMinutes(mMinutes.getCurrentItem());
+			mTime.setSeconds(mSeconds.getCurrentItem());
+			
 			// Save the values
             this.saveValues();
 		}
@@ -73,20 +100,10 @@ public class TimerPreference extends DialogPreference implements
 	
 	@Override
 	protected View onCreateDialogView() {
-		// Create a new TimePicker
-		final TimePicker timer = new TimePicker(this.getContext());
-		timer.setIs24HourView(true);
-		
-		// Recall the stored values
-    	this.recallValues();
-		
-		// Update view
-		timer.setCurrentHour(mTime.getMinutes());
-		timer.setCurrentMinute(mTime.getSeconds());
-		
-		// Return view
-		timer.setOnTimeChangedListener(this);
-		return timer;
+		// Setup the window to the set time
+		mMinutes.setCurrentItem(mTime.getMinutes());
+		mSeconds.setCurrentItem(mTime.getSeconds());
+		return mTimeWheel;
 	}
 	
 	/**
@@ -140,4 +157,20 @@ public class TimerPreference extends DialogPreference implements
 		mTime.saveTime(editor, this.getKey());
 		editor.commit();
     }
+    
+	/**
+	 * Sets up {@link #mTimeWheel}
+	 */
+	private void setupTimeWheel(final Context context)
+	{
+		// Configure the minutes wheel
+		mMinutes.setViewAdapter(new NumericWheelAdapter(context, 0, 60));
+		mMinutes.setLabel("Mins");
+		mMinutes.setLabelWidth(60);
+		
+		// Configure the hours wheel
+		mSeconds.setViewAdapter(new NumericWheelAdapter(context, 0, 59, "%02d"));
+		mSeconds.setLabel("Secs");
+		mSeconds.setLabelWidth(60);
+	}
 }

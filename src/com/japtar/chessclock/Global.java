@@ -1,5 +1,14 @@
 /**
+ * <p>
+ * Main Package
+ * </p>
  * 
+ * <hr/>
+ * 
+ * <p>
+ * Chess Clock App 
+ * Copyright 2011 Taro Omiya
+ * </p>
  */
 package com.japtar.chessclock;
 
