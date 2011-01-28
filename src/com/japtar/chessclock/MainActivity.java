@@ -175,7 +175,7 @@ public class MainActivity extends Activity {
 		this.setContentView(testTextWidth);
 		
 		// Calculate the text size
-	    while(testTextWidth.getPaint().measureText("00:00") < maxWidth) {
+	    while(testTextWidth.getPaint().measureText("000:00") < maxWidth) {
 	    	testTextWidth.setTextSize(++msTextSize);
 	    }
 	    --msTextSize;
