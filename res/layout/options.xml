@@ -4,38 +4,38 @@
 	<PreferenceCategory android:key="timeNoHandicapGroup"
 	android:title="@string/timePrefGroupNoHandicap">
 	
-		<com.japtar.chessclock.gui.TimerPreference android:key="timeLimit"
+		<com.japtar.chessclock.gui.TimeDurationPreference android:key="timeLimit"
 		android:title="@string/gameDurationPref"
 		android:summary="@string/gameDurationSummaryPref"
 		android:defaultValue="300" />
 		
-		<com.japtar.chessclock.gui.TimerPreference android:key="delayTime"
+		<com.japtar.chessclock.gui.TimeDelayPreference android:key="delayTime"
 		android:title="@string/basicDelayPref"
 		android:summary="@string/basicDelaySummaryPref"
-		android:defaultValue="2" />
+		android:defaultValue="0" />
 	
 	</PreferenceCategory>
 	
 	<PreferenceCategory android:key="timeWithHandicapGroup"
     android:title="@string/timePrefGroupWithHandicap">
     
-		<com.japtar.chessclock.gui.TimerPreference android:key="timeLimit"
+		<com.japtar.chessclock.gui.TimeDurationPreference android:key="timeLimit"
         android:title="@string/gameDurationPrefWhite"
         android:summary="@string/gameDurationSummaryPrefWhite" />
         
-        <com.japtar.chessclock.gui.TimerPreference android:key="delayTime"
+        <com.japtar.chessclock.gui.TimeDelayPreference android:key="delayTime"
         android:title="@string/basicDelayPrefWhite"
         android:summary="@string/basicDelaySummaryPrefWhite" />
         
-        <com.japtar.chessclock.gui.TimerPreference android:key="timeLimitBlack"
+        <com.japtar.chessclock.gui.TimeDurationPreference android:key="timeLimitBlack"
         android:title="@string/gameDurationPrefBlack"
         android:summary="@string/gameDurationSummaryPrefBlack"
         android:defaultValue="300" />
         
-        <com.japtar.chessclock.gui.TimerPreference android:key="delayTimeBlack"
+        <com.japtar.chessclock.gui.TimeDelayPreference android:key="delayTimeBlack"
         android:title="@string/basicDelayPrefBlack"
         android:summary="@string/basicDelaySummaryPrefBlack"
-        android:defaultValue="2" />
+        android:defaultValue="0" />
         
     </PreferenceCategory>
         

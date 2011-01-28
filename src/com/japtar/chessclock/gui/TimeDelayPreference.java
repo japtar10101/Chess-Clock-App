@@ -14,6 +14,7 @@ package com.japtar.chessclock.gui;
 
 import kankan.wheel.widget.WheelView;
 import kankan.wheel.widget.adapters.NumericWheelAdapter;
+
 import com.japtar.chessclock.R;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -30,7 +31,7 @@ import com.japtar.chessclock.models.TimeModel;
  * GUI element that opens a timer dialog
  * @author japtar10101
  */
-public class TimerPreference extends DialogPreference {
+public class TimeDelayPreference extends DialogPreference {
 	/* ===========================================================
 	 * Members
 	 * =========================================================== */
@@ -51,7 +52,7 @@ public class TimerPreference extends DialogPreference {
 	/**
 	 * @see Preference#Preference(Context, AttributeSet)
 	 */
-	public TimerPreference(final Context context, final AttributeSet attrs) {
+	public TimeDelayPreference(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
 		
 		// Setup the wheel UI
@@ -59,13 +60,13 @@ public class TimerPreference extends DialogPreference {
 				context, R.xml.timer_preference, null);
 		mMinutes = (WheelView) mTimeWheel.findViewById(R.id.minutes);
 		mSeconds = (WheelView) mTimeWheel.findViewById(R.id.seconds);
-		setupTimeWheel(context);
+		this.setupTimeWheel(context);
 	}
 	
 	/**
 	 * @see Preference#Preference(Context, AttributeSet, int)
 	 */
-	public TimerPreference(final Context context, final AttributeSet attrs,
+	public TimeDelayPreference(final Context context, final AttributeSet attrs,
 			final int defStyle) {
 		super(context, attrs, defStyle);
 		
@@ -74,7 +75,7 @@ public class TimerPreference extends DialogPreference {
 				context, R.xml.timer_preference, null);
 		mMinutes = (WheelView) mTimeWheel.findViewById(R.id.minutes);
 		mSeconds = (WheelView) mTimeWheel.findViewById(R.id.seconds);
-		setupTimeWheel(context);
+		this.setupTimeWheel(context);
 	}
 	
 	/* ===========================================================
@@ -92,7 +93,7 @@ public class TimerPreference extends DialogPreference {
 			// Grab the values
 			mTime.setMinutes(mMinutes.getCurrentItem());
 			mTime.setSeconds(mSeconds.getCurrentItem());
-			
+            
 			// Save the values
             this.saveValues();
 		}
@@ -130,6 +131,8 @@ public class TimerPreference extends DialogPreference {
         } else if(defaultValue instanceof Integer) {
         	// Set state based on default value
         	mDefaultValue = (Integer) defaultValue;
+        	mTime.setMinutes(mDefaultValue / 60);
+        	mTime.setSeconds(mDefaultValue % 60);
     	}
     }
     
@@ -163,14 +166,16 @@ public class TimerPreference extends DialogPreference {
 	 */
 	private void setupTimeWheel(final Context context)
 	{
-		// Configure the minutes wheel
-		mMinutes.setViewAdapter(new NumericWheelAdapter(context, 0, 60));
-		mMinutes.setLabel("Mins");
-		mMinutes.setLabelWidth(60);
+		final int width = (int) (mTimeWheel.getWidth() / 20d);
 		
-		// Configure the hours wheel
+		// Configure the minutes wheel
+		mMinutes.setViewAdapter(new NumericWheelAdapter(context, 0, 30));
+		mMinutes.setLabel("Mins");
+		mMinutes.setLabelWidth(width);
+		
+		// Configure the seconds wheel
 		mSeconds.setViewAdapter(new NumericWheelAdapter(context, 0, 59, "%02d"));
 		mSeconds.setLabel("Secs");
-		mSeconds.setLabelWidth(60);
+		mSeconds.setLabelWidth(width);
 	}
 }
