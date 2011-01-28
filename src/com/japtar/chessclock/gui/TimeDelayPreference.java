@@ -36,7 +36,7 @@ public class TimeDelayPreference extends BaseTimePreference {
 	 */
 	public TimeDelayPreference(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
-		mMinutesAdapter = new NumericWheelAdapter(context, 0, 60);
+		mMinutesAdapter = new NumericWheelAdapter(context, 0, 30);
 	}
 	
 	/**
@@ -45,7 +45,7 @@ public class TimeDelayPreference extends BaseTimePreference {
 	public TimeDelayPreference(final Context context, final AttributeSet attrs,
 			final int defStyle) {
 		super(context, attrs, defStyle);
-		mMinutesAdapter = new NumericWheelAdapter(context, 0, 60);
+		mMinutesAdapter = new NumericWheelAdapter(context, 0, 30);
 	}
 	
 	/* ===========================================================
