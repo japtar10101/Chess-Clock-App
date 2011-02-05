@@ -3,18 +3,11 @@
 android:layout_width="fill_parent" android:layout_height="fill_parent"
 android:layout_alignParentTop="true" android:layout_alignParentLeft="true">
 
-	<!-- Displaying Ads -->
-	<com.admob.android.ads.AdView android:id="@+id/ad"
-	android:layout_width="wrap_content" android:layout_height="wrap_content"
-	backgroundColor="#b0000000"
-	primaryTextColor="#b0ffffff" secondaryTextColor="#b0cccccc"
-	android:layout_alignParentTop="true" android:layout_centerHorizontal="true" />
-	
 	<!-- Displaying Times up Label -->
     <TextView android:id="@+id/labelTimesUp" android:background="#a0000000"
     android:text="@string/timesUpLabelText" android:textSize="80px"
     android:layout_width="fill_parent" android:layout_height="wrap_content"
-    android:layout_centerVertical="true" android:layout_centerHorizontal="true"
+    android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
     android:typeface="monospace" android:textStyle="bold"
     android:gravity="center_horizontal" />
 	

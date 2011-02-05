@@ -5,7 +5,7 @@
 <!-- For "features," even numbers are stable, odds are unstable -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 package="com.japtar.chessclock"
-android:versionName="2.3.0" android:versionCode="9">
+android:versionName="3.0.0" android:versionCode="10">
     <uses-sdk android:minSdkVersion="8" />
 
     <!--  Application's activities -->    
@@ -24,27 +24,6 @@ android:versionName="2.3.0" android:versionCode="9">
         
         <!-- Preference Activity -->
         <activity android:name=".menus.OptionsMenu" />
-        
-        <!-- The application's publisher ID assigned by AdMob -->
-		<meta-data android:value="a14ce87763b2b94"
-		android:name="ADMOB_PUBLISHER_ID" />
-		
-		<!-- AdMobActivity definition -->
-		<activity android:name="com.admob.android.ads.AdMobActivity"
-		android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-		android:configChanges="orientation|keyboard|keyboardHidden" />
-		
-		<!-- Track Market installs -->
-		<receiver android:exported="true"
-		android:name="com.admob.android.ads.analytics.InstallReceiver">
-			<intent-filter>
-				<action android:name="com.android.vending.INSTALL_REFERRER" />
-			</intent-filter>
-		</receiver>
-		
-		<!-- Don't allow location tracking -->
-        <meta-data android:value="false"
-        android:name="ADMOB_ALLOW_LOCATION_FOR_ADS" />
     </application>
     
     <!-- List of permissions -->
@@ -52,7 +31,5 @@ android:versionName="2.3.0" android:versionCode="9">
 	<uses-permission android:name="android.permission.VIBRATE" />
 	<!-- One for keeping the screen on -->
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
-	<!-- One for accessing the internet (ads) -->
-	<uses-permission android:name="android.permission.INTERNET" />
 	
 </manifest>
