@@ -384,16 +384,6 @@ public class TimersMenu implements MenuInterface,
 		mLeftLabel.setText(Global.GAME_STATE.leftPlayerTime());
 		mRightLabel.setText(Global.GAME_STATE.rightPlayerTime());
 		
-		// Update Left player's move count texts
-		mStringGenerator.delete(mMoveStringLength, mStringGenerator.length());
-		mStringGenerator.append(Global.GAME_STATE.numLeftPlayerMoves);
-		mLeftMoveLabel.setText(mStringGenerator.toString());
-		
-		// Update Left player's move count texts
-		mStringGenerator.delete(mMoveStringLength, mStringGenerator.length());
-		mStringGenerator.append(Global.GAME_STATE.numRightPlayerMoves);
-		mRightMoveLabel.setText(mStringGenerator.toString());
-	
 		// Update the delay label's text or visibility
 		if((Global.GAME_STATE.timerCondition == TimerCondition.RUNNING) ||
 				(Global.GAME_STATE.timerCondition == TimerCondition.PAUSE)) {
@@ -409,6 +399,23 @@ public class TimersMenu implements MenuInterface,
 			} else if(mDelayLabel.getVisibility() == View.INVISIBLE) {
 				// If text IS provided, play the show-label animation
 				mDelayLabel.startAnimation(mShowAnimation);
+			}
+			
+			// Update the move counts
+			if(Global.OPTIONS.displayMoveCount) {
+				// Hide the move count
+				mLeftMoveLabel.setVisibility(View.VISIBLE);
+				mRightMoveLabel.setVisibility(View.VISIBLE);
+				
+				// Update Left player's move count texts
+				mStringGenerator.delete(mMoveStringLength, mStringGenerator.length());
+				mStringGenerator.append(Global.GAME_STATE.numLeftPlayerMoves);
+				mLeftMoveLabel.setText(mStringGenerator.toString());
+				
+				// Update Left player's move count texts
+				mStringGenerator.delete(mMoveStringLength, mStringGenerator.length());
+				mStringGenerator.append(Global.GAME_STATE.numRightPlayerMoves);
+				mRightMoveLabel.setText(mStringGenerator.toString());
 			}
 			
 			// Update the text
@@ -452,6 +459,14 @@ public class TimersMenu implements MenuInterface,
 		
 		// Hide the delay label
 		mDelayLabel.setVisibility(View.INVISIBLE);
+		
+		// Hide the increment label
+		mLeftIncreaseLabel.setVisibility(View.INVISIBLE);
+		mRightIncreaseLabel.setVisibility(View.INVISIBLE);
+		
+		// Hide the move count
+		mLeftMoveLabel.setVisibility(View.INVISIBLE);
+		mRightMoveLabel.setVisibility(View.INVISIBLE);
 	}
 	
 	/**
@@ -618,8 +633,8 @@ public class TimersMenu implements MenuInterface,
 		final String moveText = mParentActivity.getString(R.string.moveLabelText);
 		mStringGenerator.delete(0, mStringGenerator.length());
 		mStringGenerator.append(moveText);
-		mStringGenerator.append('-');
-		mMoveStringLength = mStringGenerator.length() - 1;
+		mStringGenerator.append(": ");
+		mMoveStringLength = mStringGenerator.length();
 	}
 	
 	/**
