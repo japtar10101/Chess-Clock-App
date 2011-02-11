@@ -77,8 +77,8 @@
 		
         <CheckBoxPreference android:key="moveCount"
         android:title="@string/moveCountPref"
-        android:defaultValue="false"
-        android:summary="@string/moveCountPref" />
+        android:defaultValue="true"
+        android:summary="@string/moveCountSummaryPref" />
 		
 	</PreferenceCategory>
 	

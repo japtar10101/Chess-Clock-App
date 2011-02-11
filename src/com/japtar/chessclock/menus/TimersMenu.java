@@ -633,7 +633,7 @@ public class TimersMenu implements MenuInterface,
 		final String moveText = mParentActivity.getString(R.string.moveLabelText);
 		mStringGenerator.delete(0, mStringGenerator.length());
 		mStringGenerator.append(moveText);
-		mStringGenerator.append(": ");
+		mStringGenerator.append(":");
 		mMoveStringLength = mStringGenerator.length();
 	}
 	
