@@ -81,6 +81,10 @@ public class TimersMenu implements MenuInterface,
 	private OutlinedTextView mLeftIncreaseLabel = null;
 	/** Right player's label indicating time increase */
 	private OutlinedTextView mRightIncreaseLabel = null;
+	/** Left player's label indicating move count */
+	private OutlinedTextView mLeftMoveLabel = null;
+	/** Right player's label indicating move count */
+	private OutlinedTextView mRightMoveLabel = null;
 	
 	// == Animations ==
 	/** Shows the delay label */
@@ -95,11 +99,11 @@ public class TimersMenu implements MenuInterface,
 	private final AnimationListener mIncreaseLeftLabel;
 	private final AnimationListener mIncreaseRightLabel;
 	
-	// == Drawables ==
-	
 	// == Misc. ==
 	/** Sound of alarm */
 	private Ringtone mRingtone = null;
+	private int mMoveStringLength = 0;
+	private final StringBuffer mStringGenerator = new StringBuffer();
 	
 	/* ===========================================================
 	 * Constructors
@@ -263,8 +267,10 @@ public class TimersMenu implements MenuInterface,
 		mRightLabel.setTextSize(MainActivity.msTextSize);
 		mPauseButton.setTextSize(MainActivity.msTextSize * 0.7f);
 		mDelayLabel.setTextSize(MainActivity.msTextSize * 0.7f);
-		mLeftIncreaseLabel.setTextSize(MainActivity.msTextSize * 0.7f);
-		mRightIncreaseLabel.setTextSize(MainActivity.msTextSize * 0.7f);
+		mLeftIncreaseLabel.setTextSize(MainActivity.msTextSize * 0.6f);
+		mRightIncreaseLabel.setTextSize(MainActivity.msTextSize * 0.6f);
+		mLeftMoveLabel.setTextSize(MainActivity.msTextSize * 0.6f);
+		mRightMoveLabel.setTextSize(MainActivity.msTextSize * 0.6f);
 		
 		// Update the sub menu
 		mStartMenu.setupMenu();
@@ -364,6 +370,16 @@ public class TimersMenu implements MenuInterface,
 		mLeftLabel.setText(Global.GAME_STATE.leftPlayerTime());
 		mRightLabel.setText(Global.GAME_STATE.rightPlayerTime());
 		
+		// Update Left player's move count texts
+		mStringGenerator.delete(mMoveStringLength, mStringGenerator.length());
+		mStringGenerator.append(Global.GAME_STATE.numLeftPlayerMoves);
+		mLeftMoveLabel.setText(mStringGenerator.toString());
+		
+		// Update Left player's move count texts
+		mStringGenerator.delete(mMoveStringLength, mStringGenerator.length());
+		mStringGenerator.append(Global.GAME_STATE.numRightPlayerMoves);
+		mRightMoveLabel.setText(mStringGenerator.toString());
+	
 		// Update the delay label's text or visibility
 		if((Global.GAME_STATE.timerCondition == TimerCondition.RUNNING) ||
 				(Global.GAME_STATE.timerCondition == TimerCondition.PAUSE)) {
@@ -557,6 +573,10 @@ public class TimersMenu implements MenuInterface,
 			mParentActivity.findViewById(R.id.labelLeftIncreaseTime);
 		mRightIncreaseLabel = (OutlinedTextView)
 			mParentActivity.findViewById(R.id.labelRightIncreaseTime);
+		mLeftMoveLabel = (OutlinedTextView)
+			mParentActivity.findViewById(R.id.labelLeftMoveCount);
+		mRightMoveLabel = (OutlinedTextView)
+			mParentActivity.findViewById(R.id.labelRightMoveCount);
 		
 		// Grab the buttons
 		mLeftButton = this.getImageButton(R.id.buttonLeftTime);
@@ -579,6 +599,12 @@ public class TimersMenu implements MenuInterface,
 				R.anim.increment_label);
 		mRightIncreaseAnimation = AnimationUtils.loadAnimation(mParentActivity,
 				R.anim.increment_label);
+		
+		// Get strings
+		final String moveText = mParentActivity.getString(R.string.moveLabelText);
+		mStringGenerator.delete(0, mStringGenerator.length());
+		mStringGenerator.append(moveText);
+		mMoveStringLength = moveText.length() - 1;
 	}
 	
 	/**

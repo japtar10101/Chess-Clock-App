@@ -7,6 +7,7 @@
     <string name="delayLabelText">Delay -</string>
     <string name="pauseLabelText">Paused</string>
     <string name="timesUpLabelText">Times Up!</string>
+    <string name="moveLabelText">Move: </string>
 
 	<!-- Button strings -->
     <string name="playerButtonText">Press to Start</string>

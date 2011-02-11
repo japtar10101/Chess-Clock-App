@@ -33,6 +33,7 @@ public class TimeModel implements Comparable<TimeModel> {
 	public final static int totalSeconds(final TimeModel time) {
 		return time.mSeconds;
 	}
+	private final static StringBuffer mStringGenerator = new StringBuffer();
 	
 	/* ===========================================================
 	 * Members
@@ -87,26 +88,26 @@ public class TimeModel implements Comparable<TimeModel> {
 	@Override
 	public String toString() {
 		// Generate a string
-		String toReturn = "";
+		mStringGenerator.delete(0, mStringGenerator.length());
 		
 		// If negative, add in a minus sign
 		if(mSeconds < 0) {
-			toReturn += '-';
+			mStringGenerator.append('-');
 		}
 		
 		// Add in the minutes and colon
-		toReturn += Integer.toString(this.getMinutes());
-		toReturn += ':';
+		mStringGenerator.append(this.getMinutes());
+		mStringGenerator.append(':');
 		
 		// Append the seconds
 		final int seconds = this.getSeconds();
 		if(seconds < 10) {
 			// If seconds is less than 10, append a 0
-			toReturn += '0';
+			mStringGenerator.append('0');
 		}
-		toReturn += Integer.toString(seconds);
+		mStringGenerator.append(seconds);
 		
-		return toReturn;
+		return mStringGenerator.toString();
 	}
 	
 	/* ===========================================================

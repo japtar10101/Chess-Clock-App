@@ -22,6 +22,7 @@ xmlns:chessclock="http://schemas.android.com/apk/res/com.japtar.chessclock">
 	
 	</LinearLayout>
 	
+	<!-- Display the player's time on top of the buttons -->
 	<LinearLayout android:id="@+id/layoutTimeLabels"
     android:layout_width="fill_parent" android:layout_height="wrap_content"
     android:layout_centerVertical="true" android:layout_alignParentLeft="true">
@@ -42,6 +43,7 @@ xmlns:chessclock="http://schemas.android.com/apk/res/com.japtar.chessclock">
 	    
     </LinearLayout>
     
+    <!-- Display the incremented delay above player's time -->
     <LinearLayout android:layout_above="@+id/layoutTimeLabels"
     android:layout_width="fill_parent" android:layout_height="wrap_content"
     android:layout_alignParentLeft="true">
@@ -64,6 +66,29 @@ xmlns:chessclock="http://schemas.android.com/apk/res/com.japtar.chessclock">
 	
 	</LinearLayout>
 	
+    <!-- Display the player's move count -->
+    <LinearLayout android:layout_below="@+id/layoutTimeLabels"
+    android:layout_width="fill_parent" android:layout_height="wrap_content"
+    android:layout_alignParentLeft="true">
+    
+        <com.japtar.chessclock.gui.OutlinedTextView
+        android:id="@+id/labelLeftMoveCount" android:layout_weight="1"
+        android:text="@string/moveLabelText" android:textSize="60px"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:typeface="monospace" android:textStyle="bold"
+        android:textColor="#ffc2c2c2" chessclock:outlineColor="#ff000000"
+        android:visibility="invisible" />
+        
+        <com.japtar.chessclock.gui.OutlinedTextView
+        android:id="@+id/labelRightMoveCount" android:layout_weight="1"
+        android:text="@string/moveLabelText" android:textSize="60px"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:typeface="monospace" android:textStyle="bold"
+        android:textColor="#ffc2c2c2" chessclock:outlineColor="#ff000000"
+        android:visibility="invisible" />
+    
+    </LinearLayout>
+    
 	<!-- Displaying Delay Label -->
 	<TextView android:id="@+id/labelDelay"
 	android:layout_width="wrap_content" android:layout_height="wrap_content"

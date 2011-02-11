@@ -234,6 +234,16 @@ public class GameStateModel implements SaveStateModel {
 		// update the current player
 		leftPlayersTurn = leftPlayerIsNext;
 		
+		if(leftPlayersTurn) {
+			// It's left player's turn
+			// Increment right player's move count
+			++numRightPlayerMoves;
+		} else {
+			// It's left player's turn
+			// Increment right player's move count
+			++numLeftPlayerMoves;
+		}
+		
 		// Determine which player's time to increment
 		TimeModel increment = null, delayTime = null;
 		boolean increaseLeftPlayersTime = false;
@@ -298,6 +308,10 @@ public class GameStateModel implements SaveStateModel {
 			leftTime = Global.OPTIONS.savedBlackTimeLimit;
 			rightTime = Global.OPTIONS.savedWhiteTimeLimit;
 		}
+		
+		// Revert the move count to 0
+		numLeftPlayerMoves = 0;
+		numRightPlayerMoves = 0;
 		
 		// Revert all the time to Option's settings
 		mLeftPlayersTime.setTime(leftTime);
