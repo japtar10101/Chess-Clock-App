@@ -273,8 +273,14 @@ public class TimersMenu implements MenuInterface,
 		mRightButton.setHapticFeedbackEnabled(Global.OPTIONS.enableVibrate);
 		
 		// Update the outlined text position
-		mLeftLabel.setWidth(mLeftButton.getWidth());
-		mRightLabel.setWidth(mRightButton.getWidth());
+		final int leftWidth = mLeftButton.getWidth();
+		final int rightWidth = mRightButton.getWidth();
+		mLeftLabel.setWidth(leftWidth);
+		mRightLabel.setWidth(rightWidth);
+		mLeftIncreaseLabel.setWidth(leftWidth);
+		mRightIncreaseLabel.setWidth(rightWidth);
+		mLeftMoveLabel.setWidth(leftWidth);
+		mRightMoveLabel.setWidth(rightWidth);
 		
 		// Update the text size on everything
 		mLeftLabel.setTextSize(MainActivity.msTextSize);
