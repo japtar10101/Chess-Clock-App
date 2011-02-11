@@ -39,6 +39,12 @@ public class OptionsModel implements SaveStateModel {
 	/** The saved key value for delay time */
 	public static final String KEY_BLACK_DELAY_TIME = "delayTimeBlack";
 	
+	// == Advanced Options ==
+	/** The saved key value for enabling handicap */
+	public static final String KEY_HANDICAP = "enableHandicap";
+	/** The saved key value for the list of delay modes */
+	public static final String KEY_DELAY_MODE = "delayMode";
+	
 	// == Feedback ==
 	/** The saved key value for alarm */
 	public static final String KEY_ALARM = "alarm";
@@ -46,12 +52,8 @@ public class OptionsModel implements SaveStateModel {
 	public static final String KEY_CLICK = "click";
 	/** The saved key value for vibrating */
 	public static final String KEY_VIBRATE = "vibrate";
-	
-	// == Advanced Options ==
-	/** The saved key value for enabling handicap */
-	public static final String KEY_HANDICAP = "enableHandicap";
-	/** The saved key value for the list of delay modes */
-	public static final String KEY_DELAY_MODE = "delayMode";
+	/** The saved key value for displaying the move count */
+	public static final String KEY_MOVE_COUNT = "moveCount";
 	
 	// == Default values ==
 	// == Player's time ==
@@ -65,6 +67,8 @@ public class OptionsModel implements SaveStateModel {
 	public static final boolean DEFAULT_ENABLE_CLICK = true;
 	/** The default value for {@link #enableVibrate} */
 	public static final boolean DEFAULT_ENABLE_VIBRATE = true;
+	/** The default value for {@link #displayMoveCount} */
+	public static final boolean DEFAULT_DISPLAY_MOVE_COUNT = true;
 	
 	// == Advanced Options ==
 	/** The default value for {@link #enableHandicap} */
@@ -94,6 +98,8 @@ public class OptionsModel implements SaveStateModel {
 	public boolean enableClick = DEFAULT_ENABLE_CLICK;
 	/** If true, vibrates when clicking any button */
 	public boolean enableVibrate = DEFAULT_ENABLE_VIBRATE;
+	/** If true, displays the move count for each player */
+	public boolean displayMoveCount = DEFAULT_DISPLAY_MOVE_COUNT;
 	
 	// == Advanced Options ==
 	/** If true, the white and black player's options will be used respectively.
@@ -146,6 +152,8 @@ public class OptionsModel implements SaveStateModel {
 		enableClick = savedState.getBoolean(KEY_CLICK, DEFAULT_ENABLE_CLICK);
 		enableVibrate = savedState.getBoolean(KEY_VIBRATE,
 				DEFAULT_ENABLE_VIBRATE);
+		displayMoveCount = savedState.getBoolean(KEY_MOVE_COUNT,
+				DEFAULT_DISPLAY_MOVE_COUNT);
 		
 		// Recall advanced options
 		enableHandicap = savedState.getBoolean(KEY_HANDICAP,
@@ -196,6 +204,7 @@ public class OptionsModel implements SaveStateModel {
 		// Save feedback-related conditionals
 		saveEditor.putBoolean(KEY_CLICK, enableClick);
 		saveEditor.putBoolean(KEY_VIBRATE, enableVibrate);
+		saveEditor.putBoolean(KEY_MOVE_COUNT, displayMoveCount);
 		
 		// Save advanced options
 		saveEditor.putBoolean(KEY_HANDICAP, enableHandicap);

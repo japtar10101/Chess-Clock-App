@@ -7,7 +7,7 @@
     <string name="delayLabelText">Delay -</string>
     <string name="pauseLabelText">Paused</string>
     <string name="timesUpLabelText">Times Up!</string>
-    <string name="moveLabelText">Move: </string>
+    <string name="moveLabelText">Move</string>
 
 	<!-- Button strings -->
     <string name="playerButtonText">Press to Start</string>
@@ -63,6 +63,8 @@
     <string name="vibrateSummaryPref">Vibrate the phone when any button is pressed</string>
     <string name="clickPref">Enable \"Click\" Sound</string>
     <string name="clickSummaryPref">Play a \"click\" sound when pressing a game button</string>
+    <string name="moveCountPref">Display Move Count</string>
+    <string name="moveCountSummaryPref">Display the number of moves each player played</string>
     
     <!-- Conditional-related strings -->
     <string name="disabledSummaryPref">Can only be configured at the beginning of a game</string>

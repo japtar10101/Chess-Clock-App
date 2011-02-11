@@ -269,8 +269,8 @@ public class TimersMenu implements MenuInterface,
 		mDelayLabel.setTextSize(MainActivity.msTextSize * 0.7f);
 		mLeftIncreaseLabel.setTextSize(MainActivity.msTextSize * 0.6f);
 		mRightIncreaseLabel.setTextSize(MainActivity.msTextSize * 0.6f);
-		mLeftMoveLabel.setTextSize(MainActivity.msTextSize * 0.6f);
-		mRightMoveLabel.setTextSize(MainActivity.msTextSize * 0.6f);
+		mLeftMoveLabel.setTextSize(MainActivity.msTextSize * 0.4f);
+		mRightMoveLabel.setTextSize(MainActivity.msTextSize * 0.4f);
 		
 		// Update the sub menu
 		mStartMenu.setupMenu();
@@ -604,7 +604,8 @@ public class TimersMenu implements MenuInterface,
 		final String moveText = mParentActivity.getString(R.string.moveLabelText);
 		mStringGenerator.delete(0, mStringGenerator.length());
 		mStringGenerator.append(moveText);
-		mMoveStringLength = moveText.length() - 1;
+		mStringGenerator.append('-');
+		mMoveStringLength = mStringGenerator.length() - 1;
 	}
 	
 	/**
