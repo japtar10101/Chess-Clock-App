@@ -5,7 +5,7 @@
 <!-- For "features," even numbers are stable, odds are unstable -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 package="com.japtar.chessclock"
-android:versionName="3.0.1" android:versionCode="11">
+android:versionName="3.0.2" android:versionCode="12">
     <uses-sdk android:minSdkVersion="8" />
 
     <!--  Application's activities -->    
