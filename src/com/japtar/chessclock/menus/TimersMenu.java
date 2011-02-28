@@ -402,8 +402,10 @@ public class TimersMenu implements MenuInterface,
 				}
 				// Update the delay text
 				delayText = Global.GAME_STATE.defaultDelayLabelString();
-			} else if(mDelayLabel.getVisibility() == View.INVISIBLE) {
+			} else if((mDelayLabel.getVisibility() == View.INVISIBLE) ||
+					(mDelayLabel.getAnimation() != null)) {
 				// If text IS provided, play the show-label animation
+				mDelayLabel.clearAnimation();
 				mDelayLabel.startAnimation(mShowAnimation);
 			}
 			
