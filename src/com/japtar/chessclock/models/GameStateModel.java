@@ -301,12 +301,10 @@ public class GameStateModel implements SaveStateModel {
 				mListener.onTimeIncreased(
 						increaseLeftPlayersTime, delayTime);
 			}
-			
-			// Revert the delay
-			if(Global.OPTIONS.delayMode == DelayMode.BRONSTEIN) {
-				this.resetDelay();
-			}
 		}
+		
+		// Revert the delay
+		this.resetDelay();
 	}
 	
 	/**
